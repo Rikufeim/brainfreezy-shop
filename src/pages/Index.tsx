@@ -1,25 +1,49 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronLeft } from "lucide-react";
 import CometCardDemo from "@/components/comet-card-demo";
 import Header from "@/components/Header";
 import CartDrawer from "@/components/CartDrawer";
-import CategorySidebar from "@/components/CategorySidebar";
 import FeaturedProducts from "@/components/FeaturedProducts";
+import ProductDetail from "@/components/ProductDetail";
 import { CartProvider } from "@/contexts/CartContext";
-
-import ProductOverlay from "@/components/ProductOverlay";
+import { getProductsByCategory } from "@/data/clothing";
+import { Button } from "@/components/ui/button";
 
 import { Product } from "@/types/product";
 
+const categories = [
+  "ALL",
+  "MENS",
+  "WOMENS",
+  "ACCESSORIES",
+];
+
 function IndexContent() {
-  const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category);
     // Clear selected product when changing category
     setSelectedProduct(null);
+  };
+
+  // Get current category products for navigation
+  const currentProducts = getProductsByCategory(selectedCategory);
+
+  const handleNext = () => {
+    if (!selectedProduct) return;
+    const currentIndex = currentProducts.findIndex(p => p.id === selectedProduct.id);
+    const nextIndex = (currentIndex + 1) % currentProducts.length;
+    setSelectedProduct(currentProducts[nextIndex]);
+  };
+
+  const handlePrev = () => {
+    if (!selectedProduct) return;
+    const currentIndex = currentProducts.findIndex(p => p.id === selectedProduct.id);
+    const prevIndex = (currentIndex - 1 + currentProducts.length) % currentProducts.length;
+    setSelectedProduct(currentProducts[prevIndex]);
   };
 
   return (
@@ -32,7 +56,7 @@ function IndexContent() {
 
       {/* Header */}
       <Header
-        onToggleCategories={() => setIsCategoriesOpen(!isCategoriesOpen)}
+        onToggleCategories={() => {}}
         showBackButton={!!selectedProduct}
         onBack={() => setSelectedProduct(null)}
       />
@@ -42,26 +66,95 @@ function IndexContent() {
         <CometCardDemo />
       </div>
 
+      {/* Categories */}
+      <section className="py-16 px-6 md:px-12 bg-black w-full relative z-10">
+        <div className="max-w-7xl mx-auto">
+          <nav className="flex flex-wrap justify-center gap-8 md:gap-12">
+            {categories.map((category, index) => (
+              <motion.button
+                key={category}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                onClick={() => handleCategorySelect(category)}
+                className={`text-2xl md:text-3xl font-display font-bold tracking-widest transition-colors duration-300 ${
+                  selectedCategory === category ? 'text-white' : 'text-white/50 hover:text-white'
+                }`}
+              >
+                {category}
+              </motion.button>
+            ))}
+          </nav>
+        </div>
+      </section>
+
       {/* Featured Products */}
-      <FeaturedProducts />
+      <FeaturedProducts selectedCategory={selectedCategory} onSelectProduct={setSelectedProduct} />
 
-      {/* Product Overlay */}
-      <ProductOverlay
-        category={selectedCategory}
-        onClose={() => setSelectedCategory(null)}
-        selectedProduct={selectedProduct}
-        onSelectProduct={setSelectedProduct}
-      />
+      {/* Product Detail Modal */}
+      <AnimatePresence>
+        {selectedProduct && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
+            onClick={() => setSelectedProduct(null)}
+          >
+            {/* Back Button */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3, delay: 0.2 }}
+              className="fixed top-6 left-6 md:top-8 md:left-8 z-10"
+            >
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setSelectedProduct(null)}
+                className="text-white hover:bg-white/10 transition-all duration-300"
+                aria-label="Go Back"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </Button>
+            </motion.div>
 
-      {/* Modals and Sidebars */}
-      <CategorySidebar
-        isOpen={isCategoriesOpen}
-        onClose={() => setIsCategoriesOpen(false)}
-        onSelectCategory={handleCategorySelect}
-      />
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0, y: 50 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.8, opacity: 0, y: 50 }}
+              transition={{ duration: 0.5, type: "spring", damping: 20 }}
+              className="relative w-full max-w-4xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <ProductDetail
+                product={selectedProduct}
+                onNext={handleNext}
+                onPrev={handlePrev}
+                onAddToCart={() => {}}
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Cart Drawer */}
       <CartDrawer />
+
+      {/* Footer */}
+      <footer className="py-8 px-6 md:px-12 bg-black w-full relative z-10">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+            <a href="#" className="text-lg md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">CONTACT</a>
+            <a href="#" className="text-lg md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">TERMS</a>
+            <a href="#" className="text-lg md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">PRIVACY</a>
+            <a href="#" className="text-lg md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">COOKIES</a>
+          </div>
+        </div>
+      </footer>
     </motion.div>
   );
 }

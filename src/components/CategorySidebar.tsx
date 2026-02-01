@@ -12,7 +12,6 @@ const categories = [
     "NEW",
     "MENS",
     "WOMENS",
-    "SLIDES",
     "ACCESSORIES",
 ];
 
@@ -28,7 +27,7 @@ export default function CategorySidebar({ isOpen, onClose, onSelectCategory }: C
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
                         onClick={onClose}
-                        className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden"
+                        className="fixed inset-0 z-40 md:hidden"
                     />
 
                     {/* Sidebar */}
@@ -38,7 +37,7 @@ export default function CategorySidebar({ isOpen, onClose, onSelectCategory }: C
                         exit={{ x: -250, opacity: 0 }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
                         className="fixed left-0 top-0 bottom-0 z-40 w-64 md:w-80 
-                       bg-black/80 backdrop-blur-md p-8 pt-32"
+                       p-8 pt-32"
                     >
                         <nav className="flex flex-col gap-6">
                             {categories.map((category, index) => (

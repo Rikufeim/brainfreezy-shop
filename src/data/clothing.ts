@@ -38,6 +38,8 @@ export const clothingProducts: Product[] = [
 export const getProductsByCategory = (category: string) => {
     const normCategory = category.toLowerCase();
 
+    if (normCategory === 'all') return clothingProducts;
+
     if (normCategory === 'new') return clothingProducts.slice(0, 4);
 
     if (normCategory === 'mens') {
@@ -49,13 +51,9 @@ export const getProductsByCategory = (category: string) => {
         return clothingProducts.filter(p => p.category === 'clothing');
     }
 
-    if (normCategory === 'slides') {
-        return clothingProducts.filter(p => p.category === 'slides');
-    }
-
     if (normCategory === 'accessories') {
         return clothingProducts.filter(p => p.category === 'accessory');
     }
 
-    return [];
+    return clothingProducts;
 };

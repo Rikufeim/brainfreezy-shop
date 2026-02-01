@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Freezy Sledding Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 100%);
+            overflow-x: hidden;
+        }
+
+        /* Hero Section - Mock content for demonstration */
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .hero-content {
+            text-align: center;
+            color: white;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Play Button in top-left */
+        .play-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #4A90E2, #357ABD);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 10;
+        }
+
+        .play-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .play-button:active {
+            transform: translateY(0);
+        }
+
+        /* Game Overlay */
+        .game-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .game-overlay.active {
+            display: flex;
+        }
+
+        .game-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-width: 1200px;
+            max-height: 800px;
+            background: linear-gradient(to bottom, #B3E5FC 0%, #E1F5FE 50%, #FFFFFF 100%);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        #gameCanvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            transition: background 0.2s, transform 0.2s;
+            z-index: 10;
+        }
+
+        .close-button:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: scale(1.1);
+        }
+
+        /* Game Over Screen */
+        .game-over-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+        }
+
+        .game-over-screen.active {
+            display: flex;
+        }
+
+        .game-over-content {
+            text-align: center;
+            color: white;
+            background: linear-gradient(135deg, #4A90E2, #357ABD);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-over-content h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .game-over-content p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .restart-button {
+            background: white;
+            color: #4A90E2;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .restart-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+
+            .play-button {
+                padding: 12px 24px;
+                font-size: 1rem;
+            }
+
+            .game-container {
+                border-radius: 0;
+                max-width: 100%;
+                max-height: 100%;
+            }
+
+            .game-over-content h2 {
+                font-size: 2rem;
+            }
+
+            .game-over-content p {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <button class="play-button" id="playButton">🎮 Play Brain Freezy</button>
+        <div class="hero-content">
+            <h1>Brain Freezy</h1>
+            <p>Experience the coolest game on the web!</p>
+        </div>
+    </div>
+
+    <!-- Game Overlay -->
+    <div class="game-overlay" id="gameOverlay">
+        <div class="game-container">
+            <button class="close-button" id="closeButton">×</button>
+            <canvas id="gameCanvas"></canvas>
+            
+            <!-- Game Over Screen -->
+            <div class="game-over-screen" id="gameOverScreen">
+                <div class="game-over-content">
+                    <h2>Game Over!</h2>
+                    <p>Score: <span id="finalScore">0</span></p>
+                    <p>Clothing Items: <span id="finalClothing">0</span></p>
+                    <button class="restart-button" id="restartButton">Play Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // GAME SETUP AND INITIALIZATION
+        // ============================================
+        
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const gameOverlay = document.getElementById('gameOverlay');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const playButton = document.getElementById('playButton');
+        const closeButton = document.getElementById('closeButton');
+        const restartButton = document.getElementById('restartButton');
+
+        // Set canvas dimensions
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+        }
+
+        // ============================================
+        // GAME STATE
+        // ============================================
+        
+        const gameState = {
+            isRunning: false,
+            isPaused: false,
+            score: 0,
+            clothingCollected: 0,
+            lives: 3,
+            speed: 3,
+            baseSpeed: 3,
+            maxSpeed: 12,
+            difficulty: 1,
+            time: 0,
+            lastSpawnTime: 0,
+            spawnInterval: 1500, // milliseconds
+            isHit: false,
+            hitTimer: 0
+        };
+
+        // ============================================
+        // INPUT HANDLING
+        // ============================================
+        
+        const keys = {
+            left: false,
+            right: false
+        };
+
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+                keys.left = true;
+            }
+            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+                keys.right = true;
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+                keys.left = false;
+            }
+            if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+                keys.right = false;
+            }
+        });
+
+        // Touch controls for mobile
+        let touchStartX = 0;
+        let touchCurrentX = 0;
+
+        canvas.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchCurrentX = touchStartX;
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            touchCurrentX = e.touches[0].clientX;
+            const diff = touchCurrentX - touchStartX;
+            
+            keys.left = diff < -20;
+            keys.right = diff > 20;
+        });
+
+        canvas.addEventListener('touchend', () => {
+            keys.left = false;
+            keys.right = false;
+        });
+
+        // ============================================
+        // PLAYER CLASS
+        // ============================================
+        
+        class Player {
+            constructor() {
+                this.width = 60;
+                this.height = 80;
+                this.x = canvas.width / 2 - this.width / 2;
+                this.y = canvas.height - 200;
+                this.speed = 8;
+                this.image = new Image();
+                this.image.src = 'Sticker 1.png';
+                this.imageLoaded = false;
+                
+                this.image.onload = () => {
+                    this.imageLoaded = true;
+                };
+                
+                // Fallback if image doesn't load
+                this.image.onerror = () => {
+                    this.imageLoaded = false;
+                };
+            }
+
+            update() {
+                // Move left
+                if (keys.left && this.x > 0) {
+                    this.x -= this.speed;
+                }
+                // Move right
+                if (keys.right && this.x < canvas.width - this.width) {
+                    this.x += this.speed;
+                }
+            }
+
+            draw() {
+                if (gameState.isHit) {
+                    // Flash red when hit
+                    ctx.save();
+                    ctx.globalAlpha = Math.sin(gameState.hitTimer * 20) * 0.5 + 0.5;
+                }
+
+                if (this.imageLoaded) {
+                    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+                } else {
+                    // Draw fallback sled with rider
+                    this.drawFallback();
+                }
+
+                if (gameState.isHit) {
+                    ctx.restore();
+                }
+            }
+
+            drawFallback() {
+                // Sled
+                ctx.fillStyle = '#2196F3';
+                ctx.beginPath();
+                ctx.ellipse(this.x + this.width / 2, this.y + this.height - 15, 
+                           this.width / 2, 10, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Rider body
+                ctx.fillStyle = '#1976D2';
+                ctx.fillRect(this.x + 15, this.y + 20, 30, 40);
+
+                // Rider head
+                ctx.fillStyle = '#FFE0BD';
+                ctx.beginPath();
+                ctx.arc(this.x + 30, this.y + 15, 12, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Hat
+                ctx.fillStyle = '#0D47A1';
+                ctx.fillRect(this.x + 20, this.y + 5, 20, 8);
+                ctx.fillRect(this.x + 25, this.y, 10, 8);
+
+                // Sled runners
+                ctx.strokeStyle = '#1565C0';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(this.x + 10, this.y + this.height - 5);
+                ctx.lineTo(this.x + 10, this.y + this.height);
+                ctx.moveTo(this.x + this.width - 10, this.y + this.height - 5);
+                ctx.lineTo(this.x + this.width - 10, this.y + this.height);
+                ctx.stroke();
+            }
+
+            getCollisionBox() {
+                return {
+                    x: this.x + 5,
+                    y: this.y + 5,
+                    width: this.width - 10,
+                    height: this.height - 10
+                };
+            }
+        }
+
+        // ============================================
+        // GAME OBJECT CLASSES
+        // ============================================
+        
+        class GameObject {
+            constructor(x, y, type) {
+                this.x = x;
+                this.y = y;
+                this.type = type;
+                this.width = 40;
+                this.height = 40;
+                this.active = true;
+            }
+
+            update() {
+                this.y += gameState.speed;
+                
+                // Remove if off screen
+                if (this.y > canvas.height) {
+                    this.active = false;
+                }
+            }
+
+            draw() {
+                // Override in subclasses
+            }
+
+            checkCollision(player) {
+                const playerBox = player.getCollisionBox();
+                return (
+                    this.x < playerBox.x + playerBox.width &&
+                    this.x + this.width > playerBox.x &&
+                    this.y < playerBox.y + playerBox.height &&
+                    this.y + this.height > playerBox.y
+                );
+            }
+        }
+
+        // Collectible clothing items
+        class ClothingItem extends GameObject {
+            constructor(x, y) {
+                super(x, y, 'clothing');
+                const items = ['scarf', 'gloves', 'hat', 'jacket'];
+                this.itemType = items[Math.floor(Math.random() * items.length)];
+                this.rotation = 0;
+            }
+
+            update() {
+                super.update();
+                this.rotation += 0.05;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+                ctx.rotate(this.rotation);
+
+                switch(this.itemType) {
+                    case 'scarf':
+                        this.drawScarf();
+                        break;
+                    case 'gloves':
+                        this.drawGloves();
+                        break;
+                    case 'hat':
+                        this.drawHat();
+                        break;
+                    case 'jacket':
+                        this.drawJacket();
+                        break;
+                }
+
+                ctx.restore();
+            }
+
+            drawScarf() {
+                ctx.fillStyle = '#FF5722';
+                ctx.fillRect(-15, -3, 30, 6);
+                ctx.fillRect(-15, -3, 3, 15);
+                ctx.fillRect(12, -3, 3, 15);
+            }
+
+            drawGloves() {
+                ctx.fillStyle = '#4CAF50';
+                // Left glove
+                ctx.beginPath();
+                ctx.arc(-10, 0, 8, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillRect(-12, -2, 4, 6);
+                // Right glove
+                ctx.beginPath();
+                ctx.arc(10, 0, 8, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillRect(8, -2, 4, 6);
+            }
+
+            drawHat() {
+                ctx.fillStyle = '#9C27B0';
+                ctx.fillRect(-15, -5, 30, 8);
+                ctx.fillRect(-10, -15, 20, 12);
+                ctx.beginPath();
+                ctx.arc(0, -15, 5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            drawJacket() {
+                ctx.fillStyle = '#FF9800';
+                ctx.fillRect(-12, -12, 24, 24);
+                ctx.fillStyle = '#FFA726';
+                ctx.fillRect(-10, -10, 20, 20);
+                ctx.strokeStyle = '#F57C00';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(0, -10);
+                ctx.lineTo(0, 10);
+                ctx.stroke();
+            }
+        }
+
+        // Obstacle items
+        class Obstacle extends GameObject {
+            constructor(x, y) {
+                super(x, y, 'obstacle');
+                const types = ['rock', 'log', 'snowman'];
+                this.obstacleType = types[Math.floor(Math.random() * types.length)];
+                this.width = 50;
+                this.height = 50;
+            }
+
+            draw() {
+                switch(this.obstacleType) {
+                    case 'rock':
+                        this.drawRock();
+                        break;
+                    case 'log':
+                        this.drawLog();
+                        break;
+                    case 'snowman':
+                        this.drawSnowman();
+                        break;
+                }
+            }
+
+            drawRock() {
+                ctx.fillStyle = '#616161';
+                ctx.beginPath();
+                ctx.ellipse(this.x + 25, this.y + 30, 25, 20, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = '#757575';
+                ctx.beginPath();
+                ctx.ellipse(this.x + 20, this.y + 25, 15, 12, 0, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            drawLog() {
+                ctx.fillStyle = '#5D4037';
+                ctx.fillRect(this.x + 5, this.y + 15, 40, 20);
+                ctx.strokeStyle = '#4E342E';
+                ctx.lineWidth = 2;
+                for (let i = 0; i < 3; i++) {
+                    ctx.beginPath();
+                    ctx.arc(this.x + 15 + i * 10, this.y + 25, 3, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+            }
+
+            drawSnowman() {
+                // Bottom snowball
+                ctx.fillStyle = '#FFFFFF';
+                ctx.beginPath();
+                ctx.arc(this.x + 25, this.y + 35, 15, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#E0E0E0';
+                ctx.stroke();
+
+                // Top snowball
+                ctx.fillStyle = '#FFFFFF';
+                ctx.beginPath();
+                ctx.arc(this.x + 25, this.y + 15, 10, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#E0E0E0';
+                ctx.stroke();
+
+                // Eyes
+                ctx.fillStyle = '#000000';
+                ctx.beginPath();
+                ctx.arc(this.x + 21, this.y + 13, 2, 0, Math.PI * 2);
+                ctx.arc(this.x + 29, this.y + 13, 2, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Carrot nose
+                ctx.fillStyle = '#FF6F00';
+                ctx.beginPath();
+                ctx.moveTo(this.x + 25, this.y + 16);
+                ctx.lineTo(this.x + 30, this.y + 18);
+                ctx.lineTo(this.x + 25, this.y + 20);
+                ctx.fill();
+            }
+        }
+
+        // ============================================
+        // PARTICLE SYSTEM (SNOW)
+        // ============================================
+        
+        class SnowParticle {
+            constructor() {
+                this.reset();
+                this.y = Math.random() * canvas.height;
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = -10;
+                this.size = Math.random() * 3 + 1;
+                this.speedY = Math.random() * 1 + 0.5;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.6 + 0.4;
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+
+                if (this.y > canvas.height) {
+                    this.reset();
+                }
+
+                if (this.x < 0 || this.x > canvas.width) {
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // ============================================
+        // GAME MANAGERS
+        // ============================================
+        
+        let player;
+        let gameObjects = [];
+        let snowParticles = [];
+
+        // Initialize snow particles
+        function initSnow() {
+            snowParticles = [];
+            for (let i = 0; i < 150; i++) {
+                snowParticles.push(new SnowParticle());
+            }
+        }
+
+        // Spawn game objects (collectibles and obstacles)
+        function spawnObject() {
+            const now = Date.now();
+            if (now - gameState.lastSpawnTime < gameState.spawnInterval) {
+                return;
+            }
+
+            gameState.lastSpawnTime = now;
+
+            const x = Math.random() * (canvas.width - 60) + 30;
+            const y = -50;
+
+            // 60% chance for clothing, 40% for obstacles
+            if (Math.random() < 0.6) {
+                gameObjects.push(new ClothingItem(x, y));
+            } else {
+                gameObjects.push(new Obstacle(x, y));
+            }
+        }
+
+        // Draw mountains in background
+        function drawMountains() {
+            const mountainY = canvas.height * 0.4;
+            
+            // Far mountains (lighter)
+            ctx.fillStyle = 'rgba(200, 220, 240, 0.6)';
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height);
+            ctx.lineTo(0, mountainY + 50);
+            ctx.lineTo(canvas.width * 0.2, mountainY + 80);
+            ctx.lineTo(canvas.width * 0.4, mountainY + 30);
+            ctx.lineTo(canvas.width * 0.6, mountainY + 70);
+            ctx.lineTo(canvas.width * 0.8, mountainY + 40);
+            ctx.lineTo(canvas.width, mountainY + 90);
+            ctx.lineTo(canvas.width, canvas.height);
+            ctx.closePath();
+            ctx.fill();
+
+            // Near mountains (darker)
+            ctx.fillStyle = 'rgba(180, 210, 230, 0.8)';
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height);
+            ctx.lineTo(0, mountainY + 100);
+            ctx.lineTo(canvas.width * 0.3, mountainY + 60);
+            ctx.lineTo(canvas.width * 0.5, mountainY + 120);
+            ctx.lineTo(canvas.width * 0.7, mountainY + 70);
+            ctx.lineTo(canvas.width, mountainY + 130);
+            ctx.lineTo(canvas.width, canvas.height);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        // Draw HUD (score, lives, collected items)
+        function drawHUD() {
+            ctx.save();
+            ctx.font = 'bold 24px Arial';
+            ctx.fillStyle = '#FFFFFF';
+            ctx.strokeStyle = '#2196F3';
+            ctx.lineWidth = 4;
+
+            // Score
+            const scoreText = `Score: ${gameState.score}`;
+            ctx.strokeText(scoreText, 20, 40);
+            ctx.fillText(scoreText, 20, 40);
+
+            // Clothing collected
+            const clothingText = `👕 ${gameState.clothingCollected}`;
+            ctx.strokeText(clothingText, 20, 75);
+            ctx.fillText(clothingText, 20, 75);
+
+            // Lives (hearts)
+            ctx.font = '32px Arial';
+            for (let i = 0; i < gameState.lives; i++) {
+                ctx.fillText('❤️', canvas.width - 120 + i * 40, 40);
+            }
+
+            ctx.restore();
+        }
+
+        // Increase difficulty over time
+        function updateDifficulty() {
+            gameState.time += 1;
+            
+            // Increase speed every 5 seconds
+            if (gameState.time % 300 === 0) {
+                gameState.speed = Math.min(gameState.speed + 0.5, gameState.maxSpeed);
+                gameState.difficulty += 0.1;
+            }
+
+            // Decrease spawn interval (faster spawning)
+            gameState.spawnInterval = Math.max(800, 1500 - gameState.time);
+        }
+
+        // Handle collisions
+        function checkCollisions() {
+            for (let i = gameObjects.length - 1; i >= 0; i--) {
+                const obj = gameObjects[i];
+                
+                if (obj.checkCollision(player)) {
+                    if (obj.type === 'clothing') {
+                        // Collect item
+                        gameState.score += 10;
+                        gameState.clothingCollected += 1;
+                        obj.active = false;
+                    } else if (obj.type === 'obstacle' && !gameState.isHit) {
+                        // Hit obstacle
+                        gameState.lives -= 1;
+                        gameState.isHit = true;
+                        gameState.hitTimer = 0;
+                        obj.active = false;
+
+                        if (gameState.lives <= 0) {
+                            endGame();
+                        }
+                    }
+                }
+            }
+
+            // Handle hit animation
+            if (gameState.isHit) {
+                gameState.hitTimer += 0.016; // ~60fps
+                if (gameState.hitTimer > 1) {
+                    gameState.isHit = false;
+                }
+            }
+
+            // Remove inactive objects
+            gameObjects = gameObjects.filter(obj => obj.active);
+        }
+
+        // ============================================
+        // GAME LOOP
+        // ============================================
+        
+        function gameLoop() {
+            if (!gameState.isRunning) return;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw background gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#B3E5FC');
+            gradient.addColorStop(0.5, '#E1F5FE');
+            gradient.addColorStop(1, '#FFFFFF');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw mountains
+            drawMountains();
+
+            // Update and draw snow
+            snowParticles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            // Update and draw game objects
+            gameObjects.forEach(obj => {
+                obj.update();
+                obj.draw();
+            });
+
+            // Update and draw player
+            player.update();
+            player.draw();
+
+            // Check collisions
+            checkCollisions();
+
+            // Spawn new objects
+            spawnObject();
+
+            // Update difficulty
+            updateDifficulty();
+
+            // Draw HUD
+            drawHUD();
+
+            // Continue loop
+            requestAnimationFrame(gameLoop);
+        }
+
+        // ============================================
+        // GAME STATE MANAGEMENT
+        // ============================================
+        
+        function startGame() {
+            // Reset game state
+            gameState.isRunning = true;
+            gameState.score = 0;
+            gameState.clothingCollected = 0;
+            gameState.lives = 3;
+            gameState.speed = gameState.baseSpeed;
+            gameState.difficulty = 1;
+            gameState.time = 0;
+            gameState.lastSpawnTime = Date.now();
+            gameState.isHit = false;
+            gameState.hitTimer = 0;
+
+            // Reset arrays
+            gameObjects = [];
+            
+            // Initialize player
+            player = new Player();
+
+            // Initialize snow
+            initSnow();
+
+            // Hide game over screen
+            gameOverScreen.classList.remove('active');
+
+            // Resize canvas and start loop
+            resizeCanvas();
+            gameLoop();
+        }
+
+        function endGame() {
+            gameState.isRunning = false;
+            
+            // Update final score display
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('finalClothing').textContent = gameState.clothingCollected;
+            
+            // Show game over screen
+            gameOverScreen.classList.add('active');
+        }
+
+        function closeGame() {
+            gameState.isRunning = false;
+            gameOverlay.classList.remove('active');
+            gameOverScreen.classList.remove('active');
+        }
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        
+        playButton.addEventListener('click', () => {
+            gameOverlay.classList.add('active');
+            startGame();
+        });
+
+        closeButton.addEventListener('click', closeGame);
+
+        restartButton.addEventListener('click', () => {
+            startGame();
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (gameState.isRunning) {
+                resizeCanvas();
+            }
+        });
+
+        // Initialize canvas size on load
+        resizeCanvas();
+    </script>
+</body>
+</html>
