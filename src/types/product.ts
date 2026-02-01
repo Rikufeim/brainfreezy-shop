@@ -3,7 +3,7 @@ export interface Product {
   name: string;
   description: string;
   price: number;
-  category: 'course' | 'guide' | 'bundle' | 'membership';
+  category: 'course' | 'guide' | 'bundle' | 'membership' | 'clothing' | 'accessory' | 'slides';
   image?: string;
   features?: string[];
   isSubscription?: boolean;

@@ -1,15 +1,15 @@
-import { motion } from "framer-motion";
-import { ShoppingBag } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ShoppingBag, Plus, ChevronLeft } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { Button } from "@/components/ui/button";
 
 interface HeaderProps {
-  onOpenContact: () => void;
-  onOpenShop: () => void;
-  onOpenVibeCode: () => void;
+  onToggleCategories: () => void;
+  showBackButton?: boolean;
+  onBack?: () => void;
 }
 
-export default function Header({ onOpenContact, onOpenShop, onOpenVibeCode }: HeaderProps) {
+export default function Header({ onToggleCategories, showBackButton, onBack }: HeaderProps) {
   const { totalItems, openCart } = useCart();
 
   return (
@@ -17,69 +17,49 @@ export default function Header({ onOpenContact, onOpenShop, onOpenVibeCode }: He
       <nav className="flex items-center justify-between">
         {/* Left side buttons */}
         <div className="flex items-center gap-4">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onOpenContact}
-              className="uppercase tracking-[0.2em] font-display"
-            >
-              Let's Talk
-            </Button>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
-          >
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onOpenVibeCode}
-              className="uppercase tracking-[0.2em] font-display"
-            >
-              Vibe Code
-            </Button>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <Button
-              variant="outline"
-              size="sm"
-              className="uppercase tracking-[0.2em] font-display"
-            >
-              Crypto
-            </Button>
-          </motion.div>
+          <AnimatePresence mode="wait">
+            {showBackButton ? (
+              <motion.div
+                key="back-button"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={onBack}
+                  className="bg-black/20 backdrop-blur-md border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+                  aria-label="Go Back"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </Button>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="menu-button"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={onToggleCategories}
+                  className="bg-black/20 backdrop-blur-md border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+                  aria-label="Open Categories"
+                >
+                  <Plus className="w-5 h-5" />
+                </Button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Right side buttons */}
         <div className="flex items-center gap-4">
-          {/* Shop Button */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onOpenShop}
-              className="uppercase tracking-[0.2em] font-display"
-            >
-              Shop
-            </Button>
-          </motion.div>
-
           {/* Cart Button */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}

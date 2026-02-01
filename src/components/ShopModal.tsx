@@ -58,7 +58,7 @@ export default function ShopModal({ isOpen, onClose }: ShopModalProps) {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-50 overflow-y-auto"
+            className="fixed inset-0 z-50 overflow-y-auto scrollbar-hide"
           >
             <div className="min-h-full flex items-start justify-center p-6 pt-20">
               <div className="relative w-full max-w-6xl">

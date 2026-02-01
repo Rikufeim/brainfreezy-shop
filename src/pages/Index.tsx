@@ -2,42 +2,64 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import CometCardDemo from "@/components/comet-card-demo";
 import Header from "@/components/Header";
-import LetsTalkModal from "@/components/lets-talk/LetsTalkModal";
-import ShopModal from "@/components/ShopModal";
-import VibeCodeModal from "@/components/VibeCodeModal";
 import CartDrawer from "@/components/CartDrawer";
+import CategorySidebar from "@/components/CategorySidebar";
+import FeaturedProducts from "@/components/FeaturedProducts";
 import { CartProvider } from "@/contexts/CartContext";
 
+import ProductOverlay from "@/components/ProductOverlay";
+
+import { Product } from "@/types/product";
+
 function IndexContent() {
-  const [isContactOpen, setIsContactOpen] = useState(false);
-  const [isShopOpen, setIsShopOpen] = useState(false);
-  const [isVibeCodeOpen, setIsVibeCodeOpen] = useState(false);
+  const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(category);
+    // Clear selected product when changing category
+    setSelectedProduct(null);
+  };
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="relative min-h-screen bg-black overflow-hidden"
+      className="relative h-screen bg-black overflow-y-auto overflow-x-hidden scrollbar-hide"
     >
-      
+
       {/* Header */}
-      <Header 
-        onOpenContact={() => setIsContactOpen(true)}
-        onOpenShop={() => setIsShopOpen(true)}
-        onOpenVibeCode={() => setIsVibeCodeOpen(true)}
+      <Header
+        onToggleCategories={() => setIsCategoriesOpen(!isCategoriesOpen)}
+        showBackButton={!!selectedProduct}
+        onBack={() => setSelectedProduct(null)}
       />
-      
+
       {/* Hero Content */}
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex h-screen items-center justify-center">
         <CometCardDemo />
       </div>
-      
-      {/* Modals */}
-      <LetsTalkModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
-      <ShopModal isOpen={isShopOpen} onClose={() => setIsShopOpen(false)} />
-      <VibeCodeModal isOpen={isVibeCodeOpen} onClose={() => setIsVibeCodeOpen(false)} />
-      
+
+      {/* Featured Products */}
+      <FeaturedProducts />
+
+      {/* Product Overlay */}
+      <ProductOverlay
+        category={selectedCategory}
+        onClose={() => setSelectedCategory(null)}
+        selectedProduct={selectedProduct}
+        onSelectProduct={setSelectedProduct}
+      />
+
+      {/* Modals and Sidebars */}
+      <CategorySidebar
+        isOpen={isCategoriesOpen}
+        onClose={() => setIsCategoriesOpen(false)}
+        onSelectCategory={handleCategorySelect}
+      />
+
       {/* Cart Drawer */}
       <CartDrawer />
     </motion.div>

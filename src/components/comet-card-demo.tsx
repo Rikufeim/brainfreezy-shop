@@ -1,5 +1,5 @@
 import { CometCard } from "@/components/ui/comet-card";
-import heroCard from "@/assets/hero-multiply-card.png";
+import brainfreezyLogo from "@/assets/brainfreezy-logo.jpg";
 
 export default function CometCardDemo() {
   return (
@@ -16,8 +16,8 @@ export default function CometCardDemo() {
           <img
             loading="lazy"
             className="h-full w-full rounded-[16px] object-contain"
-            alt="Multiply Card"
-            src={heroCard}
+            alt="Brain Freezy Logo"
+            src={brainfreezyLogo}
             style={{
               filter: "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5))",
             }}
