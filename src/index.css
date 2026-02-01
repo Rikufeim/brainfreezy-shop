@@ -1,0 +1,216 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Multiply Design System - Luxury Dark Theme */
+
+@layer base {
+  :root {
+    /* Core palette - Pure black with electric purple */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    
+    /* Card surfaces */
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 100%;
+    
+    /* Popover surfaces */
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 100%;
+    
+    /* Electric Purple - Primary accent */
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Secondary - Dark gray */
+    --secondary: 0 0% 11%;
+    --secondary-foreground: 0 0% 100%;
+    
+    /* Muted tones */
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+    
+    /* Accent - subtle purple tint */
+    --accent: 262 30% 20%;
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 262 83% 58%;
+    
+    --radius: 0.75rem;
+    
+    /* Custom purple glow effects */
+    --glow-purple: 262 83% 58%;
+    --glow-purple-light: 262 83% 70%;
+    
+    /* Sidebar (for potential future use) */
+    --sidebar-background: 0 0% 3%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 262 83% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 18%;
+    --sidebar-ring: 262 83% 58%;
+  }
+
+  .dark {
+    /* Same as root - dark mode by default */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 11%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 262 30% 20%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 262 83% 58%;
+  }
+}
+
+@layer base {
+  :root {
+    --main: #000;
+    --overlay: rgba(0, 0, 0, 0.8);
+
+    --bg: #dfe5f2;
+    --bw: #fff;
+    --blank: #000;
+    --border: #000;
+    --text: #000;
+    --mtext: #fff;
+    --ring: #000;
+    --ring-offset: #fff;
+
+    --border-radius: 5px;
+    --box-shadow-x: 4px;
+    --box-shadow-y: 4px;
+    --reverse-box-shadow-x: -4px;
+    --reverse-box-shadow-y: -4px;
+    --base-font-weight: 500;
+    --heading-font-weight: 700;
+
+    --shadow: var(--box-shadow-x) var(--box-shadow-y) 0px 0px var(--border);
+  }
+
+  .dark {
+    --bg: #272933;
+    --bw: #212121;
+    --blank: #fff;
+    --border: #000;
+    --text: #e6e6e6;
+    --mtext: #000;
+    --ring: #fff;
+    --ring-offset: #000;
+
+    --shadow: var(--box-shadow-x) var(--box-shadow-y) 0px 0px var(--border);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+}
+
+@layer utilities {
+  .perspective-distant {
+    perspective: 1000px;
+  }
+
+  .transform-3d {
+    transform-style: preserve-3d;
+  }
+
+  /* Purple glow effects */
+  .glow-purple {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.4),
+                0 0 40px hsl(var(--primary) / 0.2),
+                0 0 60px hsl(var(--primary) / 0.1);
+  }
+
+  .glow-purple-sm {
+    box-shadow: 0 0 10px hsl(var(--primary) / 0.3),
+                0 0 20px hsl(var(--primary) / 0.15);
+  }
+
+  .glow-purple-lg {
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.5),
+                0 0 60px hsl(var(--primary) / 0.3),
+                0 0 90px hsl(var(--primary) / 0.15);
+  }
+
+  .text-glow-purple {
+    text-shadow: 0 0 10px hsl(var(--primary) / 0.5),
+                 0 0 20px hsl(var(--primary) / 0.3);
+  }
+
+  /* Border glow */
+  .border-glow {
+    border-color: hsl(var(--primary) / 0.5);
+    box-shadow: 0 0 15px hsl(var(--primary) / 0.3),
+                inset 0 0 15px hsl(var(--primary) / 0.05);
+  }
+
+  /* Gradient backgrounds */
+  .bg-gradient-radial {
+    background: radial-gradient(ellipse at center, hsl(var(--primary) / 0.15) 0%, transparent 70%);
+  }
+
+  .bg-gradient-dark {
+    background: linear-gradient(180deg, hsl(0 0% 0%) 0%, hsl(0 0% 5%) 100%);
+  }
+
+  /* Fog effect overlay */
+  .fog-overlay {
+    background: radial-gradient(ellipse at 50% 50%, hsl(262 83% 58% / 0.08) 0%, transparent 50%);
+  }
+
+  /* Letter spacing for luxury feel */
+  .tracking-luxury {
+    letter-spacing: 0.2em;
+  }
+
+  .tracking-wide-luxury {
+    letter-spacing: 0.3em;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari and Opera */
+  }
+}
