@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingBag, ChevronLeft } from "lucide-react";
-import { useCart } from "@/contexts/CartContext";
+import { useCartStore } from "@/stores/cartStore";
 import { Button } from "@/components/ui/button";
 
 interface HeaderProps {
@@ -10,7 +10,8 @@ interface HeaderProps {
 }
 
 export default function Header({ onToggleCategories, showBackButton, onBack }: HeaderProps) {
-  const { totalItems, openCart } = useCart();
+  const totalItems = useCartStore((state) => state.totalItems);
+  const openCart = useCartStore((state) => state.openCart);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
@@ -77,10 +78,10 @@ export default function Header({ onToggleCategories, showBackButton, onBack }: H
             >
               <ShoppingBag className="w-5 h-5" />
             </Button>
-            {totalItems > 0 && (
+            {totalItems() > 0 && (
               <span className="absolute -top-1 -right-1 w-5 h-5 bg-white text-black rounded-full 
                                flex items-center justify-center text-xs font-bold">
-                {totalItems}
+                {totalItems()}
               </span>
             )}
           </motion.div>
