@@ -1,18 +1,39 @@
 import { motion } from "framer-motion";
-import { Product } from "@/types/product";
-import { ChevronRight, ChevronLeft, Plus } from "lucide-react";
+import { ShopifyProduct } from "@/lib/shopify";
+import { ChevronRight, ChevronLeft, Plus, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useCart } from "@/contexts/CartContext";
+import { useCartStore } from "@/stores/cartStore";
 
 interface ProductDetailProps {
-    product: Product;
+    product: ShopifyProduct;
     onNext: () => void;
     onPrev: () => void;
     onAddToCart: () => void;
 }
 
 export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: ProductDetailProps) {
-    const { addToCart } = useCart();
+    const addItem = useCartStore((state) => state.addItem);
+    const isLoading = useCartStore((state) => state.isLoading);
+    
+    const imageUrl = product.node.images.edges[0]?.node.url;
+    const variant = product.node.variants.edges[0]?.node;
+    const price = parseFloat(product.node.priceRange.minVariantPrice.amount);
+    const currency = product.node.priceRange.minVariantPrice.currencyCode;
+
+    const handleAddToCart = async () => {
+        if (!variant) return;
+        
+        await addItem({
+            product,
+            variantId: variant.id,
+            variantTitle: variant.title,
+            price: variant.price,
+            quantity: 1,
+            selectedOptions: variant.selectedOptions || []
+        });
+        
+        if (onAddToCart) onAddToCart();
+    };
 
     return (
         <div className="w-full h-full flex flex-col items-center justify-center relative">
@@ -33,7 +54,7 @@ export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: 
 
             {/* Main Content */}
             <motion.div
-                key={product.id}
+                key={product.node.id}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
@@ -42,17 +63,15 @@ export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: 
             >
                 {/* Image */}
                 <div className="w-full aspect-square relative mb-8 flex items-center justify-center">
-                    {/* Using a placeholder or the image if available */}
-                    {product.image && product.image !== "/placeholder" ? (
+                    {imageUrl ? (
                         <img
-                            src={product.image}
-                            alt={product.name}
+                            src={imageUrl}
+                            alt={product.node.title}
                             className="w-full h-full object-contain drop-shadow-2xl"
                         />
                     ) : (
-                        // Fallback specific for clothing (mock)
                         <div className="w-full h-full bg-white/5 rounded-xl flex items-center justify-center text-white/20">
-                            <span className="font-display uppercase tracking-widest">{product.name}</span>
+                            <span className="font-display uppercase tracking-widest">{product.node.title}</span>
                         </div>
                     )}
                 </div>
@@ -66,24 +85,25 @@ export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: 
 
                 {/* Info */}
                 <h2 className="font-display font-bold text-2xl uppercase tracking-[0.2em] mb-2">
-                    {product.name}
-                    {/* Hack to match screenshot "JC-11" style if needed, but using name is fine */}
+                    {product.node.title}
                 </h2>
 
                 <p className="font-display text-xl mb-8">
-                    ${product.price}
+                    {currency === 'EUR' ? '€' : '$'}{price.toFixed(0)}
                 </p>
 
                 {/* Add Button */}
                 <Button
                     size="icon"
-                    onClick={() => {
-                        addToCart(product);
-                        if (onAddToCart) onAddToCart();
-                    }}
-                    className="w-12 h-12 rounded-full bg-white text-black hover:bg-white/90 hover:scale-110 transition-all font-bold"
+                    onClick={handleAddToCart}
+                    disabled={isLoading || !variant}
+                    className="w-12 h-12 rounded-full bg-white text-black hover:bg-white/90 hover:scale-110 transition-all font-bold disabled:opacity-50"
                 >
-                    <Plus className="w-6 h-6" />
+                    {isLoading ? (
+                        <Loader2 className="w-6 h-6 animate-spin" />
+                    ) : (
+                        <Plus className="w-6 h-6" />
+                    )}
                 </Button>
 
             </motion.div>
