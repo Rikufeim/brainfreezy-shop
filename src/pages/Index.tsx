@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import CartDrawer from "@/components/CartDrawer";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import ProductDetail from "@/components/ProductDetail";
+import ChatBot from "@/components/ChatBot";
 import { Button } from "@/components/ui/button";
 import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 import { ShopifyProduct } from "@/lib/shopify";
@@ -190,6 +191,9 @@ function IndexContent() {
 
       {/* Cart Drawer */}
       <CartDrawer />
+
+      {/* ChatBot */}
+      <ChatBot />
 
       {/* Footer */}
       <footer className="py-8 px-6 md:px-12 bg-black w-full relative z-10">
