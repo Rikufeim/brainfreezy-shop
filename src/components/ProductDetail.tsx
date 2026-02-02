@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { ShopifyProduct } from "@/lib/shopify";
 import { ChevronRight, ChevronLeft, Plus, Loader2 } from "lucide-react";
@@ -15,11 +15,10 @@ interface ProductDetailProps {
 export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: ProductDetailProps) {
     const addItem = useCartStore((state) => state.addItem);
     const isLoading = useCartStore((state) => state.isLoading);
-    const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
+    const [showSizes, setShowSizes] = useState(false);
     
     const imageUrl = product.node.images.edges[0]?.node.url;
     const variants = product.node.variants.edges;
-    const selectedVariant = variants[selectedVariantIndex]?.node;
     const price = parseFloat(product.node.priceRange.minVariantPrice.amount);
     const currency = product.node.priceRange.minVariantPrice.currencyCode;
 
@@ -29,7 +28,17 @@ export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: 
     );
     const hasSizes = sizeOption && sizeOption.values.length > 1;
 
-    const handleAddToCart = async () => {
+    const handlePlusClick = () => {
+        if (hasSizes) {
+            setShowSizes(true);
+        } else {
+            // No sizes, add default variant directly
+            handleAddToCart(0);
+        }
+    };
+
+    const handleAddToCart = async (variantIndex: number) => {
+        const selectedVariant = variants[variantIndex]?.node;
         if (!selectedVariant) return;
         
         await addItem({
@@ -41,6 +50,7 @@ export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: 
             selectedOptions: selectedVariant.selectedOptions || []
         });
         
+        setShowSizes(false);
         if (onAddToCart) onAddToCart();
     };
 
@@ -97,48 +107,68 @@ export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: 
                     {product.node.title}
                 </h2>
 
-                <p className="font-display text-xl mb-4">
+                <p className="font-display text-xl mb-6">
                     {currency === 'EUR' ? '€' : '$'}{price.toFixed(0)}
                 </p>
 
-                {/* Size Options */}
-                {hasSizes && (
-                    <div className="flex flex-wrap justify-center gap-2 mb-4">
-                        {variants.map((variant, index) => {
-                            const sizeValue = variant.node.selectedOptions?.find(
-                                opt => opt.name.toLowerCase() === 'size' || opt.name.toLowerCase() === 'koko'
-                            )?.value || variant.node.title;
-                            
-                            return (
-                                <button
-                                    key={variant.node.id}
-                                    onClick={() => setSelectedVariantIndex(index)}
-                                    className={`font-display text-sm uppercase tracking-[0.15em] px-4 py-2 rounded-full border transition-all ${
-                                        selectedVariantIndex === index
-                                            ? 'bg-white text-black border-white'
-                                            : 'bg-transparent text-white/70 border-white/30 hover:border-white hover:text-white'
-                                    }`}
+                {/* Add Button / Size Selection */}
+                <div className="min-h-[48px] flex items-center justify-center">
+                    <AnimatePresence mode="wait">
+                        {!showSizes ? (
+                            <motion.div
+                                key="plus-button"
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.8 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                <Button
+                                    size="icon"
+                                    onClick={handlePlusClick}
+                                    disabled={isLoading}
+                                    className="w-12 h-12 rounded-full bg-white text-black hover:bg-white/90 hover:scale-110 transition-all font-bold disabled:opacity-50"
                                 >
-                                    {sizeValue}
-                                </button>
-                            );
-                        })}
-                    </div>
-                )}
-
-                {/* Add Button */}
-                <Button
-                    size="icon"
-                    onClick={handleAddToCart}
-                    disabled={isLoading || !selectedVariant}
-                    className="w-12 h-12 rounded-full bg-white text-black hover:bg-white/90 hover:scale-110 transition-all font-bold disabled:opacity-50"
-                >
-                    {isLoading ? (
-                        <Loader2 className="w-6 h-6 animate-spin" />
-                    ) : (
-                        <Plus className="w-6 h-6" />
-                    )}
-                </Button>
+                                    {isLoading ? (
+                                        <Loader2 className="w-6 h-6 animate-spin" />
+                                    ) : (
+                                        <Plus className="w-6 h-6" />
+                                    )}
+                                </Button>
+                            </motion.div>
+                        ) : (
+                            <motion.div
+                                key="size-options"
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.8 }}
+                                transition={{ duration: 0.2 }}
+                                className="flex flex-wrap justify-center gap-2"
+                            >
+                                {variants.map((variant, index) => {
+                                    const sizeValue = variant.node.selectedOptions?.find(
+                                        opt => opt.name.toLowerCase() === 'size' || opt.name.toLowerCase() === 'koko'
+                                    )?.value || variant.node.title;
+                                    
+                                    return (
+                                        <button
+                                            key={variant.node.id}
+                                            onClick={() => handleAddToCart(index)}
+                                            disabled={isLoading}
+                                            className="font-display text-sm uppercase tracking-[0.15em] px-4 py-2 rounded-full 
+                                                       bg-white text-black hover:bg-white/80 transition-all disabled:opacity-50"
+                                        >
+                                            {isLoading ? (
+                                                <Loader2 className="w-4 h-4 animate-spin" />
+                                            ) : (
+                                                sizeValue
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
 
             </motion.div>
         </div>
