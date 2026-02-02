@@ -62,7 +62,7 @@ export default function FeaturedProducts({ selectedCategory, onSelectProduct }: 
                                 className="flex flex-col items-center group cursor-pointer"
                                 onClick={() => onSelectProduct(product)}
                             >
-                                <div className="relative w-full aspect-square mb-6 overflow-hidden">
+                                <div className="relative w-full aspect-square mb-6">
                                     {imageUrl ? (
                                         <img
                                             src={imageUrl}
