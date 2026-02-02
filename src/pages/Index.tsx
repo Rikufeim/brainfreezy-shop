@@ -6,7 +6,7 @@ import Header from "@/components/Header";
 import CartDrawer from "@/components/CartDrawer";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import ProductDetail from "@/components/ProductDetail";
-import ChatBot from "@/components/ChatBot";
+import icyMascot from "@/assets/icy-mascot.png";
 import { Button } from "@/components/ui/button";
 import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 import { ShopifyProduct } from "@/lib/shopify";
@@ -192,9 +192,6 @@ function IndexContent() {
       {/* Cart Drawer */}
       <CartDrawer />
 
-      {/* ChatBot */}
-      <ChatBot />
-
       {/* Footer */}
       <footer className="py-8 px-6 md:px-12 bg-black w-full relative z-10">
         <div className="max-w-7xl mx-auto">
@@ -203,6 +200,11 @@ function IndexContent() {
             <a href="#" className="text-lg md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">TERMS</a>
             <a href="#" className="text-lg md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">PRIVACY</a>
             <a href="#" className="text-lg md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">COOKIES</a>
+            <img
+              src={icyMascot}
+              alt="ICY"
+              className="w-12 h-12 object-contain"
+            />
           </div>
         </div>
       </footer>
