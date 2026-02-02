@@ -1,5 +1,5 @@
 import { CometCard } from "@/components/ui/comet-card";
-import brainfreezyLogo from "@/assets/brainfreezy-logo.jpg";
+import brainfreezyLogo from "@/assets/brainfreezy-logo-official.png";
 
 export default function CometCardDemo() {
   return (
