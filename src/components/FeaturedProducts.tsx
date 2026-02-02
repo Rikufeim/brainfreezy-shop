@@ -1,41 +1,129 @@
 import { motion } from "framer-motion";
-import { getProductsByCategory } from "@/data/clothing";
-import { Product } from "@/types/product";
+import { useShopifyProducts } from "@/hooks/useShopifyProducts";
+import { ShopifyProduct } from "@/lib/shopify";
+import { Loader2 } from "lucide-react";
 
 interface FeaturedProductsProps {
     selectedCategory: string;
-    onSelectProduct: (product: Product) => void;
+    onSelectProduct: (product: ShopifyProduct) => void;
 }
 
 export default function FeaturedProducts({ selectedCategory, onSelectProduct }: FeaturedProductsProps) {
-    const products = getProductsByCategory(selectedCategory);
+    const { products, isLoading, error } = useShopifyProducts(50);
+    
+    // Filter products by category
+    const filteredProducts = filterByCategory(products, selectedCategory);
+
+    if (isLoading) {
+        return (
+            <section className="py-24 px-6 md:px-12 bg-black w-full relative z-10">
+                <div className="max-w-7xl mx-auto flex items-center justify-center min-h-[400px]">
+                    <Loader2 className="w-8 h-8 animate-spin text-white/50" />
+                </div>
+            </section>
+        );
+    }
+
+    if (error) {
+        return (
+            <section className="py-24 px-6 md:px-12 bg-black w-full relative z-10">
+                <div className="max-w-7xl mx-auto flex items-center justify-center min-h-[400px]">
+                    <p className="text-white/50">Failed to load products</p>
+                </div>
+            </section>
+        );
+    }
+
+    if (filteredProducts.length === 0) {
+        return (
+            <section className="py-24 px-6 md:px-12 bg-black w-full relative z-10">
+                <div className="max-w-7xl mx-auto flex items-center justify-center min-h-[400px]">
+                    <p className="text-white/50">No products found</p>
+                </div>
+            </section>
+        );
+    }
+
     return (
         <section className="py-24 px-6 md:px-12 bg-black w-full relative z-10">
             <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-16">
-                    {products.map((product, index) => (
-                        <motion.div
-                            key={product.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.1 }}
-                            className="flex flex-col items-center group cursor-pointer"
-                            onClick={() => onSelectProduct(product)}
-                        >
-                            <div className="relative w-full aspect-square mb-6 overflow-hidden">
-                                <img
-                                    src={product.image}
-                                    alt={product.name}
-                                    className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-2xl"
-                                />
-                            </div>
-                            <h3 className="font-display font-medium text-lg tracking-widest text-white/90 uppercase mb-2">
-                                {product.id}
-                            </h3>
-                        </motion.div>
-                    ))}
+                    {filteredProducts.map((product, index) => {
+                        const imageUrl = product.node.images.edges[0]?.node.url;
+                        const price = parseFloat(product.node.priceRange.minVariantPrice.amount);
+                        const currency = product.node.priceRange.minVariantPrice.currencyCode;
+                        
+                        return (
+                            <motion.div
+                                key={product.node.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.1 }}
+                                className="flex flex-col items-center group cursor-pointer"
+                                onClick={() => onSelectProduct(product)}
+                            >
+                                <div className="relative w-full aspect-square mb-6 overflow-hidden">
+                                    {imageUrl ? (
+                                        <img
+                                            src={imageUrl}
+                                            alt={product.node.title}
+                                            className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-2xl"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full bg-white/5 flex items-center justify-center">
+                                            <span className="text-white/20 text-xs uppercase tracking-widest">No Image</span>
+                                        </div>
+                                    )}
+                                </div>
+                                <h3 className="font-display font-medium text-lg tracking-widest text-white/90 uppercase mb-2 text-center">
+                                    {product.node.title}
+                                </h3>
+                                <p className="font-display text-white/60 text-sm">
+                                    {currency === 'EUR' ? '€' : '$'}{price.toFixed(0)}
+                                </p>
+                            </motion.div>
+                        );
+                    })}
                 </div>
             </div>
         </section>
     );
+}
+
+function filterByCategory(products: ShopifyProduct[], category: string): ShopifyProduct[] {
+    const normalized = category.toLowerCase();
+    
+    if (normalized === 'all') {
+        return products;
+    }
+    
+    if (normalized === 'mens' || normalized === 'womens') {
+        // Filter to clothing products only
+        return products.filter(p => {
+            const handle = p.node.handle.toLowerCase();
+            const title = p.node.title.toLowerCase();
+            // Exclude accessories
+            return !handle.includes('case') && 
+                   !handle.includes('beanie') && 
+                   !handle.includes('patch') &&
+                   !title.includes('case') &&
+                   !title.includes('beanie') &&
+                   !title.includes('patch');
+        });
+    }
+    
+    if (normalized === 'accessories') {
+        return products.filter(p => {
+            const handle = p.node.handle.toLowerCase();
+            const title = p.node.title.toLowerCase();
+            return handle.includes('case') || 
+                   handle.includes('beanie') || 
+                   handle.includes('patch') ||
+                   title.includes('case') ||
+                   title.includes('beanie') ||
+                   title.includes('patch');
+        });
+    }
+    
+    return products;
 }

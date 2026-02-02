@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft } from "lucide-react";
 import CometCardDemo from "@/components/comet-card-demo";
@@ -6,11 +6,10 @@ import Header from "@/components/Header";
 import CartDrawer from "@/components/CartDrawer";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import ProductDetail from "@/components/ProductDetail";
-import { CartProvider } from "@/contexts/CartContext";
-import { getProductsByCategory } from "@/data/clothing";
 import { Button } from "@/components/ui/button";
-
-import { Product } from "@/types/product";
+import { useShopifyProducts } from "@/hooks/useShopifyProducts";
+import { ShopifyProduct } from "@/lib/shopify";
+import { useCartStore } from "@/stores/cartStore";
 
 const categories = [
   "ALL",
@@ -19,29 +18,77 @@ const categories = [
   "ACCESSORIES",
 ];
 
+// Filter products by category
+function filterByCategory(products: ShopifyProduct[], category: string): ShopifyProduct[] {
+  const normalized = category.toLowerCase();
+  
+  if (normalized === 'all') {
+    return products;
+  }
+  
+  if (normalized === 'mens' || normalized === 'womens') {
+    return products.filter(p => {
+      const handle = p.node.handle.toLowerCase();
+      const title = p.node.title.toLowerCase();
+      return !handle.includes('case') && 
+             !handle.includes('beanie') && 
+             !handle.includes('patch') &&
+             !title.includes('case') &&
+             !title.includes('beanie') &&
+             !title.includes('patch');
+    });
+  }
+  
+  if (normalized === 'accessories') {
+    return products.filter(p => {
+      const handle = p.node.handle.toLowerCase();
+      const title = p.node.title.toLowerCase();
+      return handle.includes('case') || 
+             handle.includes('beanie') || 
+             handle.includes('patch') ||
+             title.includes('case') ||
+             title.includes('beanie') ||
+             title.includes('patch');
+    });
+  }
+  
+  return products;
+}
+
 function IndexContent() {
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<ShopifyProduct | null>(null);
+  const { products } = useShopifyProducts(50);
+  const syncCart = useCartStore((state) => state.syncCart);
+
+  // Sync cart on visibility change
+  useEffect(() => {
+    syncCart();
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') syncCart();
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [syncCart]);
 
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category);
-    // Clear selected product when changing category
     setSelectedProduct(null);
   };
 
   // Get current category products for navigation
-  const currentProducts = getProductsByCategory(selectedCategory);
+  const currentProducts = filterByCategory(products, selectedCategory);
 
   const handleNext = () => {
     if (!selectedProduct) return;
-    const currentIndex = currentProducts.findIndex(p => p.id === selectedProduct.id);
+    const currentIndex = currentProducts.findIndex(p => p.node.id === selectedProduct.node.id);
     const nextIndex = (currentIndex + 1) % currentProducts.length;
     setSelectedProduct(currentProducts[nextIndex]);
   };
 
   const handlePrev = () => {
     if (!selectedProduct) return;
-    const currentIndex = currentProducts.findIndex(p => p.id === selectedProduct.id);
+    const currentIndex = currentProducts.findIndex(p => p.node.id === selectedProduct.node.id);
     const prevIndex = (currentIndex - 1 + currentProducts.length) % currentProducts.length;
     setSelectedProduct(currentProducts[prevIndex]);
   };
@@ -160,11 +207,7 @@ function IndexContent() {
 }
 
 const Index = () => {
-  return (
-    <CartProvider>
-      <IndexContent />
-    </CartProvider>
-  );
+  return <IndexContent />;
 };
 
 export default Index;
