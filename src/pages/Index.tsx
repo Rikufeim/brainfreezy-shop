@@ -195,16 +195,21 @@ function IndexContent() {
       {/* Footer */}
       <footer className="py-8 px-6 md:px-12 bg-black w-full relative z-10">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-            <a href="#" className="text-lg md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">CONTACT</a>
-            <a href="#" className="text-lg md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">TERMS</a>
-            <a href="#" className="text-lg md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">PRIVACY</a>
-            <a href="#" className="text-lg md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">COOKIES</a>
-            <img
-              src={icyMascot}
-              alt="ICY"
-              className="w-12 h-12 object-contain"
-            />
+          <div className="flex items-center justify-between">
+            <div className="flex-1" />
+            <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+              <a href="#" className="text-lg md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">CONTACT</a>
+              <a href="#" className="text-lg md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">TERMS</a>
+              <a href="#" className="text-lg md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">PRIVACY</a>
+              <a href="#" className="text-lg md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">COOKIES</a>
+            </div>
+            <div className="flex-1 flex justify-end">
+              <img
+                src={icyMascot}
+                alt="ICY"
+                className="w-20 h-20 object-contain"
+              />
+            </div>
           </div>
         </div>
       </footer>
