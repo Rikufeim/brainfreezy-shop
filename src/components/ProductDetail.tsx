@@ -59,10 +59,10 @@ export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: 
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.4, type: "spring" }}
-                className="flex flex-col items-center max-w-lg w-full p-6 text-center"
+                className="flex flex-col items-center max-w-md w-full p-4 text-center"
             >
                 {/* Image */}
-                <div className="w-full aspect-square relative mb-8 flex items-center justify-center">
+                <div className="w-full max-h-[50vh] aspect-square relative mb-6 flex items-center justify-center">
                     {imageUrl ? (
                         <img
                             src={imageUrl}
