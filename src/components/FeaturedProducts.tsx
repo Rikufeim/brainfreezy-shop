@@ -76,7 +76,7 @@ export default function FeaturedProducts({ selectedCategory, onSelectProduct }: 
                                     )}
                                 </div>
                                 <h3 className="font-display font-medium text-lg tracking-widest text-white/90 uppercase text-center">
-                                    BF-{String(index + 1).padStart(2, '0')}
+                                    BF-{getProductCode(product.node.title)}-{String(index + 1).padStart(2, '0')}
                                 </h3>
                             </motion.div>
                         );
@@ -85,6 +85,19 @@ export default function FeaturedProducts({ selectedCategory, onSelectProduct }: 
             </div>
         </section>
     );
+}
+
+// Get short product code from title
+function getProductCode(title: string): string {
+    const t = title.toLowerCase();
+    if (t.includes('hoodie')) return 'HD';
+    if (t.includes('crewneck')) return 'CN';
+    if (t.includes('sweatshirt')) return 'SW';
+    if (t.includes('tee') || t.includes('t-shirt')) return 'TS';
+    if (t.includes('beanie')) return 'BN';
+    if (t.includes('patch')) return 'PT';
+    if (t.includes('case') || t.includes('phone')) return 'PC';
+    return 'XX';
 }
 
 function filterByCategory(products: ShopifyProduct[], category: string): ShopifyProduct[] {
