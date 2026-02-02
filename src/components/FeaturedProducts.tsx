@@ -75,12 +75,9 @@ export default function FeaturedProducts({ selectedCategory, onSelectProduct }: 
                                         </div>
                                     )}
                                 </div>
-                                <h3 className="font-display font-medium text-lg tracking-widest text-white/90 uppercase mb-2 text-center">
-                                    {product.node.title}
+                                <h3 className="font-display font-medium text-lg tracking-widest text-white/90 uppercase text-center">
+                                    BF-{String(index + 1).padStart(2, '0')}
                                 </h3>
-                                <p className="font-display text-white/60 text-sm">
-                                    {currency === 'EUR' ? '€' : '$'}{price.toFixed(0)}
-                                </p>
                             </motion.div>
                         );
                     })}
