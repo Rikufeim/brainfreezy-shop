@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import {
   motion,
   useMotionValue,
@@ -17,11 +17,22 @@ const ROTATION_INTERVAL = 4000; // 4 seconds
 interface ProductShowcaseProps {
   product: ShopifyProduct;
   side: "left" | "right";
-  onAddToCart: (product: ShopifyProduct) => void;
   countdown: number;
+  isPaused: boolean;
+  onSelectSize: (product: ShopifyProduct) => void;
+  onAddWithVariant: (product: ShopifyProduct, variantId: string) => void;
+  activeProductId: string | null;
 }
 
-function ProductShowcase({ product, side, onAddToCart, countdown }: ProductShowcaseProps) {
+function ProductShowcase({ 
+  product, 
+  side, 
+  countdown, 
+  isPaused,
+  onSelectSize,
+  onAddWithVariant,
+  activeProductId 
+}: ProductShowcaseProps) {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -51,6 +62,14 @@ function ProductShowcase({ product, side, onAddToCart, countdown }: ProductShowc
   const imageUrl = product.node.images.edges[0]?.node.url;
   const price = parseFloat(product.node.priceRange.minVariantPrice.amount);
   const hasVariants = product.node.variants.edges.length > 1;
+  const isActive = activeProductId === product.node.id;
+
+  // Get size options
+  const sizeOptions = product.node.variants.edges.map(v => ({
+    id: v.node.id,
+    size: v.node.selectedOptions.find(o => o.name.toLowerCase() === 'size')?.value || v.node.title,
+    available: v.node.availableForSale
+  }));
 
   return (
     <motion.div
@@ -62,12 +81,12 @@ function ProductShowcase({ product, side, onAddToCart, countdown }: ProductShowc
     >
       {/* Countdown Timer */}
       <motion.div 
-        key={countdown}
+        key={`${countdown}-${isPaused}`}
         initial={{ scale: 1.2, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="text-white/40 text-sm font-mono tabular-nums"
+        className={`text-sm font-mono tabular-nums ${isPaused ? 'text-white/60' : 'text-white/40'}`}
       >
-        {countdown}s
+        {isPaused ? '⏸' : `${countdown}s`}
       </motion.div>
 
       {/* 3D Product Image */}
@@ -96,14 +115,48 @@ function ProductShowcase({ product, side, onAddToCart, countdown }: ProductShowc
         </motion.div>
       </div>
       
-      <Button
-        onClick={() => onAddToCart(product)}
-        variant="outline"
-        size="sm"
-        className="text-xs md:text-sm font-display uppercase tracking-widest border-white/30 text-white hover:bg-white hover:text-black transition-all duration-300"
-      >
-        {hasVariants ? "Select" : `€${price.toFixed(0)}`}
-      </Button>
+      {/* Button or Size Selector */}
+      <AnimatePresence mode="wait">
+        {isActive && hasVariants ? (
+          <motion.div
+            key="sizes"
+            initial={{ opacity: 0, y: -10, height: 0 }}
+            animate={{ opacity: 1, y: 0, height: 'auto' }}
+            exit={{ opacity: 0, y: -10, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="flex flex-wrap justify-center gap-2"
+          >
+            {sizeOptions.map((option) => (
+              <Button
+                key={option.id}
+                onClick={() => onAddWithVariant(product, option.id)}
+                disabled={!option.available}
+                variant="outline"
+                size="sm"
+                className="text-xs font-display uppercase tracking-widest border-white/30 text-white hover:bg-white hover:text-black transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed px-3 py-1 min-w-[40px]"
+              >
+                {option.size}
+              </Button>
+            ))}
+          </motion.div>
+        ) : (
+          <motion.div
+            key="button"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <Button
+              onClick={() => hasVariants ? onSelectSize(product) : onAddWithVariant(product, product.node.variants.edges[0]?.node.id)}
+              variant="outline"
+              size="sm"
+              className="text-xs md:text-sm font-display uppercase tracking-widest border-white/30 text-white hover:bg-white hover:text-black transition-all duration-300"
+            >
+              {hasVariants ? "Select" : `€${price.toFixed(0)}`}
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
@@ -160,6 +213,7 @@ export default function HeroShowcase() {
   const { products } = useShopifyProducts(50);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [countdown, setCountdown] = useState(ROTATION_INTERVAL / 1000);
+  const [activeProductId, setActiveProductId] = useState<string | null>(null);
   const addItem = useCartStore((state) => state.addItem);
   const openCart = useCartStore((state) => state.openCart);
 
@@ -175,9 +229,11 @@ export default function HeroShowcase() {
            !title.includes('patch');
   });
 
-  // Countdown timer
+  const isPaused = activeProductId !== null;
+
+  // Countdown timer - pause when selecting size
   useEffect(() => {
-    if (clothingProducts.length < 2) return;
+    if (clothingProducts.length < 2 || isPaused) return;
     
     const countdownInterval = setInterval(() => {
       setCountdown((prev) => {
@@ -189,11 +245,11 @@ export default function HeroShowcase() {
     }, 1000);
     
     return () => clearInterval(countdownInterval);
-  }, [clothingProducts.length]);
+  }, [clothingProducts.length, isPaused]);
 
-  // Auto-rotate products
+  // Auto-rotate products - pause when selecting size
   useEffect(() => {
-    if (clothingProducts.length < 2) return;
+    if (clothingProducts.length < 2 || isPaused) return;
     
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 2) % clothingProducts.length);
@@ -201,10 +257,14 @@ export default function HeroShowcase() {
     }, ROTATION_INTERVAL);
     
     return () => clearInterval(interval);
-  }, [clothingProducts.length]);
+  }, [clothingProducts.length, isPaused]);
 
-  const handleAddToCart = (product: ShopifyProduct) => {
-    const variant = product.node.variants.edges[0]?.node;
+  const handleSelectSize = useCallback((product: ShopifyProduct) => {
+    setActiveProductId(product.node.id);
+  }, []);
+
+  const handleAddWithVariant = useCallback((product: ShopifyProduct, variantId: string) => {
+    const variant = product.node.variants.edges.find(v => v.node.id === variantId)?.node;
     if (!variant) return;
     
     addItem({
@@ -216,7 +276,8 @@ export default function HeroShowcase() {
       selectedOptions: variant.selectedOptions,
     });
     openCart();
-  };
+    setActiveProductId(null); // Reset after adding
+  }, [addItem, openCart]);
 
   // Get current products to display
   const leftProduct = clothingProducts[currentIndex % clothingProducts.length];
@@ -232,8 +293,11 @@ export default function HeroShowcase() {
               key={leftProduct.node.id}
               product={leftProduct}
               side="left"
-              onAddToCart={handleAddToCart}
               countdown={countdown}
+              isPaused={isPaused}
+              onSelectSize={handleSelectSize}
+              onAddWithVariant={handleAddWithVariant}
+              activeProductId={activeProductId}
             />
           )}
         </AnimatePresence>
@@ -250,8 +314,11 @@ export default function HeroShowcase() {
               key={rightProduct.node.id}
               product={rightProduct}
               side="right"
-              onAddToCart={handleAddToCart}
               countdown={countdown}
+              isPaused={isPaused}
+              onSelectSize={handleSelectSize}
+              onAddWithVariant={handleAddWithVariant}
+              activeProductId={activeProductId}
             />
           )}
         </AnimatePresence>
