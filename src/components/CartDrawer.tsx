@@ -102,7 +102,7 @@ export default function CartDrawer() {
                         >
                           {/* Image */}
                           {imageUrl && (
-                            <div className="w-16 h-16 bg-secondary/20 rounded-md overflow-hidden flex-shrink-0">
+                            <div className="w-16 h-16 rounded-md overflow-hidden flex-shrink-0">
                               <img 
                                 src={imageUrl} 
                                 alt={item.product.node.title} 
