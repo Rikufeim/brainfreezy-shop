@@ -1,7 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingBag, ChevronLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { Button } from "@/components/ui/button";
+import icyCartIcon from "@/assets/icy-cart-icon.png";
 
 interface HeaderProps {
   onToggleCategories: () => void;
@@ -72,14 +73,13 @@ export default function Header({ onToggleCategories, showBackButton, onBack }: H
             transition={{ duration: 0.6, delay: 0.4 }}
             className="relative"
           >
-            <Button
-              variant="icon"
-              size="icon"
+            <button
               onClick={openCart}
               aria-label="Shopping cart"
+              className="w-10 h-10 flex items-center justify-center hover:scale-110 transition-transform duration-200"
             >
-              <ShoppingBag className="w-5 h-5" />
-            </Button>
+              <img src={icyCartIcon} alt="Cart" className="w-10 h-10 object-contain" />
+            </button>
             {totalItems > 0 && (
               <span className="absolute -top-1 -right-1 w-5 h-5 bg-white text-black rounded-full 
                                flex items-center justify-center text-xs font-bold">
