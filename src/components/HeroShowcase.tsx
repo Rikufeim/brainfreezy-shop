@@ -18,9 +18,10 @@ interface ProductShowcaseProps {
   product: ShopifyProduct;
   side: "left" | "right";
   onAddToCart: (product: ShopifyProduct) => void;
+  countdown: number;
 }
 
-function ProductShowcase({ product, side, onAddToCart }: ProductShowcaseProps) {
+function ProductShowcase({ product, side, onAddToCart, countdown }: ProductShowcaseProps) {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -28,8 +29,10 @@ function ProductShowcase({ product, side, onAddToCart }: ProductShowcaseProps) {
   const mouseXSpring = useSpring(x, { stiffness: 300, damping: 30 });
   const mouseYSpring = useSpring(y, { stiffness: 300, damping: 30 });
 
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["-12deg", "12deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["12deg", "-12deg"]);
+  const translateX = useTransform(mouseXSpring, [-0.5, 0.5], ["-8px", "8px"]);
+  const translateY = useTransform(mouseYSpring, [-0.5, 0.5], ["8px", "-8px"]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
@@ -57,13 +60,29 @@ function ProductShowcase({ product, side, onAddToCart }: ProductShowcaseProps) {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="flex flex-col items-center gap-3"
     >
+      {/* Countdown Timer */}
+      <motion.div 
+        key={countdown}
+        initial={{ scale: 1.2, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className="text-white/40 text-sm font-mono tabular-nums"
+      >
+        {countdown}s
+      </motion.div>
+
+      {/* 3D Product Image */}
       <div className="perspective-distant transform-3d">
         <motion.div
           ref={ref}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
-          style={{ rotateX, rotateY }}
-          whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
+          style={{ rotateX, rotateY, translateX, translateY }}
+          initial={{ scale: 1, z: 0 }}
+          whileHover={{ 
+            scale: 1.08, 
+            z: 30,
+            transition: { duration: 0.2 } 
+          }}
           className="cursor-pointer"
         >
           <img
@@ -71,7 +90,7 @@ function ProductShowcase({ product, side, onAddToCart }: ProductShowcaseProps) {
             alt={product.node.title}
             className="w-28 h-28 md:w-40 md:h-40 object-contain"
             style={{
-              filter: "drop-shadow(0 15px 30px rgba(0, 0, 0, 0.4))",
+              filter: "drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5))",
             }}
           />
         </motion.div>
@@ -83,7 +102,7 @@ function ProductShowcase({ product, side, onAddToCart }: ProductShowcaseProps) {
         size="sm"
         className="text-xs md:text-sm font-display uppercase tracking-widest border-white/30 text-white hover:bg-white hover:text-black transition-all duration-300"
       >
-        {hasVariants ? "Valitse" : `${price.toFixed(0)}€`}
+        {hasVariants ? "Select" : `€${price.toFixed(0)}`}
       </Button>
     </motion.div>
   );
@@ -140,6 +159,7 @@ function Logo3D() {
 export default function HeroShowcase() {
   const { products } = useShopifyProducts(50);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [countdown, setCountdown] = useState(ROTATION_INTERVAL / 1000);
   const addItem = useCartStore((state) => state.addItem);
   const openCart = useCartStore((state) => state.openCart);
 
@@ -155,12 +175,29 @@ export default function HeroShowcase() {
            !title.includes('patch');
   });
 
+  // Countdown timer
+  useEffect(() => {
+    if (clothingProducts.length < 2) return;
+    
+    const countdownInterval = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          return ROTATION_INTERVAL / 1000;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    
+    return () => clearInterval(countdownInterval);
+  }, [clothingProducts.length]);
+
   // Auto-rotate products
   useEffect(() => {
     if (clothingProducts.length < 2) return;
     
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 2) % clothingProducts.length);
+      setCountdown(ROTATION_INTERVAL / 1000);
     }, ROTATION_INTERVAL);
     
     return () => clearInterval(interval);
@@ -181,7 +218,7 @@ export default function HeroShowcase() {
     openCart();
   };
 
-  // Get current products to display (2 on each side)
+  // Get current products to display
   const leftProduct = clothingProducts[currentIndex % clothingProducts.length];
   const rightProduct = clothingProducts[(currentIndex + 1) % clothingProducts.length];
 
@@ -196,6 +233,7 @@ export default function HeroShowcase() {
               product={leftProduct}
               side="left"
               onAddToCart={handleAddToCart}
+              countdown={countdown}
             />
           )}
         </AnimatePresence>
@@ -213,6 +251,7 @@ export default function HeroShowcase() {
               product={rightProduct}
               side="right"
               onAddToCart={handleAddToCart}
+              countdown={countdown}
             />
           )}
         </AnimatePresence>
