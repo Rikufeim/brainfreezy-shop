@@ -78,14 +78,14 @@ function ProductShowcase({
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="flex flex-col items-center gap-3"
     >
-      {/* Countdown Timer or Lock indicator */}
+      {/* Countdown Timer */}
       <motion.div 
-        key={`${countdown}-${isLocked}`}
+        key={countdown}
         initial={{ scale: 1.2, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className={`text-sm font-mono tabular-nums ${isLocked ? 'text-green-400' : 'text-white/40'}`}
+        className="text-white/40 text-sm font-mono tabular-nums"
       >
-        {isLocked ? '🔒' : `${countdown}s`}
+        {isLocked ? '' : `${countdown}s`}
       </motion.div>
 
       {/* 3D Product Image */}
@@ -103,16 +103,13 @@ function ProductShowcase({
           }}
           className="cursor-pointer"
         >
-          <motion.img
+          <img
             src={imageUrl}
             alt={product.node.title}
             className="w-28 h-28 md:w-40 md:h-40 object-contain"
-            animate={{ 
-              filter: isLocked 
-                ? "drop-shadow(0 20px 40px rgba(74, 222, 128, 0.4))" 
-                : "drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5))"
+            style={{
+              filter: "drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5))",
             }}
-            transition={{ duration: 0.3 }}
           />
         </motion.div>
       </div>
