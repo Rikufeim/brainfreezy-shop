@@ -76,9 +76,9 @@ export default function Header({ onToggleCategories, showBackButton, onBack }: H
             <button
               onClick={openCart}
               aria-label="Shopping cart"
-              className="w-20 h-20 flex items-center justify-center hover:scale-110 transition-transform duration-200"
+              className="w-12 h-12 flex items-center justify-center hover:scale-110 transition-transform duration-200"
             >
-              <img src={icyCartIcon} alt="Cart" className="w-20 h-20 object-contain" />
+              <img src={icyCartIcon} alt="Cart" className="w-12 h-12 object-contain" />
             </button>
             {totalItems > 0 && (
               <span className="absolute -top-1 -right-1 w-5 h-5 bg-white text-black rounded-full 
