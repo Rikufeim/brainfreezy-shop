@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 import { ShopifyProduct } from "@/lib/shopify";
 import { Loader2 } from "lucide-react";
+import Product3DCard from "./Product3DCard";
 
 interface FeaturedProductsProps {
     selectedCategory: string;
@@ -56,29 +57,36 @@ export default function FeaturedProducts({ selectedCategory, onSelectProduct }: 
                         const price = parseFloat(product.node.priceRange.minVariantPrice.amount);
                         const currency = product.node.priceRange.minVariantPrice.currencyCode;
                         
-                        return (
+                            return (
                             <motion.div
                                 key={product.node.id}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1 }}
-                                className="flex flex-col items-center group cursor-pointer"
-                                onClick={() => onSelectProduct(product)}
+                                className="flex flex-col items-center"
                             >
-                                <div className="relative w-full aspect-square mb-6">
-                                    {imageUrl ? (
-                                        <img
-                                            src={imageUrl}
-                                            alt={product.node.title}
-                                            className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-2xl"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full bg-white/5 flex items-center justify-center">
-                                            <span className="text-white/20 text-xs uppercase tracking-widest">No Image</span>
-                                        </div>
-                                    )}
-                                </div>
-                                <h3 className="font-display font-medium text-lg tracking-widest text-white/90 uppercase text-center">
+                                <Product3DCard 
+                                    onClick={() => onSelectProduct(product)}
+                                    className="w-full"
+                                >
+                                    <div className="relative w-full aspect-square mb-6">
+                                        {imageUrl ? (
+                                            <img
+                                                src={imageUrl}
+                                                alt={product.node.title}
+                                                className="w-full h-full object-contain drop-shadow-2xl"
+                                                style={{
+                                                    filter: "drop-shadow(0 15px 30px rgba(0, 0, 0, 0.4))",
+                                                }}
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full bg-white/5 flex items-center justify-center">
+                                                <span className="text-white/20 text-xs uppercase tracking-widest">No Image</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </Product3DCard>
+                                <h3 className="font-display font-medium text-lg tracking-widest text-white/90 uppercase text-center mt-2">
                                     BF-{getProductCode(product.node.title)}-{String(index + 1).padStart(2, '0')}
                                 </h3>
                             </motion.div>
