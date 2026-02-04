@@ -17,8 +17,8 @@ export default function Header({ onToggleCategories, showBackButton, onBack }: H
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      {/* White banner background */}
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm border-b border-border" style={{ height: '60px' }} />
+      {/* Black banner background */}
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" style={{ height: '60px' }} />
       
       <nav className="relative flex items-center justify-between px-6 md:px-8" style={{ height: '60px' }}>
         {/* Left side buttons */}
@@ -36,7 +36,7 @@ export default function Header({ onToggleCategories, showBackButton, onBack }: H
                   variant="outline"
                   size="icon"
                   onClick={onBack}
-                  className="bg-background/20 backdrop-blur-md border-border hover:bg-muted transition-all duration-300"
+                  className="bg-black/20 backdrop-blur-md border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300"
                   aria-label="Go Back"
                 >
                   <ChevronLeft className="w-5 h-5" />
@@ -50,14 +50,14 @@ export default function Header({ onToggleCategories, showBackButton, onBack }: H
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           <div className="flex items-baseline gap-3 md:gap-4">
             <div className="relative inline-block">
-              <div className="text-foreground/70 text-[10px] md:text-xs font-display font-bold tracking-wider">
+              <div className="text-white/70 text-[10px] md:text-xs font-display font-bold tracking-wider">
                 HOLD XRP DROP
               </div>
-              <div className="absolute left-1/2 -translate-x-1/2 text-foreground/40 text-[7px] md:text-[8px] font-display font-light tracking-wide mt-0.5 whitespace-nowrap">
+              <div className="absolute left-1/2 -translate-x-1/2 text-white/40 text-[7px] md:text-[8px] font-display font-light tracking-wide mt-0.5 whitespace-nowrap">
                 (coming soon)
               </div>
             </div>
-            <div className="text-foreground text-[10px] md:text-xs font-display font-bold tracking-wider">
+            <div className="text-white text-[10px] md:text-xs font-display font-bold tracking-wider">
               BRAIN FREEZY
             </div>
           </div>
@@ -81,7 +81,7 @@ export default function Header({ onToggleCategories, showBackButton, onBack }: H
               <ShoppingBag className="w-5 h-5" />
             </Button>
             {totalItems > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-foreground text-background rounded-full 
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-white text-black rounded-full 
                                flex items-center justify-center text-xs font-bold">
                 {totalItems}
               </span>

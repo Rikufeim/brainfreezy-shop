@@ -100,14 +100,14 @@ export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: 
             {/* Navigation Arrows */}
             <button
                 onClick={handlePrevImage}
-                className="absolute left-0 md:left-4 z-10 p-4 text-foreground/50 hover:text-foreground transition-colors"
+                className="absolute left-0 md:left-4 z-10 p-4 text-white/50 hover:text-white transition-colors"
             >
                 <ChevronLeft className="w-8 h-8" />
             </button>
 
             <button
                 onClick={handleNextImage}
-                className="absolute right-0 md:right-4 z-10 p-4 text-foreground/50 hover:text-foreground transition-colors"
+                className="absolute right-0 md:right-4 z-10 p-4 text-white/50 hover:text-white transition-colors"
             >
                 <ChevronRight className="w-8 h-8" />
             </button>
@@ -138,7 +138,7 @@ export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: 
                             className="w-full h-full object-contain drop-shadow-2xl"
                         />
                     ) : (
-                        <div className="w-full h-full bg-foreground/5 rounded-xl flex items-center justify-center text-foreground/20">
+                        <div className="w-full h-full bg-white/5 rounded-xl flex items-center justify-center text-white/20">
                             <span className="font-display uppercase tracking-widest">{product.node.title}</span>
                         </div>
                     )}
@@ -151,7 +151,7 @@ export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: 
                             key={index}
                             onClick={() => setCurrentImageIndex(index)}
                             className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                                index === currentImageIndex ? 'bg-foreground' : 'bg-foreground/30'
+                                index === currentImageIndex ? 'bg-white' : 'bg-white/30'
                             }`}
                         />
                     ))}
@@ -181,7 +181,7 @@ export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: 
                                     size="icon"
                                     onClick={handlePlusClick}
                                     disabled={isLoading}
-                                    className="w-12 h-12 rounded-full bg-foreground text-background hover:bg-foreground/90 hover:scale-110 transition-all font-bold disabled:opacity-50"
+                                    className="w-12 h-12 rounded-full bg-white text-black hover:bg-white/90 hover:scale-110 transition-all font-bold disabled:opacity-50"
                                 >
                                     {isLoading ? (
                                         <Loader2 className="w-6 h-6 animate-spin" />
@@ -210,7 +210,7 @@ export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: 
                                             onClick={() => handleAddToCart(index)}
                                             disabled={isLoading}
                                             className="font-display text-sm uppercase tracking-[0.15em] px-4 py-2 rounded-full 
-                                                       bg-foreground text-background hover:bg-foreground/80 transition-all disabled:opacity-50"
+                                                       bg-white text-black hover:bg-white/80 transition-all disabled:opacity-50"
                                         >
                                             {isLoading ? (
                                                 <Loader2 className="w-4 h-4 animate-spin" />
