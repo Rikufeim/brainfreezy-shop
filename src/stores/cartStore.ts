@@ -26,8 +26,8 @@ interface CartStore {
   openCart: () => void;
   closeCart: () => void;
   toggleCart: () => void;
-  totalItems: () => number;
-  totalPrice: () => number;
+  getTotalItems: () => number;
+  getTotalPrice: () => number;
 }
 
 export const useCartStore = create<CartStore>()(
@@ -146,8 +146,8 @@ export const useCartStore = create<CartStore>()(
       closeCart: () => set({ isOpen: false }),
       toggleCart: () => set((state) => ({ isOpen: !state.isOpen })),
 
-      totalItems: () => get().items.reduce((sum, item) => sum + item.quantity, 0),
-      totalPrice: () => get().items.reduce((sum, item) => sum + (parseFloat(item.price.amount) * item.quantity), 0),
+      getTotalItems: () => get().items.reduce((sum, item) => sum + item.quantity, 0),
+      getTotalPrice: () => get().items.reduce((sum, item) => sum + (parseFloat(item.price.amount) * item.quantity), 0),
 
       syncCart: async () => {
         const { cartId, isSyncing, clearCart } = get();
