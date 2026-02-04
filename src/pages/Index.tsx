@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import CartDrawer from "@/components/CartDrawer";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import ProductDetail from "@/components/ProductDetail";
+import CookieBanner from "@/components/CookieBanner";
 import icyMascot from "@/assets/icy-mascot.png";
 import { Button } from "@/components/ui/button";
 import { useShopifyProducts } from "@/hooks/useShopifyProducts";
@@ -60,6 +61,7 @@ function filterByCategory(products: ShopifyProduct[], category: string): Shopify
 function IndexContent() {
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
   const [selectedProduct, setSelectedProduct] = useState<ShopifyProduct | null>(null);
+  const [cookieBannerOpen, setCookieBannerOpen] = useState(false);
   const { products } = useShopifyProducts(50);
   const syncCart = useCartStore((state) => state.syncCart);
 
@@ -193,6 +195,9 @@ function IndexContent() {
       {/* Cart Drawer */}
       <CartDrawer />
 
+      {/* Cookie Banner */}
+      <CookieBanner open={cookieBannerOpen} onOpenChange={setCookieBannerOpen} />
+
       {/* Footer */}
       <footer className="py-8 px-6 md:px-12 bg-black w-full relative z-10">
         <div className="max-w-7xl mx-auto">
@@ -209,7 +214,12 @@ function IndexContent() {
             {/* Links */}
             <div className="flex flex-wrap justify-center items-center gap-6 md:gap-12 flex-1">
               <Link to="/contact" className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">CONTACT</Link>
-              <Link to="/cookies" className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">COOKIES</Link>
+              <button 
+                onClick={() => setCookieBannerOpen(true)}
+                className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300"
+              >
+                COOKIES
+              </button>
             </div>
             
             {/* Mascot - shown on right for desktop */}
