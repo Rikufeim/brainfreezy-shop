@@ -75,18 +75,13 @@ function ProductShowcase({
       initial={{ opacity: 0, x: side === "left" ? -50 : 50 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: side === "left" ? -50 : 50 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
       className="flex flex-col items-center gap-3"
     >
       {/* Countdown Timer */}
-      <motion.div 
-        key={countdown}
-        initial={{ scale: 1.2, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        className="text-white/40 text-sm font-mono tabular-nums"
-      >
-        {isLocked ? '' : `${countdown}s`}
-      </motion.div>
+      <div className="text-white/40 text-sm font-mono tabular-nums h-5">
+        {!isLocked && `${countdown}s`}
+      </div>
 
       {/* 3D Product Image */}
       <div className="perspective-distant transform-3d">
@@ -119,10 +114,10 @@ function ProductShowcase({
         {showSizes && hasVariants ? (
           <motion.div
             key="sizes"
-            initial={{ opacity: 0, y: -10, height: 0 }}
-            animate={{ opacity: 1, y: 0, height: 'auto' }}
-            exit={{ opacity: 0, y: -10, height: 0 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
             className="flex flex-wrap justify-center gap-2"
           >
             {sizeOptions.map((option) => (
@@ -144,6 +139,7 @@ function ProductShowcase({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
           >
             <Button
               onClick={() => hasVariants ? onSelectSize(product, side) : onAddWithVariant(product, product.node.variants.edges[0]?.node.id)}
@@ -231,61 +227,43 @@ export default function HeroShowcase() {
            !title.includes('patch');
   });
 
-  // Left side timer - independent
+  const productCount = clothingProducts.length;
+
+  // Left side timer and rotation
   useEffect(() => {
-    if (clothingProducts.length < 2 || lockedSide === "left") return;
+    if (productCount < 2 || lockedSide === "left") return;
     
     const countdownInterval = setInterval(() => {
-      setLeftCountdown((prev) => (prev <= 1 ? ROTATION_INTERVAL / 1000 : prev - 1));
+      setLeftCountdown((prev) => {
+        if (prev <= 1) {
+          // Rotate product when countdown reaches 0
+          setLeftIndex((prevIdx) => (prevIdx + 2) % productCount);
+          return ROTATION_INTERVAL / 1000;
+        }
+        return prev - 1;
+      });
     }, 1000);
     
     return () => clearInterval(countdownInterval);
-  }, [clothingProducts.length, lockedSide]);
+  }, [productCount, lockedSide]);
 
-  // Right side timer - independent
+  // Right side timer and rotation
   useEffect(() => {
-    if (clothingProducts.length < 2 || lockedSide === "right") return;
+    if (productCount < 2 || lockedSide === "right") return;
     
     const countdownInterval = setInterval(() => {
-      setRightCountdown((prev) => (prev <= 1 ? ROTATION_INTERVAL / 1000 : prev - 1));
+      setRightCountdown((prev) => {
+        if (prev <= 1) {
+          // Rotate product when countdown reaches 0
+          setRightIndex((prevIdx) => (prevIdx + 2) % productCount);
+          return ROTATION_INTERVAL / 1000;
+        }
+        return prev - 1;
+      });
     }, 1000);
     
     return () => clearInterval(countdownInterval);
-  }, [clothingProducts.length, lockedSide]);
-
-  // Left side rotation - independent
-  useEffect(() => {
-    if (clothingProducts.length < 2 || lockedSide === "left") return;
-    
-    const interval = setInterval(() => {
-      setLeftIndex((prev) => {
-        let next = (prev + 2) % clothingProducts.length;
-        // Avoid showing same product as right
-        if (next === rightIndex) next = (next + 1) % clothingProducts.length;
-        return next;
-      });
-      setLeftCountdown(ROTATION_INTERVAL / 1000);
-    }, ROTATION_INTERVAL);
-    
-    return () => clearInterval(interval);
-  }, [clothingProducts.length, lockedSide, rightIndex]);
-
-  // Right side rotation - independent (offset by 2 seconds for variety)
-  useEffect(() => {
-    if (clothingProducts.length < 2 || lockedSide === "right") return;
-    
-    const interval = setInterval(() => {
-      setRightIndex((prev) => {
-        let next = (prev + 2) % clothingProducts.length;
-        // Avoid showing same product as left
-        if (next === leftIndex) next = (next + 1) % clothingProducts.length;
-        return next;
-      });
-      setRightCountdown(ROTATION_INTERVAL / 1000);
-    }, ROTATION_INTERVAL);
-    
-    return () => clearInterval(interval);
-  }, [clothingProducts.length, lockedSide, leftIndex]);
+  }, [productCount, lockedSide]);
 
   const handleSelectSize = useCallback((product: ShopifyProduct, side: "left" | "right") => {
     setLockedSide(side);
@@ -312,19 +290,21 @@ export default function HeroShowcase() {
   // Get current products to display
   const leftProduct = lockedSide === "left" && lockedProduct 
     ? lockedProduct 
-    : clothingProducts[leftIndex % clothingProducts.length];
+    : clothingProducts[leftIndex % productCount] || null;
   const rightProduct = lockedSide === "right" && lockedProduct 
     ? lockedProduct 
-    : clothingProducts[rightIndex % clothingProducts.length];
+    : clothingProducts[rightIndex % productCount] || null;
+
+  if (productCount === 0) return <Logo3D />;
 
   return (
     <div className="flex items-center justify-center gap-6 md:gap-12 lg:gap-16">
       {/* Left Product */}
-      <div className="hidden sm:block">
+      <div className="hidden sm:block min-w-[160px]">
         <AnimatePresence mode="wait">
           {leftProduct && (
             <ProductShowcase
-              key={lockedSide === "left" ? `locked-${leftProduct.node.id}` : leftProduct.node.id}
+              key={lockedSide === "left" ? `locked-${leftProduct.node.id}` : `left-${leftIndex}`}
               product={leftProduct}
               side="left"
               countdown={leftCountdown}
@@ -341,11 +321,11 @@ export default function HeroShowcase() {
       <Logo3D />
 
       {/* Right Product */}
-      <div className="hidden sm:block">
+      <div className="hidden sm:block min-w-[160px]">
         <AnimatePresence mode="wait">
           {rightProduct && (
             <ProductShowcase
-              key={lockedSide === "right" ? `locked-${rightProduct.node.id}` : rightProduct.node.id}
+              key={lockedSide === "right" ? `locked-${rightProduct.node.id}` : `right-${rightIndex}`}
               product={rightProduct}
               side="right"
               countdown={rightCountdown}
