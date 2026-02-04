@@ -52,9 +52,7 @@ export default function Header({
           <div className="flex items-baseline gap-3 md:gap-4">
             <div className="relative inline-block">
               
-              <div className="absolute left-1/2 -translate-x-1/2 text-white/40 text-[7px] md:text-[8px] font-display font-light tracking-wide mt-0.5 whitespace-nowrap">
-                (coming soon)
-              </div>
+              
             </div>
             
           </div>
