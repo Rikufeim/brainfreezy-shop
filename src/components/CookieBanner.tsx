@@ -44,16 +44,16 @@ export default function CookieBanner({ open, onOpenChange }: CookieBannerProps) 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl bg-white text-black border-0 p-0 gap-0">
+      <DialogContent className="max-w-2xl bg-black text-white border-white/20 p-0 gap-0">
         <DialogHeader className="flex flex-row items-center justify-between p-6 pb-4">
-          <DialogTitle className="font-display text-sm font-bold tracking-widest">
+          <DialogTitle className="font-display text-sm font-bold tracking-widest text-white">
             MANAGE COOKIE PREFERENCES
           </DialogTitle>
           <Button
             variant="ghost"
             size="icon"
             onClick={() => onOpenChange(false)}
-            className="text-black hover:bg-black/10 -mr-2"
+            className="text-white hover:bg-white/10 -mr-2"
           >
             <X className="w-5 h-5" />
           </Button>
@@ -61,7 +61,7 @@ export default function CookieBanner({ open, onOpenChange }: CookieBannerProps) 
 
         <div className="px-6 pb-6 max-h-[60vh] overflow-y-auto">
           {/* Description */}
-          <p className="text-black/60 text-xs leading-relaxed tracking-wide uppercase mb-6">
+          <p className="text-white/60 text-xs leading-relaxed tracking-wide uppercase mb-6">
             IN THIS PANEL YOU CAN EXPRESS SOME PREFERENCES RELATED TO THE PROCESSING 
             OF YOUR PERSONAL INFORMATION. YOU MAY REVIEW AND CHANGE EXPRESSED CHOICES 
             AT ANY TIME BY RESURFACING THIS PANEL VIA THE PROVIDED LINK. TO DENY YOUR 
@@ -74,22 +74,22 @@ export default function CookieBanner({ open, onOpenChange }: CookieBannerProps) 
           <div className="space-y-3 mb-6">
             {/* Strictly Necessary */}
             <Collapsible open={strictlyOpen} onOpenChange={setStrictlyOpen}>
-              <div className="border border-black/20 rounded-sm">
+              <div className="border border-white/20 rounded-sm">
                 <div className="flex items-center justify-between p-4">
                   <CollapsibleTrigger className="flex items-center gap-3 flex-1">
-                    <ChevronDown className={`w-5 h-5 text-black/60 transition-transform ${strictlyOpen ? 'rotate-180' : ''}`} />
-                    <span className="font-display text-xs font-bold tracking-widest">
+                    <ChevronDown className={`w-5 h-5 text-white/60 transition-transform ${strictlyOpen ? 'rotate-180' : ''}`} />
+                    <span className="font-display text-xs font-bold tracking-widest text-white">
                       STRICTLY NECESSARY
                     </span>
                   </CollapsibleTrigger>
                   <Switch 
                     checked={strictlyNecessary} 
                     disabled 
-                    className="data-[state=checked]:bg-black/30"
+                    className="data-[state=checked]:bg-white/30"
                   />
                 </div>
                 <CollapsibleContent className="px-4 pb-4">
-                  <p className="text-black/50 text-xs tracking-wide uppercase pl-8">
+                  <p className="text-white/50 text-xs tracking-wide uppercase pl-8">
                     THESE COOKIES ARE NECESSARY FOR THE WEBSITE TO FUNCTION AND CANNOT BE SWITCHED OFF.
                   </p>
                 </CollapsibleContent>
@@ -98,27 +98,27 @@ export default function CookieBanner({ open, onOpenChange }: CookieBannerProps) 
 
             {/* Targeted Analytics */}
             <Collapsible open={analyticsOpen} onOpenChange={setAnalyticsOpen}>
-              <div className="border border-black/20 rounded-sm">
+              <div className="border border-white/20 rounded-sm">
                 <div className="flex items-center justify-between p-4">
                   <CollapsibleTrigger className="flex items-center gap-3 flex-1">
-                    <ChevronDown className={`w-5 h-5 text-black/60 transition-transform ${analyticsOpen ? 'rotate-180' : ''}`} />
-                    <span className="font-display text-xs font-bold tracking-widest">
+                    <ChevronDown className={`w-5 h-5 text-white/60 transition-transform ${analyticsOpen ? 'rotate-180' : ''}`} />
+                    <span className="font-display text-xs font-bold tracking-widest text-white">
                       TARGETED ANALYTICS
                     </span>
                   </CollapsibleTrigger>
                   <div className="flex items-center gap-2">
                     {!targetedAnalytics && (
-                      <X className="w-4 h-4 text-black/40" />
+                      <X className="w-4 h-4 text-white/40" />
                     )}
                     <Switch 
                       checked={targetedAnalytics} 
                       onCheckedChange={setTargetedAnalytics}
-                      className="data-[state=checked]:bg-black/30 data-[state=unchecked]:bg-black/20"
+                      className="data-[state=checked]:bg-white/30 data-[state=unchecked]:bg-white/20"
                     />
                   </div>
                 </div>
                 <CollapsibleContent className="px-4 pb-4">
-                  <p className="text-black/50 text-xs tracking-wide uppercase pl-8">
+                  <p className="text-white/50 text-xs tracking-wide uppercase pl-8">
                     THESE COOKIES ALLOW US TO COUNT VISITS AND TRAFFIC SOURCES TO MEASURE AND IMPROVE PERFORMANCE.
                   </p>
                 </CollapsibleContent>
@@ -127,11 +127,11 @@ export default function CookieBanner({ open, onOpenChange }: CookieBannerProps) 
           </div>
 
           {/* More Information */}
-          <div className="border-l-2 border-black/20 pl-4 mb-6">
-            <h3 className="font-display text-xs font-bold tracking-widest mb-2">
+          <div className="border-l-2 border-white/20 pl-4 mb-6">
+            <h3 className="font-display text-xs font-bold tracking-widest text-white mb-2">
               MORE INFORMATION
             </h3>
-            <p className="text-black/60 text-xs tracking-wide uppercase">
+            <p className="text-white/60 text-xs tracking-wide uppercase">
               FOR ANY QUERIES IN RELATION TO MY POLICY ON COOKIES AND YOUR CHOICES, 
               PLEASE{" "}
               <button 
@@ -139,7 +139,7 @@ export default function CookieBanner({ open, onOpenChange }: CookieBannerProps) 
                   onOpenChange(false);
                   window.location.href = '/contact';
                 }}
-                className="text-black hover:text-black/70 transition-colors underline"
+                className="text-white hover:text-white/70 transition-colors underline"
               >
                 CONTACT US
               </button>
@@ -148,18 +148,18 @@ export default function CookieBanner({ open, onOpenChange }: CookieBannerProps) 
         </div>
 
         {/* Bottom Buttons */}
-        <div className="border-t border-black/10 p-4 md:p-6">
+        <div className="border-t border-white/10 p-4 md:p-6">
           <div className="flex flex-wrap gap-3 justify-between">
             <div className="flex gap-3">
               <Button
                 onClick={handleAcceptAll}
-                className="bg-black text-white hover:bg-black/80 font-display text-xs tracking-widest px-6"
+                className="bg-white text-black hover:bg-white/90 font-display text-xs tracking-widest px-6"
               >
                 ACCEPT ALL
               </Button>
               <Button
                 onClick={handleRejectAll}
-                className="bg-black text-white hover:bg-black/80 font-display text-xs tracking-widest px-6"
+                className="bg-white text-black hover:bg-white/90 font-display text-xs tracking-widest px-6"
               >
                 REJECT ALL
               </Button>
@@ -167,7 +167,7 @@ export default function CookieBanner({ open, onOpenChange }: CookieBannerProps) 
             <Button
               onClick={handleAcceptCurrent}
               variant="outline"
-              className="border-black/40 text-black hover:bg-black/10 font-display text-xs tracking-widest px-6"
+              className="border-white/40 text-white hover:bg-white/10 font-display text-xs tracking-widest px-6"
             >
               ACCEPT CURRENT SELECTION
             </Button>
