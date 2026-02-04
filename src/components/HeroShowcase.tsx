@@ -1,0 +1,222 @@
+import { useRef, useState, useEffect } from "react";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
+import brainfreezyLogo from "@/assets/brainfreezy-logo-official.png";
+import { useShopifyProducts } from "@/hooks/useShopifyProducts";
+import { ShopifyProduct } from "@/lib/shopify";
+import { useCartStore } from "@/stores/cartStore";
+import { Button } from "@/components/ui/button";
+
+const ROTATION_INTERVAL = 4000; // 4 seconds
+
+interface ProductShowcaseProps {
+  product: ShopifyProduct;
+  side: "left" | "right";
+  onAddToCart: (product: ShopifyProduct) => void;
+}
+
+function ProductShowcase({ product, side, onAddToCart }: ProductShowcaseProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 30 });
+  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 30 });
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    x.set(mouseX / rect.width - 0.5);
+    y.set(mouseY / rect.height - 0.5);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  const imageUrl = product.node.images.edges[0]?.node.url;
+  const price = parseFloat(product.node.priceRange.minVariantPrice.amount);
+  const hasVariants = product.node.variants.edges.length > 1;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: side === "left" ? -50 : 50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: side === "left" ? -50 : 50 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="flex flex-col items-center gap-3"
+    >
+      <div className="perspective-distant transform-3d">
+        <motion.div
+          ref={ref}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          style={{ rotateX, rotateY }}
+          whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
+          className="cursor-pointer"
+        >
+          <img
+            src={imageUrl}
+            alt={product.node.title}
+            className="w-28 h-28 md:w-40 md:h-40 object-contain"
+            style={{
+              filter: "drop-shadow(0 15px 30px rgba(0, 0, 0, 0.4))",
+            }}
+          />
+        </motion.div>
+      </div>
+      
+      <Button
+        onClick={() => onAddToCart(product)}
+        variant="outline"
+        size="sm"
+        className="text-xs md:text-sm font-display uppercase tracking-widest border-white/30 text-white hover:bg-white hover:text-black transition-all duration-300"
+      >
+        {hasVariants ? "Valitse" : `${price.toFixed(0)}€`}
+      </Button>
+    </motion.div>
+  );
+}
+
+function Logo3D() {
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x);
+  const mouseYSpring = useSpring(y);
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["-17.5deg", "17.5deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["17.5deg", "-17.5deg"]);
+  const translateX = useTransform(mouseXSpring, [-0.5, 0.5], ["-20px", "20px"]);
+  const translateY = useTransform(mouseYSpring, [-0.5, 0.5], ["20px", "-20px"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    x.set((e.clientX - rect.left) / rect.width - 0.5);
+    y.set((e.clientY - rect.top) / rect.height - 0.5);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <div className="perspective-distant transform-3d">
+      <motion.div
+        ref={ref}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{ rotateX, rotateY, translateX, translateY }}
+        initial={{ scale: 1, z: 0 }}
+        whileHover={{ scale: 1.05, z: 50, transition: { duration: 0.2 } }}
+        className="relative w-48 md:w-80 cursor-pointer"
+      >
+        <img
+          loading="lazy"
+          className="h-full w-full object-contain"
+          alt="Brain Freezy Logo"
+          src={brainfreezyLogo}
+          style={{ filter: "drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5))" }}
+        />
+      </motion.div>
+    </div>
+  );
+}
+
+export default function HeroShowcase() {
+  const { products } = useShopifyProducts(50);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const addItem = useCartStore((state) => state.addItem);
+  const openCart = useCartStore((state) => state.openCart);
+
+  // Filter to get clothing products (not accessories)
+  const clothingProducts = products.filter(p => {
+    const handle = p.node.handle.toLowerCase();
+    const title = p.node.title.toLowerCase();
+    return !handle.includes('case') && 
+           !handle.includes('beanie') && 
+           !handle.includes('patch') &&
+           !title.includes('case') &&
+           !title.includes('beanie') &&
+           !title.includes('patch');
+  });
+
+  // Auto-rotate products
+  useEffect(() => {
+    if (clothingProducts.length < 2) return;
+    
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 2) % clothingProducts.length);
+    }, ROTATION_INTERVAL);
+    
+    return () => clearInterval(interval);
+  }, [clothingProducts.length]);
+
+  const handleAddToCart = (product: ShopifyProduct) => {
+    const variant = product.node.variants.edges[0]?.node;
+    if (!variant) return;
+    
+    addItem({
+      product,
+      variantId: variant.id,
+      variantTitle: variant.title,
+      price: variant.price,
+      quantity: 1,
+      selectedOptions: variant.selectedOptions,
+    });
+    openCart();
+  };
+
+  // Get current products to display (2 on each side)
+  const leftProduct = clothingProducts[currentIndex % clothingProducts.length];
+  const rightProduct = clothingProducts[(currentIndex + 1) % clothingProducts.length];
+
+  return (
+    <div className="flex items-center justify-center gap-6 md:gap-12 lg:gap-16">
+      {/* Left Product */}
+      <div className="hidden sm:block">
+        <AnimatePresence mode="wait">
+          {leftProduct && (
+            <ProductShowcase
+              key={leftProduct.node.id}
+              product={leftProduct}
+              side="left"
+              onAddToCart={handleAddToCart}
+            />
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Center Logo */}
+      <Logo3D />
+
+      {/* Right Product */}
+      <div className="hidden sm:block">
+        <AnimatePresence mode="wait">
+          {rightProduct && (
+            <ProductShowcase
+              key={rightProduct.node.id}
+              product={rightProduct}
+              side="right"
+              onAddToCart={handleAddToCart}
+            />
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}

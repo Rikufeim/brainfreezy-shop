@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft } from "lucide-react";
-import CometCardDemo from "@/components/comet-card-demo";
+import HeroShowcase from "@/components/HeroShowcase";
 import Header from "@/components/Header";
 import CartDrawer from "@/components/CartDrawer";
 import FeaturedProducts from "@/components/FeaturedProducts";
@@ -113,8 +113,8 @@ function IndexContent() {
       />
 
       {/* Hero Content */}
-      <div className="flex h-screen items-center justify-center">
-        <CometCardDemo />
+      <div className="flex h-screen items-center justify-center px-4">
+        <HeroShowcase />
       </div>
 
       {/* Categories */}
