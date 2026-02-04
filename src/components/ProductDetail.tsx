@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ShopifyProduct } from "@/lib/shopify";
 import { ChevronRight, ChevronLeft, Plus, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,9 @@ export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: 
     const isLoading = useCartStore((state) => state.isLoading);
     const [showSizes, setShowSizes] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [isRapidNav, setIsRapidNav] = useState(false);
+    const lastNavTime = useRef<number>(0);
+    const rapidNavTimeout = useRef<NodeJS.Timeout | null>(null);
     
     const images = product.node.images.edges;
     const imageUrl = images[currentImageIndex]?.node.url;
@@ -30,11 +33,23 @@ export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: 
     );
     const hasSizes = sizeOption && sizeOption.values.length > 1;
 
+    // Detect rapid navigation
+    const detectRapidNav = () => {
+        const now = Date.now();
+        const timeSinceLastNav = now - lastNavTime.current;
+        lastNavTime.current = now;
+        
+        if (timeSinceLastNav < 400) {
+            setIsRapidNav(true);
+            if (rapidNavTimeout.current) clearTimeout(rapidNavTimeout.current);
+            rapidNavTimeout.current = setTimeout(() => setIsRapidNav(false), 300);
+        }
+    };
+
     const handlePlusClick = () => {
         if (hasSizes) {
             setShowSizes(true);
         } else {
-            // No sizes, add default variant directly
             handleAddToCart(0);
         }
     };
@@ -56,31 +71,29 @@ export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: 
         if (onAddToCart) onAddToCart();
     };
 
-    // Navigate through images
     const handleNextImage = () => {
+        detectRapidNav();
         if (currentImageIndex < images.length - 1) {
             setCurrentImageIndex(currentImageIndex + 1);
         } else {
-            // Last image, go to next product
             setCurrentImageIndex(0);
             onNext();
         }
     };
 
     const handlePrevImage = () => {
+        detectRapidNav();
         if (currentImageIndex > 0) {
             setCurrentImageIndex(currentImageIndex - 1);
         } else {
-            // First image, go to previous product
             onPrev();
         }
     };
 
     // Reset image index when product changes
-    const productId = product.node.id;
-    useState(() => {
+    useEffect(() => {
         setCurrentImageIndex(0);
-    });
+    }, [product.node.id]);
 
     return (
         <div className="w-full h-full flex flex-col items-center justify-center relative">
@@ -102,10 +115,18 @@ export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: 
             {/* Main Content */}
             <motion.div
                 key={`${product.node.id}-${currentImageIndex}`}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, scale: 0.9, x: 0 }}
+                animate={{ 
+                    opacity: 1, 
+                    scale: 1,
+                    x: isRapidNav ? [0, -3, 3, -2, 2, 0] : 0
+                }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.4, type: "spring" }}
+                transition={{ 
+                    duration: isRapidNav ? 0.2 : 0.4, 
+                    type: isRapidNav ? "tween" : "spring",
+                    x: { duration: 0.3, ease: "easeOut" }
+                }}
                 className="flex flex-col items-center max-w-md w-full p-4 text-center"
             >
                 {/* Image */}
