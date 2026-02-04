@@ -16,8 +16,10 @@ export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: 
     const addItem = useCartStore((state) => state.addItem);
     const isLoading = useCartStore((state) => state.isLoading);
     const [showSizes, setShowSizes] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
     
-    const imageUrl = product.node.images.edges[0]?.node.url;
+    const images = product.node.images.edges;
+    const imageUrl = images[currentImageIndex]?.node.url;
     const variants = product.node.variants.edges;
     const price = parseFloat(product.node.priceRange.minVariantPrice.amount);
     const currency = product.node.priceRange.minVariantPrice.currencyCode;
@@ -54,18 +56,44 @@ export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: 
         if (onAddToCart) onAddToCart();
     };
 
+    // Navigate through images
+    const handleNextImage = () => {
+        if (currentImageIndex < images.length - 1) {
+            setCurrentImageIndex(currentImageIndex + 1);
+        } else {
+            // Last image, go to next product
+            setCurrentImageIndex(0);
+            onNext();
+        }
+    };
+
+    const handlePrevImage = () => {
+        if (currentImageIndex > 0) {
+            setCurrentImageIndex(currentImageIndex - 1);
+        } else {
+            // First image, go to previous product
+            onPrev();
+        }
+    };
+
+    // Reset image index when product changes
+    const productId = product.node.id;
+    useState(() => {
+        setCurrentImageIndex(0);
+    });
+
     return (
         <div className="w-full h-full flex flex-col items-center justify-center relative">
             {/* Navigation Arrows */}
             <button
-                onClick={onPrev}
+                onClick={handlePrevImage}
                 className="absolute left-0 md:left-4 z-10 p-4 text-white/50 hover:text-white transition-colors"
             >
                 <ChevronLeft className="w-8 h-8" />
             </button>
 
             <button
-                onClick={onNext}
+                onClick={handleNextImage}
                 className="absolute right-0 md:right-4 z-10 p-4 text-white/50 hover:text-white transition-colors"
             >
                 <ChevronRight className="w-8 h-8" />
@@ -73,7 +101,7 @@ export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: 
 
             {/* Main Content */}
             <motion.div
-                key={product.node.id}
+                key={`${product.node.id}-${currentImageIndex}`}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
@@ -95,11 +123,17 @@ export default function ProductDetail({ product, onNext, onPrev, onAddToCart }: 
                     )}
                 </div>
 
-                {/* Dots simplified (just visual) */}
+                {/* Image Dots */}
                 <div className="flex gap-2 mb-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-white"></div>
-                    <div className="w-1.5 h-1.5 rounded-full bg-white/30"></div>
-                    <div className="w-1.5 h-1.5 rounded-full bg-white/30"></div>
+                    {images.map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => setCurrentImageIndex(index)}
+                            className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                                index === currentImageIndex ? 'bg-white' : 'bg-white/30'
+                            }`}
+                        />
+                    ))}
                 </div>
 
                 {/* Info */}

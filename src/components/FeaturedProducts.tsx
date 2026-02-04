@@ -103,16 +103,49 @@ function getProductCode(title: string): string {
     return 'XX';
 }
 
+// Sort products: clothing first, accessories last
+function sortProducts(products: ShopifyProduct[]): ShopifyProduct[] {
+    return [...products].sort((a, b) => {
+        const aHandle = a.node.handle.toLowerCase();
+        const bHandle = b.node.handle.toLowerCase();
+        const aTitle = a.node.title.toLowerCase();
+        const bTitle = b.node.title.toLowerCase();
+        
+        const isAccessoryA = aHandle.includes('case') || aHandle.includes('beanie') || 
+                             aHandle.includes('patch') || aTitle.includes('case') || 
+                             aTitle.includes('beanie') || aTitle.includes('patch');
+        const isAccessoryB = bHandle.includes('case') || bHandle.includes('beanie') || 
+                             bHandle.includes('patch') || bTitle.includes('case') || 
+                             bTitle.includes('beanie') || bTitle.includes('patch');
+        
+        // Accessories go last
+        if (isAccessoryA && !isAccessoryB) return 1;
+        if (!isAccessoryA && isAccessoryB) return -1;
+        
+        // Within clothing, prioritize sweatshirts (SW)
+        const isSweatshirtA = aHandle.includes('sweatshirt') || aTitle.includes('sweatshirt');
+        const isSweatshirtB = bHandle.includes('sweatshirt') || bTitle.includes('sweatshirt');
+        
+        if (isSweatshirtA && !isSweatshirtB) return -1;
+        if (!isSweatshirtA && isSweatshirtB) return 1;
+        
+        return 0;
+    });
+}
+
 function filterByCategory(products: ShopifyProduct[], category: string): ShopifyProduct[] {
     const normalized = category.toLowerCase();
     
+    // Sort first, then filter
+    const sortedProducts = sortProducts(products);
+    
     if (normalized === 'all') {
-        return products;
+        return sortedProducts;
     }
     
     if (normalized === 'mens' || normalized === 'womens') {
         // Filter to clothing products only
-        return products.filter(p => {
+        return sortedProducts.filter(p => {
             const handle = p.node.handle.toLowerCase();
             const title = p.node.title.toLowerCase();
             // Exclude accessories
@@ -126,7 +159,7 @@ function filterByCategory(products: ShopifyProduct[], category: string): Shopify
     }
     
     if (normalized === 'accessories') {
-        return products.filter(p => {
+        return sortedProducts.filter(p => {
             const handle = p.node.handle.toLowerCase();
             const title = p.node.title.toLowerCase();
             return handle.includes('case') || 
@@ -138,5 +171,5 @@ function filterByCategory(products: ShopifyProduct[], category: string): Shopify
         });
     }
     
-    return products;
+    return sortedProducts;
 }
