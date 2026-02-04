@@ -18,20 +18,20 @@ interface ProductShowcaseProps {
   product: ShopifyProduct;
   side: "left" | "right";
   countdown: number;
-  isPaused: boolean;
-  onSelectSize: (product: ShopifyProduct) => void;
+  isLocked: boolean;
+  onSelectSize: (product: ShopifyProduct, side: "left" | "right") => void;
   onAddWithVariant: (product: ShopifyProduct, variantId: string) => void;
-  activeProductId: string | null;
+  showSizes: boolean;
 }
 
 function ProductShowcase({ 
   product, 
   side, 
   countdown, 
-  isPaused,
+  isLocked,
   onSelectSize,
   onAddWithVariant,
-  activeProductId 
+  showSizes
 }: ProductShowcaseProps) {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
@@ -62,7 +62,6 @@ function ProductShowcase({
   const imageUrl = product.node.images.edges[0]?.node.url;
   const price = parseFloat(product.node.priceRange.minVariantPrice.amount);
   const hasVariants = product.node.variants.edges.length > 1;
-  const isActive = activeProductId === product.node.id;
 
   // Get size options
   const sizeOptions = product.node.variants.edges.map(v => ({
@@ -79,14 +78,14 @@ function ProductShowcase({
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="flex flex-col items-center gap-3"
     >
-      {/* Countdown Timer */}
+      {/* Countdown Timer or Lock indicator */}
       <motion.div 
-        key={`${countdown}-${isPaused}`}
+        key={`${countdown}-${isLocked}`}
         initial={{ scale: 1.2, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className={`text-sm font-mono tabular-nums ${isPaused ? 'text-white/60' : 'text-white/40'}`}
+        className={`text-sm font-mono tabular-nums ${isLocked ? 'text-green-400' : 'text-white/40'}`}
       >
-        {isPaused ? '⏸' : `${countdown}s`}
+        {isLocked ? '🔒' : `${countdown}s`}
       </motion.div>
 
       {/* 3D Product Image */}
@@ -104,20 +103,23 @@ function ProductShowcase({
           }}
           className="cursor-pointer"
         >
-          <img
+          <motion.img
             src={imageUrl}
             alt={product.node.title}
             className="w-28 h-28 md:w-40 md:h-40 object-contain"
-            style={{
-              filter: "drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5))",
+            animate={{ 
+              filter: isLocked 
+                ? "drop-shadow(0 20px 40px rgba(74, 222, 128, 0.4))" 
+                : "drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5))"
             }}
+            transition={{ duration: 0.3 }}
           />
         </motion.div>
       </div>
       
       {/* Button or Size Selector */}
       <AnimatePresence mode="wait">
-        {isActive && hasVariants ? (
+        {showSizes && hasVariants ? (
           <motion.div
             key="sizes"
             initial={{ opacity: 0, y: -10, height: 0 }}
@@ -147,7 +149,7 @@ function ProductShowcase({
             exit={{ opacity: 0 }}
           >
             <Button
-              onClick={() => hasVariants ? onSelectSize(product) : onAddWithVariant(product, product.node.variants.edges[0]?.node.id)}
+              onClick={() => hasVariants ? onSelectSize(product, side) : onAddWithVariant(product, product.node.variants.edges[0]?.node.id)}
               variant="outline"
               size="sm"
               className="text-xs md:text-sm font-display uppercase tracking-widest border-white/30 text-white hover:bg-white hover:text-black transition-all duration-300"
@@ -211,9 +213,12 @@ function Logo3D() {
 
 export default function HeroShowcase() {
   const { products } = useShopifyProducts(50);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [countdown, setCountdown] = useState(ROTATION_INTERVAL / 1000);
-  const [activeProductId, setActiveProductId] = useState<string | null>(null);
+  const [leftIndex, setLeftIndex] = useState(0);
+  const [rightIndex, setRightIndex] = useState(1);
+  const [leftCountdown, setLeftCountdown] = useState(ROTATION_INTERVAL / 1000);
+  const [rightCountdown, setRightCountdown] = useState(ROTATION_INTERVAL / 1000);
+  const [lockedSide, setLockedSide] = useState<"left" | "right" | null>(null);
+  const [lockedProduct, setLockedProduct] = useState<ShopifyProduct | null>(null);
   const addItem = useCartStore((state) => state.addItem);
   const openCart = useCartStore((state) => state.openCart);
 
@@ -229,38 +234,65 @@ export default function HeroShowcase() {
            !title.includes('patch');
   });
 
-  const isPaused = activeProductId !== null;
-
-  // Countdown timer - pause when selecting size
+  // Left side timer - independent
   useEffect(() => {
-    if (clothingProducts.length < 2 || isPaused) return;
+    if (clothingProducts.length < 2 || lockedSide === "left") return;
     
     const countdownInterval = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          return ROTATION_INTERVAL / 1000;
-        }
-        return prev - 1;
-      });
+      setLeftCountdown((prev) => (prev <= 1 ? ROTATION_INTERVAL / 1000 : prev - 1));
     }, 1000);
     
     return () => clearInterval(countdownInterval);
-  }, [clothingProducts.length, isPaused]);
+  }, [clothingProducts.length, lockedSide]);
 
-  // Auto-rotate products - pause when selecting size
+  // Right side timer - independent
   useEffect(() => {
-    if (clothingProducts.length < 2 || isPaused) return;
+    if (clothingProducts.length < 2 || lockedSide === "right") return;
+    
+    const countdownInterval = setInterval(() => {
+      setRightCountdown((prev) => (prev <= 1 ? ROTATION_INTERVAL / 1000 : prev - 1));
+    }, 1000);
+    
+    return () => clearInterval(countdownInterval);
+  }, [clothingProducts.length, lockedSide]);
+
+  // Left side rotation - independent
+  useEffect(() => {
+    if (clothingProducts.length < 2 || lockedSide === "left") return;
     
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 2) % clothingProducts.length);
-      setCountdown(ROTATION_INTERVAL / 1000);
+      setLeftIndex((prev) => {
+        let next = (prev + 2) % clothingProducts.length;
+        // Avoid showing same product as right
+        if (next === rightIndex) next = (next + 1) % clothingProducts.length;
+        return next;
+      });
+      setLeftCountdown(ROTATION_INTERVAL / 1000);
     }, ROTATION_INTERVAL);
     
     return () => clearInterval(interval);
-  }, [clothingProducts.length, isPaused]);
+  }, [clothingProducts.length, lockedSide, rightIndex]);
 
-  const handleSelectSize = useCallback((product: ShopifyProduct) => {
-    setActiveProductId(product.node.id);
+  // Right side rotation - independent (offset by 2 seconds for variety)
+  useEffect(() => {
+    if (clothingProducts.length < 2 || lockedSide === "right") return;
+    
+    const interval = setInterval(() => {
+      setRightIndex((prev) => {
+        let next = (prev + 2) % clothingProducts.length;
+        // Avoid showing same product as left
+        if (next === leftIndex) next = (next + 1) % clothingProducts.length;
+        return next;
+      });
+      setRightCountdown(ROTATION_INTERVAL / 1000);
+    }, ROTATION_INTERVAL);
+    
+    return () => clearInterval(interval);
+  }, [clothingProducts.length, lockedSide, leftIndex]);
+
+  const handleSelectSize = useCallback((product: ShopifyProduct, side: "left" | "right") => {
+    setLockedSide(side);
+    setLockedProduct(product);
   }, []);
 
   const handleAddWithVariant = useCallback((product: ShopifyProduct, variantId: string) => {
@@ -276,12 +308,17 @@ export default function HeroShowcase() {
       selectedOptions: variant.selectedOptions,
     });
     openCart();
-    setActiveProductId(null); // Reset after adding
+    setLockedSide(null);
+    setLockedProduct(null);
   }, [addItem, openCart]);
 
   // Get current products to display
-  const leftProduct = clothingProducts[currentIndex % clothingProducts.length];
-  const rightProduct = clothingProducts[(currentIndex + 1) % clothingProducts.length];
+  const leftProduct = lockedSide === "left" && lockedProduct 
+    ? lockedProduct 
+    : clothingProducts[leftIndex % clothingProducts.length];
+  const rightProduct = lockedSide === "right" && lockedProduct 
+    ? lockedProduct 
+    : clothingProducts[rightIndex % clothingProducts.length];
 
   return (
     <div className="flex items-center justify-center gap-6 md:gap-12 lg:gap-16">
@@ -290,14 +327,14 @@ export default function HeroShowcase() {
         <AnimatePresence mode="wait">
           {leftProduct && (
             <ProductShowcase
-              key={leftProduct.node.id}
+              key={lockedSide === "left" ? `locked-${leftProduct.node.id}` : leftProduct.node.id}
               product={leftProduct}
               side="left"
-              countdown={countdown}
-              isPaused={isPaused}
+              countdown={leftCountdown}
+              isLocked={lockedSide === "left"}
               onSelectSize={handleSelectSize}
               onAddWithVariant={handleAddWithVariant}
-              activeProductId={activeProductId}
+              showSizes={lockedSide === "left"}
             />
           )}
         </AnimatePresence>
@@ -311,14 +348,14 @@ export default function HeroShowcase() {
         <AnimatePresence mode="wait">
           {rightProduct && (
             <ProductShowcase
-              key={rightProduct.node.id}
+              key={lockedSide === "right" ? `locked-${rightProduct.node.id}` : rightProduct.node.id}
               product={rightProduct}
               side="right"
-              countdown={countdown}
-              isPaused={isPaused}
+              countdown={rightCountdown}
+              isLocked={lockedSide === "right"}
               onSelectSize={handleSelectSize}
               onAddWithVariant={handleAddWithVariant}
-              activeProductId={activeProductId}
+              showSizes={lockedSide === "right"}
             />
           )}
         </AnimatePresence>
