@@ -195,15 +195,26 @@ function IndexContent() {
       {/* Footer */}
       <footer className="py-8 px-6 md:px-12 bg-black w-full relative z-10">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between">
-            <div className="flex-1" />
-            <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-              <a href="#" className="text-lg md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">CONTACT</a>
-              <a href="#" className="text-lg md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">TERMS</a>
-              <a href="#" className="text-lg md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">PRIVACY</a>
-              <a href="#" className="text-lg md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">COOKIES</a>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-0">
+            {/* Mascot - shown first on mobile */}
+            <div className="md:hidden flex justify-center mb-4">
+              <img
+                src={icyMascot}
+                alt="ICY"
+                className="w-24 h-24 object-contain"
+              />
             </div>
-            <div className="flex-1 flex justify-end">
+            
+            {/* Links */}
+            <div className="flex flex-wrap justify-center items-center gap-6 md:gap-12 flex-1">
+              <a href="#" className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">CONTACT</a>
+              <a href="#" className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">TERMS</a>
+              <a href="#" className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">PRIVACY</a>
+              <a href="#" className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">COOKIES</a>
+            </div>
+            
+            {/* Mascot - shown on right for desktop */}
+            <div className="hidden md:flex justify-end">
               <img
                 src={icyMascot}
                 alt="ICY"
