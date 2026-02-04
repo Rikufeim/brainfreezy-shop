@@ -45,18 +45,10 @@ export default function CookieBanner({ open, onOpenChange }: CookieBannerProps) 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl bg-black text-white border-white/20 p-0 gap-0">
-        <DialogHeader className="flex flex-row items-center justify-between p-6 pb-4">
+        <DialogHeader className="p-6 pb-4">
           <DialogTitle className="font-display text-sm font-bold tracking-widest text-white">
             MANAGE COOKIE PREFERENCES
           </DialogTitle>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => onOpenChange(false)}
-            className="text-white hover:bg-white/10 -mr-2"
-          >
-            <X className="w-5 h-5" />
-          </Button>
         </DialogHeader>
 
         <div className="px-6 pb-6 overflow-hidden">
