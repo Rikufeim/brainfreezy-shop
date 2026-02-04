@@ -10,8 +10,10 @@ interface HeaderProps {
 }
 
 export default function Header({ onToggleCategories, showBackButton, onBack }: HeaderProps) {
-  const totalItems = useCartStore((state) => state.totalItems);
+  const items = useCartStore((state) => state.items);
   const openCart = useCartStore((state) => state.openCart);
+  
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
@@ -78,10 +80,10 @@ export default function Header({ onToggleCategories, showBackButton, onBack }: H
             >
               <ShoppingBag className="w-5 h-5" />
             </Button>
-            {totalItems() > 0 && (
+            {totalItems > 0 && (
               <span className="absolute -top-1 -right-1 w-5 h-5 bg-white text-black rounded-full 
                                flex items-center justify-center text-xs font-bold">
-                {totalItems()}
+                {totalItems}
               </span>
             )}
           </motion.div>

@@ -15,8 +15,10 @@ export default function CartDrawer() {
   const clearCart = useCartStore((state) => state.clearCart);
   const getCheckoutUrl = useCartStore((state) => state.getCheckoutUrl);
   const syncCart = useCartStore((state) => state.syncCart);
-  const totalPrice = useCartStore((state) => state.totalPrice);
-  const totalItems = useCartStore((state) => state.totalItems);
+  
+  // Calculate totals from items (reactive)
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = items.reduce((sum, item) => sum + (parseFloat(item.price.amount) * item.quantity), 0);
 
   // Sync cart when drawer opens
   useEffect(() => {
@@ -63,7 +65,7 @@ export default function CartDrawer() {
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-border">
                 <h2 className="font-display text-xl font-bold uppercase tracking-[0.2em]">
-                  Your Cart ({totalItems()})
+                  Your Cart ({totalItems})
                 </h2>
                 <Button
                   variant="ghost"
@@ -171,7 +173,7 @@ export default function CartDrawer() {
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground">Total</span>
                     <span className="font-display text-2xl font-bold">
-                      ${totalPrice().toFixed(2)}
+                      ${totalPrice.toFixed(2)}
                     </span>
                   </div>
 
