@@ -209,9 +209,7 @@ function IndexContent() {
             {/* Links */}
             <div className="flex flex-wrap justify-center items-center gap-6 md:gap-12 flex-1">
               <Link to="/contact" className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">CONTACT</Link>
-              <a href="#" className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">TERMS</a>
-              <a href="#" className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">PRIVACY</a>
-              <a href="#" className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">COOKIES</a>
+              <Link to="/cookies" className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">COOKIES</Link>
             </div>
             
             {/* Mascot - shown on right for desktop */}
