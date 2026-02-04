@@ -59,7 +59,7 @@ export default function CookieBanner({ open, onOpenChange }: CookieBannerProps) 
           </Button>
         </DialogHeader>
 
-        <div className="px-6 pb-6 max-h-[60vh] overflow-y-auto">
+        <div className="px-6 pb-6 overflow-hidden">
           {/* Description */}
           <p className="text-white/60 text-xs leading-relaxed tracking-wide uppercase mb-6">
             IN THIS PANEL YOU CAN EXPRESS SOME PREFERENCES RELATED TO THE PROCESSING 
