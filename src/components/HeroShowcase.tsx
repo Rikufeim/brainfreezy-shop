@@ -12,7 +12,7 @@ import { ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 import { Button } from "@/components/ui/button";
 
-const ROTATION_INTERVAL = 4000; // 4 seconds
+const ROTATION_INTERVAL = 3000; // 3 seconds
 
 interface ProductShowcaseProps {
   product: ShopifyProduct;
