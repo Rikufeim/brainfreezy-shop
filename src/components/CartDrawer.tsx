@@ -98,7 +98,7 @@ export default function CartDrawer() {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
-                          className="flex gap-4 p-4 bg-secondary/50 rounded-lg"
+                          className="flex gap-4 py-4 border-b border-white/10 last:border-b-0"
                         >
                           {/* Image */}
                           {imageUrl && (
