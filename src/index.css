@@ -8,79 +8,79 @@
 
 @layer base {
   :root {
-    /* Core palette - Pure black with electric purple */
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
+    /* Core palette - Pure white with black text */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
     
     /* Card surfaces */
-    --card: 0 0% 7%;
-    --card-foreground: 0 0% 100%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 0%;
     
     /* Popover surfaces */
-    --popover: 0 0% 5%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
     
-    /* Electric Purple - Primary accent */
-    --primary: 262 83% 58%;
+    /* Primary accent - black */
+    --primary: 0 0% 0%;
     --primary-foreground: 0 0% 100%;
     
-    /* Secondary - Dark gray */
-    --secondary: 0 0% 11%;
-    --secondary-foreground: 0 0% 100%;
+    /* Secondary - Light gray */
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 0%;
     
     /* Muted tones */
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 65%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
     
-    /* Accent - subtle purple tint */
-    --accent: 262 30% 20%;
-    --accent-foreground: 0 0% 100%;
+    /* Accent */
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 0%;
     
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 0 0% 18%;
-    --input: 0 0% 18%;
-    --ring: 262 83% 58%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 0 0% 0%;
     
     --radius: 0.75rem;
     
-    /* Custom purple glow effects */
-    --glow-purple: 262 83% 58%;
-    --glow-purple-light: 262 83% 70%;
+    /* Custom effects */
+    --glow-purple: 0 0% 0%;
+    --glow-purple-light: 0 0% 20%;
     
-    /* Sidebar (for potential future use) */
-    --sidebar-background: 0 0% 3%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 262 83% 58%;
+    /* Sidebar */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 0%;
+    --sidebar-primary: 0 0% 0%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 10%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 18%;
-    --sidebar-ring: 262 83% 58%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 0%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 0 0% 0%;
   }
 
   .dark {
-    /* Same as root - dark mode by default */
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
-    --card: 0 0% 7%;
-    --card-foreground: 0 0% 100%;
-    --popover: 0 0% 5%;
-    --popover-foreground: 0 0% 100%;
-    --primary: 262 83% 58%;
+    /* Dark mode - same as root for consistency */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 0%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+    --primary: 0 0% 0%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 11%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 65%;
-    --accent: 262 30% 20%;
-    --accent-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 0%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 18%;
-    --input: 0 0% 18%;
-    --ring: 262 83% 58%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 0 0% 0%;
   }
 }
 

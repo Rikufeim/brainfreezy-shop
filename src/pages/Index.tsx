@@ -99,7 +99,7 @@ function IndexContent() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="relative h-screen bg-black overflow-y-auto overflow-x-hidden scrollbar-hide"
+      className="relative h-screen bg-background overflow-y-auto overflow-x-hidden scrollbar-hide"
     >
 
       {/* Header */}
@@ -115,7 +115,7 @@ function IndexContent() {
       </div>
 
       {/* Categories */}
-      <section className="py-16 px-6 md:px-12 bg-black w-full relative z-10">
+      <section className="py-16 px-6 md:px-12 bg-background w-full relative z-10">
         <div className="max-w-7xl mx-auto">
           <nav className="flex flex-wrap justify-center gap-8 md:gap-12">
             {categories.map((category, index) => (
@@ -127,7 +127,7 @@ function IndexContent() {
                 transition={{ delay: index * 0.1 }}
                 onClick={() => handleCategorySelect(category)}
                 className={`text-2xl md:text-3xl font-display font-bold tracking-widest transition-colors duration-300 ${
-                  selectedCategory === category ? 'text-white' : 'text-white/50 hover:text-white'
+                  selectedCategory === category ? 'text-foreground' : 'text-foreground/50 hover:text-foreground'
                 }`}
               >
                 {category}
@@ -148,7 +148,7 @@ function IndexContent() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 bg-background/90 backdrop-blur-md flex items-center justify-center p-4"
             onClick={() => setSelectedProduct(null)}
           >
             {/* Back Button */}
@@ -163,7 +163,7 @@ function IndexContent() {
                 variant="ghost"
                 size="icon"
                 onClick={() => setSelectedProduct(null)}
-                className="text-white hover:bg-white/10 transition-all duration-300"
+                className="text-foreground hover:bg-foreground/10 transition-all duration-300"
                 aria-label="Go Back"
               >
                 <ChevronLeft className="w-6 h-6" />
@@ -193,7 +193,7 @@ function IndexContent() {
       <CartDrawer />
 
       {/* Footer */}
-      <footer className="py-8 px-6 md:px-12 bg-black w-full relative z-10">
+      <footer className="py-8 px-6 md:px-12 bg-background w-full relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-0">
             {/* Mascot - shown first on mobile */}
@@ -207,10 +207,10 @@ function IndexContent() {
             
             {/* Links */}
             <div className="flex flex-wrap justify-center items-center gap-6 md:gap-12 flex-1">
-              <a href="#" className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">CONTACT</a>
-              <a href="#" className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">TERMS</a>
-              <a href="#" className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">PRIVACY</a>
-              <a href="#" className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">COOKIES</a>
+              <a href="#" className="text-base md:text-xl font-display font-bold tracking-widest text-foreground/50 hover:text-foreground transition-colors duration-300">CONTACT</a>
+              <a href="#" className="text-base md:text-xl font-display font-bold tracking-widest text-foreground/50 hover:text-foreground transition-colors duration-300">TERMS</a>
+              <a href="#" className="text-base md:text-xl font-display font-bold tracking-widest text-foreground/50 hover:text-foreground transition-colors duration-300">PRIVACY</a>
+              <a href="#" className="text-base md:text-xl font-display font-bold tracking-widest text-foreground/50 hover:text-foreground transition-colors duration-300">COOKIES</a>
             </div>
             
             {/* Mascot - shown on right for desktop */}
