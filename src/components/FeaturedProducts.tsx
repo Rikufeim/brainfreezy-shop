@@ -11,8 +11,11 @@ interface FeaturedProductsProps {
 export default function FeaturedProducts({ selectedCategory, onSelectProduct }: FeaturedProductsProps) {
     const { products, isLoading, error } = useShopifyProducts(50);
     
-    // Filter products by category
-    const filteredProducts = filterByCategory(products, selectedCategory);
+    // Deduplicate products by id and filter by category
+    const uniqueProducts = products.filter((product, index, self) => 
+        index === self.findIndex(p => p.node.id === product.node.id)
+    );
+    const filteredProducts = filterByCategory(uniqueProducts, selectedCategory);
 
     if (isLoading) {
         return (
