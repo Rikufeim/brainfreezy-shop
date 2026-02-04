@@ -56,9 +56,7 @@ export default function Header({
                 (coming soon)
               </div>
             </div>
-            <div className="text-white text-[10px] md:text-xs font-display font-bold tracking-wider">
-              BRAIN FREEZY
-            </div>
+            
           </div>
         </div>
 
