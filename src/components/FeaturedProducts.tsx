@@ -19,9 +19,9 @@ export default function FeaturedProducts({ selectedCategory, onSelectProduct }: 
 
     if (isLoading) {
         return (
-            <section className="py-24 px-6 md:px-12 bg-black w-full relative z-10">
+            <section className="py-24 px-6 md:px-12 bg-background w-full relative z-10">
                 <div className="max-w-7xl mx-auto flex items-center justify-center min-h-[400px]">
-                    <Loader2 className="w-8 h-8 animate-spin text-white/50" />
+                    <Loader2 className="w-8 h-8 animate-spin text-foreground/50" />
                 </div>
             </section>
         );
@@ -29,9 +29,9 @@ export default function FeaturedProducts({ selectedCategory, onSelectProduct }: 
 
     if (error) {
         return (
-            <section className="py-24 px-6 md:px-12 bg-black w-full relative z-10">
+            <section className="py-24 px-6 md:px-12 bg-background w-full relative z-10">
                 <div className="max-w-7xl mx-auto flex items-center justify-center min-h-[400px]">
-                    <p className="text-white/50">Failed to load products</p>
+                    <p className="text-foreground/50">Failed to load products</p>
                 </div>
             </section>
         );
@@ -39,16 +39,16 @@ export default function FeaturedProducts({ selectedCategory, onSelectProduct }: 
 
     if (filteredProducts.length === 0) {
         return (
-            <section className="py-24 px-6 md:px-12 bg-black w-full relative z-10">
+            <section className="py-24 px-6 md:px-12 bg-background w-full relative z-10">
                 <div className="max-w-7xl mx-auto flex items-center justify-center min-h-[400px]">
-                    <p className="text-white/50">No products found</p>
+                    <p className="text-foreground/50">No products found</p>
                 </div>
             </section>
         );
     }
 
     return (
-        <section className="py-24 px-6 md:px-12 bg-black w-full relative z-10">
+        <section className="py-24 px-6 md:px-12 bg-background w-full relative z-10">
             <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-16">
                     {filteredProducts.map((product, index) => {
@@ -73,12 +73,12 @@ export default function FeaturedProducts({ selectedCategory, onSelectProduct }: 
                                             className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-2xl"
                                         />
                                     ) : (
-                                        <div className="w-full h-full bg-white/5 flex items-center justify-center">
-                                            <span className="text-white/20 text-xs uppercase tracking-widest">No Image</span>
+                                        <div className="w-full h-full bg-foreground/5 flex items-center justify-center">
+                                            <span className="text-foreground/20 text-xs uppercase tracking-widest">No Image</span>
                                         </div>
                                     )}
                                 </div>
-                                <h3 className="font-display font-medium text-lg tracking-widest text-white/90 uppercase text-center">
+                                <h3 className="font-display font-medium text-lg tracking-widest text-foreground/90 uppercase text-center">
                                     BF-{getProductCode(product.node.title)}-{String(index + 1).padStart(2, '0')}
                                 </h3>
                             </motion.div>
