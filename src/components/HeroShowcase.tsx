@@ -6,6 +6,7 @@ import {
   useTransform,
   AnimatePresence,
 } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import brainfreezyLogo from "@/assets/brainfreezy-logo-official.png";
 import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 import { ShopifyProduct } from "@/lib/shopify";
@@ -190,7 +191,7 @@ function Logo3D() {
         style={{ rotateX, rotateY, translateX, translateY }}
         initial={{ scale: 1, z: 0 }}
         whileHover={{ scale: 1.05, z: 50, transition: { duration: 0.2 } }}
-        className="relative w-48 md:w-80 cursor-pointer"
+        className="relative w-64 md:w-[420px] cursor-pointer"
       >
         <img
           loading="lazy"
@@ -205,6 +206,7 @@ function Logo3D() {
 }
 
 export default function HeroShowcase() {
+  const navigate = useNavigate();
   const { products } = useShopifyProducts(50);
   const [leftIndex, setLeftIndex] = useState(0);
   const [rightIndex, setRightIndex] = useState(1);
@@ -296,45 +298,62 @@ export default function HeroShowcase() {
     : clothingProducts[rightIndex % clothingProducts.length];
 
   return (
-    <div className="flex items-center justify-center gap-6 md:gap-12 lg:gap-16">
-      {/* Left Product */}
-      <div className="hidden sm:block">
-        <AnimatePresence mode="wait">
-          {leftProduct && (
-            <ProductShowcase
-              key={lockedSide === "left" ? `locked-${leftProduct.node.id}` : leftProduct.node.id}
-              product={leftProduct}
-              side="left"
-              isLocked={lockedSide === "left"}
-              onSelectSize={handleSelectSize}
-              onAddWithVariant={handleAddWithVariant}
-              showSizes={lockedSide === "left"}
-              shouldDrop={leftShouldDrop}
-            />
-          )}
-        </AnimatePresence>
+    <div className="flex flex-col items-center gap-8">
+      <div className="flex items-center justify-center gap-6 md:gap-12 lg:gap-16">
+        {/* Left Product */}
+        <div className="hidden sm:block">
+          <AnimatePresence mode="wait">
+            {leftProduct && (
+              <ProductShowcase
+                key={lockedSide === "left" ? `locked-${leftProduct.node.id}` : leftProduct.node.id}
+                product={leftProduct}
+                side="left"
+                isLocked={lockedSide === "left"}
+                onSelectSize={handleSelectSize}
+                onAddWithVariant={handleAddWithVariant}
+                showSizes={lockedSide === "left"}
+                shouldDrop={leftShouldDrop}
+              />
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Center Logo */}
+        <Logo3D />
+
+        {/* Right Product */}
+        <div className="hidden sm:block">
+          <AnimatePresence mode="wait">
+            {rightProduct && (
+              <ProductShowcase
+                key={lockedSide === "right" ? `locked-${rightProduct.node.id}` : rightProduct.node.id}
+                product={rightProduct}
+                side="right"
+                isLocked={lockedSide === "right"}
+                onSelectSize={handleSelectSize}
+                onAddWithVariant={handleAddWithVariant}
+                showSizes={lockedSide === "right"}
+                shouldDrop={rightShouldDrop}
+              />
+            )}
+          </AnimatePresence>
+        </div>
       </div>
 
-      {/* Center Logo */}
-      <Logo3D />
-
-      {/* Right Product */}
-      <div className="hidden sm:block">
-        <AnimatePresence mode="wait">
-          {rightProduct && (
-            <ProductShowcase
-              key={lockedSide === "right" ? `locked-${rightProduct.node.id}` : rightProduct.node.id}
-              product={rightProduct}
-              side="right"
-              isLocked={lockedSide === "right"}
-              onSelectSize={handleSelectSize}
-              onAddWithVariant={handleAddWithVariant}
-              showSizes={lockedSide === "right"}
-              shouldDrop={rightShouldDrop}
-            />
-          )}
-        </AnimatePresence>
-      </div>
+      {/* CTA Button */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 0.6 }}
+      >
+        <Button
+          onClick={() => navigate("/shop")}
+          variant="outline"
+          className="font-display uppercase tracking-[0.2em] text-white border-white/30 hover:bg-white hover:text-black transition-all duration-300 px-8 py-3"
+        >
+          Shop All
+        </Button>
+      </motion.div>
     </div>
   );
 }
