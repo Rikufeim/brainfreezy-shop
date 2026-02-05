@@ -17,21 +17,21 @@ const ROTATION_INTERVAL = 3000; // 3 seconds
 interface ProductShowcaseProps {
   product: ShopifyProduct;
   side: "left" | "right";
-  countdown: number;
   isLocked: boolean;
   onSelectSize: (product: ShopifyProduct, side: "left" | "right") => void;
   onAddWithVariant: (product: ShopifyProduct, variantId: string) => void;
   showSizes: boolean;
+  shouldDrop: boolean;
 }
 
 function ProductShowcase({ 
   product, 
   side, 
-  countdown, 
   isLocked,
   onSelectSize,
   onAddWithVariant,
-  showSizes
+  showSizes,
+  shouldDrop
 }: ProductShowcaseProps) {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
@@ -70,23 +70,19 @@ function ProductShowcase({
     available: v.node.availableForSale
   }));
 
+  // Determine exit animation based on shouldDrop
+  const exitAnimation = shouldDrop 
+    ? { opacity: 0, y: 100 } 
+    : { opacity: 0, x: side === "left" ? -50 : 50 };
+
   return (
     <motion.div
       initial={{ opacity: 0, x: side === "left" ? -50 : 50 }}
       animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: side === "left" ? -50 : 50 }}
+      exit={exitAnimation}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="flex flex-col items-center gap-3"
     >
-      {/* Countdown Timer */}
-      <motion.div 
-        key={countdown}
-        initial={{ scale: 1.2, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        className="text-white/40 text-sm font-mono tabular-nums"
-      >
-        {isLocked ? '' : `${countdown}s`}
-      </motion.div>
 
       {/* 3D Product Image */}
       <div className="perspective-distant transform-3d">
@@ -212,8 +208,8 @@ export default function HeroShowcase() {
   const { products } = useShopifyProducts(50);
   const [leftIndex, setLeftIndex] = useState(0);
   const [rightIndex, setRightIndex] = useState(1);
-  const [leftCountdown, setLeftCountdown] = useState(ROTATION_INTERVAL / 1000);
-  const [rightCountdown, setRightCountdown] = useState(ROTATION_INTERVAL / 1000);
+  const [leftRotationCount, setLeftRotationCount] = useState(0);
+  const [rightRotationCount, setRightRotationCount] = useState(0);
   const [lockedSide, setLockedSide] = useState<"left" | "right" | null>(null);
   const [lockedProduct, setLockedProduct] = useState<ShopifyProduct | null>(null);
   const addItem = useCartStore((state) => state.addItem);
@@ -231,28 +227,6 @@ export default function HeroShowcase() {
            !title.includes('patch');
   });
 
-  // Left side timer - independent
-  useEffect(() => {
-    if (clothingProducts.length < 2 || lockedSide === "left") return;
-    
-    const countdownInterval = setInterval(() => {
-      setLeftCountdown((prev) => (prev <= 1 ? ROTATION_INTERVAL / 1000 : prev - 1));
-    }, 1000);
-    
-    return () => clearInterval(countdownInterval);
-  }, [clothingProducts.length, lockedSide]);
-
-  // Right side timer - independent
-  useEffect(() => {
-    if (clothingProducts.length < 2 || lockedSide === "right") return;
-    
-    const countdownInterval = setInterval(() => {
-      setRightCountdown((prev) => (prev <= 1 ? ROTATION_INTERVAL / 1000 : prev - 1));
-    }, 1000);
-    
-    return () => clearInterval(countdownInterval);
-  }, [clothingProducts.length, lockedSide]);
-
   // Left side rotation - independent
   useEffect(() => {
     if (clothingProducts.length < 2 || lockedSide === "left") return;
@@ -264,13 +238,13 @@ export default function HeroShowcase() {
         if (next === rightIndex) next = (next + 1) % clothingProducts.length;
         return next;
       });
-      setLeftCountdown(ROTATION_INTERVAL / 1000);
+      setLeftRotationCount((prev) => prev + 1);
     }, ROTATION_INTERVAL);
     
     return () => clearInterval(interval);
   }, [clothingProducts.length, lockedSide, rightIndex]);
 
-  // Right side rotation - independent (offset by 2 seconds for variety)
+  // Right side rotation - independent
   useEffect(() => {
     if (clothingProducts.length < 2 || lockedSide === "right") return;
     
@@ -281,11 +255,15 @@ export default function HeroShowcase() {
         if (next === leftIndex) next = (next + 1) % clothingProducts.length;
         return next;
       });
-      setRightCountdown(ROTATION_INTERVAL / 1000);
+      setRightRotationCount((prev) => prev + 1);
     }, ROTATION_INTERVAL);
     
     return () => clearInterval(interval);
   }, [clothingProducts.length, lockedSide, leftIndex]);
+
+  // Determine if products should drop (every 3rd rotation)
+  const leftShouldDrop = leftRotationCount > 0 && leftRotationCount % 3 === 0;
+  const rightShouldDrop = rightRotationCount > 0 && rightRotationCount % 3 === 0;
 
   const handleSelectSize = useCallback((product: ShopifyProduct, side: "left" | "right") => {
     setLockedSide(side);
@@ -327,11 +305,11 @@ export default function HeroShowcase() {
               key={lockedSide === "left" ? `locked-${leftProduct.node.id}` : leftProduct.node.id}
               product={leftProduct}
               side="left"
-              countdown={leftCountdown}
               isLocked={lockedSide === "left"}
               onSelectSize={handleSelectSize}
               onAddWithVariant={handleAddWithVariant}
               showSizes={lockedSide === "left"}
+              shouldDrop={leftShouldDrop}
             />
           )}
         </AnimatePresence>
@@ -348,11 +326,11 @@ export default function HeroShowcase() {
               key={lockedSide === "right" ? `locked-${rightProduct.node.id}` : rightProduct.node.id}
               product={rightProduct}
               side="right"
-              countdown={rightCountdown}
               isLocked={lockedSide === "right"}
               onSelectSize={handleSelectSize}
               onAddWithVariant={handleAddWithVariant}
               showSizes={lockedSide === "right"}
+              shouldDrop={rightShouldDrop}
             />
           )}
         </AnimatePresence>
