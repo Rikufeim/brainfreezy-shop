@@ -111,7 +111,7 @@ function getProductCode(title: string): string {
     return 'XX';
 }
 
-// Sort products: clothing first, accessories last
+// Sort products: clothing first, accessories last (exported for Shop modal nav)
 function sortProducts(products: ShopifyProduct[]): ShopifyProduct[] {
     return [...products].sort((a, b) => {
         const aHandle = a.node.handle.toLowerCase();
@@ -141,7 +141,7 @@ function sortProducts(products: ShopifyProduct[]): ShopifyProduct[] {
     });
 }
 
-function filterByCategory(products: ShopifyProduct[], category: string): ShopifyProduct[] {
+export function filterByCategory(products: ShopifyProduct[], category: string): ShopifyProduct[] {
     const normalized = category.toLowerCase();
     
     // Sort first, then filter
