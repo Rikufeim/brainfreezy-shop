@@ -11,16 +11,16 @@ interface FeaturedProductsProps {
 
 export default function FeaturedProducts({ selectedCategory, onSelectProduct }: FeaturedProductsProps) {
     const { products, isLoading, error } = useShopifyProducts(50);
-    
+
     // Deduplicate products by id and filter by category
-    const uniqueProducts = products.filter((product, index, self) => 
+    const uniqueProducts = products.filter((product, index, self) =>
         index === self.findIndex(p => p.node.id === product.node.id)
     );
     const filteredProducts = filterByCategory(uniqueProducts, selectedCategory);
 
     if (isLoading) {
         return (
-            <section className="py-24 px-6 md:px-12 bg-black w-full relative z-10">
+            <section className="py-24 px-6 md:px-12 bg-transparent w-full relative z-10">
                 <div className="max-w-7xl mx-auto flex items-center justify-center min-h-[400px]">
                     <Loader2 className="w-8 h-8 animate-spin text-white/50" />
                 </div>
@@ -30,7 +30,7 @@ export default function FeaturedProducts({ selectedCategory, onSelectProduct }: 
 
     if (error) {
         return (
-            <section className="py-24 px-6 md:px-12 bg-black w-full relative z-10">
+            <section className="py-24 px-6 md:px-12 bg-transparent w-full relative z-10">
                 <div className="max-w-7xl mx-auto flex items-center justify-center min-h-[400px]">
                     <p className="text-white/50">Failed to load products</p>
                 </div>
@@ -40,7 +40,7 @@ export default function FeaturedProducts({ selectedCategory, onSelectProduct }: 
 
     if (filteredProducts.length === 0) {
         return (
-            <section className="py-24 px-6 md:px-12 bg-black w-full relative z-10">
+            <section className="py-24 px-6 md:px-12 bg-transparent w-full relative z-10">
                 <div className="max-w-7xl mx-auto flex items-center justify-center min-h-[400px]">
                     <p className="text-white/50">No products found</p>
                 </div>
@@ -49,15 +49,15 @@ export default function FeaturedProducts({ selectedCategory, onSelectProduct }: 
     }
 
     return (
-        <section className="py-24 px-6 md:px-12 bg-black w-full relative z-10">
+        <section className="py-24 px-6 md:px-12 bg-transparent w-full relative z-10">
             <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-16">
                     {filteredProducts.map((product, index) => {
                         const imageUrl = product.node.images.edges[0]?.node.url;
                         const price = parseFloat(product.node.priceRange.minVariantPrice.amount);
                         const currency = product.node.priceRange.minVariantPrice.currencyCode;
-                        
-                            return (
+
+                        return (
                             <motion.div
                                 key={product.node.id}
                                 initial={{ opacity: 0, y: 20 }}
@@ -65,7 +65,7 @@ export default function FeaturedProducts({ selectedCategory, onSelectProduct }: 
                                 transition={{ delay: index * 0.1 }}
                                 className="flex flex-col items-center"
                             >
-                                <Product3DCard 
+                                <Product3DCard
                                     onClick={() => onSelectProduct(product)}
                                     className="w-full"
                                 >
@@ -118,66 +118,66 @@ function sortProducts(products: ShopifyProduct[]): ShopifyProduct[] {
         const bHandle = b.node.handle.toLowerCase();
         const aTitle = a.node.title.toLowerCase();
         const bTitle = b.node.title.toLowerCase();
-        
-        const isAccessoryA = aHandle.includes('case') || aHandle.includes('beanie') || 
-                             aHandle.includes('patch') || aTitle.includes('case') || 
-                             aTitle.includes('beanie') || aTitle.includes('patch');
-        const isAccessoryB = bHandle.includes('case') || bHandle.includes('beanie') || 
-                             bHandle.includes('patch') || bTitle.includes('case') || 
-                             bTitle.includes('beanie') || bTitle.includes('patch');
-        
+
+        const isAccessoryA = aHandle.includes('case') || aHandle.includes('beanie') ||
+            aHandle.includes('patch') || aTitle.includes('case') ||
+            aTitle.includes('beanie') || aTitle.includes('patch');
+        const isAccessoryB = bHandle.includes('case') || bHandle.includes('beanie') ||
+            bHandle.includes('patch') || bTitle.includes('case') ||
+            bTitle.includes('beanie') || bTitle.includes('patch');
+
         // Accessories go last
         if (isAccessoryA && !isAccessoryB) return 1;
         if (!isAccessoryA && isAccessoryB) return -1;
-        
+
         // Within clothing, prioritize sweatshirts (SW)
         const isSweatshirtA = aHandle.includes('sweatshirt') || aTitle.includes('sweatshirt');
         const isSweatshirtB = bHandle.includes('sweatshirt') || bTitle.includes('sweatshirt');
-        
+
         if (isSweatshirtA && !isSweatshirtB) return -1;
         if (!isSweatshirtA && isSweatshirtB) return 1;
-        
+
         return 0;
     });
 }
 
 export function filterByCategory(products: ShopifyProduct[], category: string): ShopifyProduct[] {
     const normalized = category.toLowerCase();
-    
+
     // Sort first, then filter
     const sortedProducts = sortProducts(products);
-    
+
     if (normalized === 'all') {
         return sortedProducts;
     }
-    
+
     if (normalized === 'mens' || normalized === 'womens') {
         // Filter to clothing products only
         return sortedProducts.filter(p => {
             const handle = p.node.handle.toLowerCase();
             const title = p.node.title.toLowerCase();
             // Exclude accessories
-            return !handle.includes('case') && 
-                   !handle.includes('beanie') && 
-                   !handle.includes('patch') &&
-                   !title.includes('case') &&
-                   !title.includes('beanie') &&
-                   !title.includes('patch');
+            return !handle.includes('case') &&
+                !handle.includes('beanie') &&
+                !handle.includes('patch') &&
+                !title.includes('case') &&
+                !title.includes('beanie') &&
+                !title.includes('patch');
         });
     }
-    
+
     if (normalized === 'accessories') {
         return sortedProducts.filter(p => {
             const handle = p.node.handle.toLowerCase();
             const title = p.node.title.toLowerCase();
-            return handle.includes('case') || 
-                   handle.includes('beanie') || 
-                   handle.includes('patch') ||
-                   title.includes('case') ||
-                   title.includes('beanie') ||
-                   title.includes('patch');
+            return handle.includes('case') ||
+                handle.includes('beanie') ||
+                handle.includes('patch') ||
+                title.includes('case') ||
+                title.includes('beanie') ||
+                title.includes('patch');
         });
     }
-    
+
     return sortedProducts;
 }

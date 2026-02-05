@@ -10,9 +10,8 @@ interface CategorySidebarProps {
 
 const categories = [
     "NEW",
-    "MENS",
-    "WOMENS",
-    "ACCESSORIES",
+    "MERCH",
+    "APPS",
 ];
 
 export default function CategorySidebar({ isOpen, onClose, onSelectCategory }: CategorySidebarProps) {

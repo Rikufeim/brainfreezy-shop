@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft } from "lucide-react";
-import HeroShowcase from "@/components/HeroShowcase";
+import StackedClothingShowcase from "@/components/StackedClothingShowcase";
 import Header from "@/components/Header";
 import CartDrawer from "@/components/CartDrawer";
 import FeaturedProducts from "@/components/FeaturedProducts";
@@ -16,45 +16,46 @@ import { useCartStore } from "@/stores/cartStore";
 
 const categories = [
   "ALL",
-  "MENS",
-  "WOMENS",
-  "ACCESSORIES",
+  "MERCH",
+  "APPS",
 ];
 
 // Filter products by category
 function filterByCategory(products: ShopifyProduct[], category: string): ShopifyProduct[] {
   const normalized = category.toLowerCase();
-  
+
   if (normalized === 'all') {
     return products;
   }
-  
-  if (normalized === 'mens' || normalized === 'womens') {
+
+  // "MERCH" Logic (previously Mens/Womens) - clothing
+  if (normalized === 'merch') {
     return products.filter(p => {
       const handle = p.node.handle.toLowerCase();
       const title = p.node.title.toLowerCase();
-      return !handle.includes('case') && 
-             !handle.includes('beanie') && 
-             !handle.includes('patch') &&
-             !title.includes('case') &&
-             !title.includes('beanie') &&
-             !title.includes('patch');
+      return !handle.includes('case') &&
+        !handle.includes('beanie') &&
+        !handle.includes('patch') &&
+        !title.includes('case') &&
+        !title.includes('beanie') &&
+        !title.includes('patch');
     });
   }
-  
-  if (normalized === 'accessories') {
+
+  // "APPS" Logic (previously Accessories)
+  if (normalized === 'apps') {
     return products.filter(p => {
       const handle = p.node.handle.toLowerCase();
       const title = p.node.title.toLowerCase();
-      return handle.includes('case') || 
-             handle.includes('beanie') || 
-             handle.includes('patch') ||
-             title.includes('case') ||
-             title.includes('beanie') ||
-             title.includes('patch');
+      return handle.includes('case') ||
+        handle.includes('beanie') ||
+        handle.includes('patch') ||
+        title.includes('case') ||
+        title.includes('beanie') ||
+        title.includes('patch');
     });
   }
-  
+
   return products;
 }
 
@@ -107,41 +108,64 @@ function IndexContent() {
 
       {/* Header */}
       <Header
-        onToggleCategories={() => {}}
+        onToggleCategories={() => { }}
         showBackButton={!!selectedProduct}
         onBack={() => setSelectedProduct(null)}
       />
 
+      {/* Seamless Integrated Background */}
+      <div
+        className="absolute inset-0 pointer-events-none z-0"
+        style={{
+          background: `
+            /* Product Area (Bottom) */
+            radial-gradient(ellipse at 20% 1300px, #00323440 0%, #00323418 20%, transparent 50%),
+            radial-gradient(ellipse at 80% 1100px, #00000040 0%, #00000018 20%, transparent 50%),
+            
+            /* Hero Area (Top) */
+            radial-gradient(ellipse at 20% 80%, #0b0d5740 0%, #0b0d5718 20%, transparent 50%),
+            radial-gradient(ellipse at 80% 20%, #00151740 0%, #00151718 20%, transparent 50%),
+            radial-gradient(ellipse at 50% 50%, #00000025 0%, #00000010 30%, transparent 65%),
+            radial-gradient(circle at 30% 30%, #0b0d5725 0%, #0b0d5710 15%, transparent 35%),
+            radial-gradient(circle at 70% 70%, #00151725 0%, #00151710 15%, transparent 35%),
+            #000000
+          `,
+          filter: "brightness(1.6)",
+        }}
+      />
+
       {/* Hero Content */}
-      <div className="flex h-screen items-center justify-center px-4">
-        <HeroShowcase />
+      <div className="flex h-screen items-center justify-center px-4 relative z-10">
+        <StackedClothingShowcase />
       </div>
 
-      {/* Categories */}
-      <section className="py-16 px-6 md:px-12 bg-black w-full relative z-10">
-        <div className="max-w-7xl mx-auto">
-          <nav className="flex flex-wrap justify-center gap-8 md:gap-12">
-            {categories.map((category, index) => (
-              <motion.button
-                key={category}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                onClick={() => handleCategorySelect(category)}
-                className={`text-2xl md:text-3xl font-display font-bold tracking-widest transition-colors duration-300 ${
-                  selectedCategory === category ? 'text-white' : 'text-white/50 hover:text-white'
-                }`}
-              >
-                {category}
-              </motion.button>
-            ))}
-          </nav>
-        </div>
-      </section>
+      {/* Product Section Wrapper */}
+      <div className="relative z-10 w-full overflow-hidden">
+        {/* Categories */}
+        <section className="py-16 px-6 md:px-12 w-full relative">
+          <div className="max-w-7xl mx-auto">
+            <nav className="flex flex-wrap justify-center gap-8 md:gap-12">
+              {categories.map((category, index) => (
+                <motion.button
+                  key={category}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  onClick={() => handleCategorySelect(category)}
+                  className={`text-2xl md:text-3xl font-display font-bold tracking-widest transition-colors duration-300 ${selectedCategory === category ? 'text-white' : 'text-white/50 hover:text-white'
+                    }`}
+                >
+                  {category}
+                </motion.button>
+              ))}
+            </nav>
+          </div>
+        </section>
 
-      {/* Featured Products */}
-      <FeaturedProducts selectedCategory={selectedCategory} onSelectProduct={setSelectedProduct} />
+        {/* Featured Products */}
+        <FeaturedProducts selectedCategory={selectedCategory} onSelectProduct={setSelectedProduct} />
+      </div>
 
       {/* Product Detail Modal */}
       <AnimatePresence>
@@ -185,7 +209,7 @@ function IndexContent() {
                 product={selectedProduct}
                 onNext={handleNext}
                 onPrev={handlePrev}
-                onAddToCart={() => {}}
+                onAddToCart={() => { }}
               />
             </motion.div>
           </motion.div>
@@ -210,18 +234,18 @@ function IndexContent() {
                 className="w-24 h-24 object-contain"
               />
             </div>
-            
+
             {/* Links */}
             <div className="flex flex-wrap justify-center items-center gap-6 md:gap-12 flex-1">
               <Link to="/contact" className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">CONTACT</Link>
-              <button 
+              <button
                 onClick={() => setCookieBannerOpen(true)}
                 className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300"
               >
                 COOKIES
               </button>
             </div>
-            
+
             {/* Mascot - shown on right for desktop */}
             <div className="hidden md:flex justify-end">
               <img

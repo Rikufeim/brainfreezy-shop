@@ -11,7 +11,7 @@ import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 import { ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 
-const categories = ["ALL", "MENS", "WOMENS", "ACCESSORIES"];
+const categories = ["ALL", "MERCH", "APPS"];
 
 export default function Shop() {
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
@@ -51,22 +51,21 @@ export default function Shop() {
           <Link to="/" className="text-white hover:text-white/70 transition-colors">
             <ChevronLeft className="w-6 h-6" />
           </Link>
-          
+
           {/* Category Nav */}
           <nav className="flex flex-wrap justify-center gap-4 md:gap-8">
             {categories.map((category) => (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`text-sm md:text-base font-display font-bold tracking-widest transition-colors duration-300 ${
-                  selectedCategory === category ? "text-white" : "text-white/40 hover:text-white/70"
-                }`}
+                className={`text-sm md:text-base font-display font-bold tracking-widest transition-colors duration-300 ${selectedCategory === category ? "text-white" : "text-white/40 hover:text-white/70"
+                  }`}
               >
                 {category}
               </button>
             ))}
           </nav>
-          
+
           <div className="w-6" /> {/* Spacer for symmetry */}
         </div>
       </header>
@@ -117,7 +116,7 @@ export default function Shop() {
                 product={selectedProduct}
                 onNext={handleNext}
                 onPrev={handlePrev}
-                onAddToCart={() => {}}
+                onAddToCart={() => { }}
               />
             </motion.div>
           </motion.div>

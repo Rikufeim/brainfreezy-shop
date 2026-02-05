@@ -25,9 +25,9 @@ interface ProductShowcaseProps {
   shouldDrop: boolean;
 }
 
-function ProductShowcase({ 
-  product, 
-  side, 
+function ProductShowcase({
+  product,
+  side,
   isLocked,
   onSelectSize,
   onAddWithVariant,
@@ -72,8 +72,8 @@ function ProductShowcase({
   }));
 
   // Determine exit animation based on shouldDrop
-  const exitAnimation = shouldDrop 
-    ? { opacity: 0, y: 100 } 
+  const exitAnimation = shouldDrop
+    ? { opacity: 0, y: 100 }
     : { opacity: 0, x: side === "left" ? -50 : 50 };
 
   return (
@@ -93,10 +93,10 @@ function ProductShowcase({
           onMouseLeave={handleMouseLeave}
           style={{ rotateX, rotateY, translateX, translateY }}
           initial={{ scale: 1, z: 0 }}
-          whileHover={{ 
-            scale: 1.08, 
+          whileHover={{
+            scale: 1.08,
             z: 30,
-            transition: { duration: 0.2 } 
+            transition: { duration: 0.2 }
           }}
           className="cursor-pointer"
         >
@@ -110,7 +110,7 @@ function ProductShowcase({
           />
         </motion.div>
       </div>
-      
+
       {/* Button or Size Selector */}
       <AnimatePresence mode="wait">
         {showSizes && hasVariants ? (
@@ -221,18 +221,18 @@ export default function HeroShowcase() {
   const clothingProducts = products.filter(p => {
     const handle = p.node.handle.toLowerCase();
     const title = p.node.title.toLowerCase();
-    return !handle.includes('case') && 
-           !handle.includes('beanie') && 
-           !handle.includes('patch') &&
-           !title.includes('case') &&
-           !title.includes('beanie') &&
-           !title.includes('patch');
+    return !handle.includes('case') &&
+      !handle.includes('beanie') &&
+      !handle.includes('patch') &&
+      !title.includes('case') &&
+      !title.includes('beanie') &&
+      !title.includes('patch');
   });
 
   // Left side rotation - independent
   useEffect(() => {
     if (clothingProducts.length < 2 || lockedSide === "left") return;
-    
+
     const interval = setInterval(() => {
       setLeftIndex((prev) => {
         let next = (prev + 2) % clothingProducts.length;
@@ -242,14 +242,14 @@ export default function HeroShowcase() {
       });
       setLeftRotationCount((prev) => prev + 1);
     }, ROTATION_INTERVAL);
-    
+
     return () => clearInterval(interval);
   }, [clothingProducts.length, lockedSide, rightIndex]);
 
   // Right side rotation - independent
   useEffect(() => {
     if (clothingProducts.length < 2 || lockedSide === "right") return;
-    
+
     const interval = setInterval(() => {
       setRightIndex((prev) => {
         let next = (prev + 2) % clothingProducts.length;
@@ -259,7 +259,7 @@ export default function HeroShowcase() {
       });
       setRightRotationCount((prev) => prev + 1);
     }, ROTATION_INTERVAL);
-    
+
     return () => clearInterval(interval);
   }, [clothingProducts.length, lockedSide, leftIndex]);
 
@@ -275,7 +275,7 @@ export default function HeroShowcase() {
   const handleAddWithVariant = useCallback((product: ShopifyProduct, variantId: string) => {
     const variant = product.node.variants.edges.find(v => v.node.id === variantId)?.node;
     if (!variant) return;
-    
+
     addItem({
       product,
       variantId: variant.id,
@@ -290,11 +290,11 @@ export default function HeroShowcase() {
   }, [addItem, openCart]);
 
   // Get current products to display
-  const leftProduct = lockedSide === "left" && lockedProduct 
-    ? lockedProduct 
+  const leftProduct = lockedSide === "left" && lockedProduct
+    ? lockedProduct
     : clothingProducts[leftIndex % clothingProducts.length];
-  const rightProduct = lockedSide === "right" && lockedProduct 
-    ? lockedProduct 
+  const rightProduct = lockedSide === "right" && lockedProduct
+    ? lockedProduct
     : clothingProducts[rightIndex % clothingProducts.length];
 
   return (
@@ -346,13 +346,22 @@ export default function HeroShowcase() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.6 }}
       >
-        <Button
+        <motion.button
           onClick={() => navigate("/shop")}
-          variant="outline"
-          className="font-display uppercase tracking-[0.2em] text-white border-white/30 hover:bg-white hover:text-black transition-all duration-300 px-8 py-3"
+          className="px-8 py-3 rounded-lg text-white font-black text-lg tracking-widest uppercase
+                     border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
+                     hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
+                     active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2
+                     transition-all duration-150"
+          style={{
+            background: "linear-gradient(135deg, #000000 0%, #00000090 10%, #000000 25%, #00000080 40%, #63636345 55%, #63636325 70%, #f3f3f330 85%, #000000 100%)",
+            filter: "brightness(1.05)",
+          }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.95 }}
         >
           Shop All
-        </Button>
+        </motion.button>
       </motion.div>
     </div>
   );

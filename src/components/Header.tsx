@@ -16,19 +16,15 @@ export default function Header({
   const items = useCartStore(state => state.items);
   const openCart = useCartStore(state => state.openCart);
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  return <header className="fixed top-0 left-0 right-0 z-50">
-      {/* Black banner background */}
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" style={{
-      height: '60px'
-    }} />
-      
-      <nav className="relative flex items-center justify-between px-6 md:px-8 pt-2" style={{
+  return <header className="fixed top-0 left-0 right-0 z-50 bg-black/10 backdrop-blur-md transition-all duration-500">
+
+    <nav className="relative flex items-center justify-between px-6 md:px-8 pt-2" style={{
       height: '60px'
     }}>
-        {/* Left side buttons */}
-        <div className="flex items-center gap-4">
-          <AnimatePresence mode="wait">
-            {showBackButton && <motion.div key="back-button" initial={{
+      {/* Left side buttons */}
+      <div className="flex items-center gap-4">
+        <AnimatePresence mode="wait">
+          {showBackButton && <motion.div key="back-button" initial={{
             opacity: 0,
             scale: 0.8
           }} animate={{
@@ -40,28 +36,28 @@ export default function Header({
           }} transition={{
             duration: 0.2
           }}>
-                <Button variant="outline" size="icon" onClick={onBack} className="bg-black/20 backdrop-blur-md border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300" aria-label="Go Back">
-                  <ChevronLeft className="w-5 h-5" />
-                </Button>
-              </motion.div>}
-          </AnimatePresence>
-        </div>
+            <Button variant="outline" size="icon" onClick={onBack} className="bg-black/20 backdrop-blur-md border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300" aria-label="Go Back">
+              <ChevronLeft className="w-5 h-5" />
+            </Button>
+          </motion.div>}
+        </AnimatePresence>
+      </div>
 
-        {/* Center text */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div className="flex items-baseline gap-3 md:gap-4">
-            <div className="relative inline-block">
-              
-              
-            </div>
-            
+      {/* Center text */}
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div className="flex items-baseline gap-3 md:gap-4">
+          <div className="relative inline-block">
+
+
           </div>
-        </div>
 
-        {/* Right side buttons */}
-        <div className="flex items-center gap-4">
-          {/* Cart Button */}
-          <motion.div initial={{
+        </div>
+      </div>
+
+      {/* Right side buttons */}
+      <div className="flex items-center gap-4">
+        {/* Cart Button */}
+        <motion.div initial={{
           opacity: 0,
           x: 20
         }} animate={{
@@ -71,15 +67,15 @@ export default function Header({
           duration: 0.6,
           delay: 0.4
         }} className="relative">
-            <button onClick={openCart} aria-label="Shopping cart" className="w-16 h-16 flex items-center justify-center hover:scale-110 transition-transform duration-200">
-              <img src={icyCartIcon} alt="Cart" className="w-16 h-16 object-contain" />
-            </button>
-            {totalItems > 0 && <span className="absolute -top-1 -right-1 w-5 h-5 bg-white text-black rounded-full 
+          <button onClick={openCart} aria-label="Shopping cart" className="w-16 h-16 flex items-center justify-center hover:scale-110 transition-transform duration-200">
+            <img src={icyCartIcon} alt="Cart" className="w-16 h-16 object-contain" />
+          </button>
+          {totalItems > 0 && <span className="absolute -top-1 -right-1 w-5 h-5 bg-white text-black rounded-full 
                                flex items-center justify-center text-xs font-bold">
-                {totalItems}
-              </span>}
-          </motion.div>
-        </div>
-      </nav>
-    </header>;
+            {totalItems}
+          </span>}
+        </motion.div>
+      </div>
+    </nav>
+  </header>;
 }
