@@ -10,8 +10,26 @@ export default function Contact() {
   const items = useCartStore((state) => state.items);
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
+  const seamlessBackground = {
+    background: `
+      radial-gradient(ellipse at 20% 180vh, #00323440 0%, #00323418 20%, transparent 50%),
+      radial-gradient(ellipse at 80% 150vh, #00000040 0%, #00000018 20%, transparent 50%),
+      radial-gradient(ellipse at 50% 200vh, #0b0d5730 0%, #0b0d5712 25%, transparent 55%),
+      radial-gradient(ellipse at 30% 170vh, #00151730 0%, #00151712 20%, transparent 45%),
+      radial-gradient(ellipse at 20% 40%, #0b0d5740 0%, #0b0d5718 20%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, #00151740 0%, #00151718 20%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, #00000025 0%, #00000010 30%, transparent 65%),
+      radial-gradient(circle at 30% 30%, #0b0d5725 0%, #0b0d5710 15%, transparent 35%),
+      radial-gradient(circle at 70% 70%, #00151725 0%, #00151710 15%, transparent 35%),
+      #000000
+    `,
+    filter: "brightness(1.6)",
+  };
+
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-black relative">
+      {/* Seamless Background */}
+      <div className="fixed inset-0 pointer-events-none z-0" style={seamlessBackground} />
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50">
         <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" style={{ height: '60px' }} />
