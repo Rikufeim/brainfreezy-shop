@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, animate } from 'framer-motion'
 import { cn } from '@/lib/utils';
 import { Check } from "lucide-react";
+import vibeCodeVR from "@/assets/vibe-coding-vr.png";
 
 interface PricingPlan {
     name: string;
@@ -212,7 +213,7 @@ const PricingCard = ({
 // Main Export
 export default function Pricing() {
     return (
-        <div className="w-full bg-black py-12 px-4 md:px-8 relative min-h-screen flex flex-col items-center overflow-x-hidden scrollbar-hide">
+        <div className="w-full py-12 px-4 md:px-8 relative min-h-screen flex flex-col items-center overflow-x-hidden scrollbar-hide">
             {/* Background Effects Removed */}
             <PricingHeader title="CHOOSE YOUR LEVEL" />
 
@@ -257,11 +258,13 @@ export default function Pricing() {
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center text-left mb-16 max-w-5xl mx-auto">
-                    {/* Image Placeholder */}
-                    <div className="relative transform rotate-1 hover:rotate-0 transition-all duration-500 w-full">
-                        <div className="rounded-2xl overflow-hidden border-4 border-zinc-800 shadow-[8px_8px_0px_0px_#27272a] bg-zinc-900 h-80 flex items-center justify-center">
-                            <span className="text-zinc-500 font-bold uppercase tracking-widest text-sm">Add Vibe Coding Image</span>
-                        </div>
+                    {/* Vibe Coding Image */}
+                    <div className="relative transform hover:scale-105 transition-all duration-500 w-full flex items-center justify-center">
+                        <img 
+                            src={vibeCodeVR} 
+                            alt="Vibe Coding VR" 
+                            className="w-full max-w-md h-auto object-contain"
+                        />
                     </div>
 
                     {/* Vibe Code Points */}
