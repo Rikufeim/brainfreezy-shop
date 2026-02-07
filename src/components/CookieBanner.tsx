@@ -17,9 +17,10 @@ import {
 interface CookieBannerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onContact?: () => void;
 }
 
-export default function CookieBanner({ open, onOpenChange }: CookieBannerProps) {
+export default function CookieBanner({ open, onOpenChange, onContact }: CookieBannerProps) {
   const [strictlyNecessary] = useState(true);
   const [targetedAnalytics, setTargetedAnalytics] = useState(false);
   const [strictlyOpen, setStrictlyOpen] = useState(false);
@@ -129,7 +130,9 @@ export default function CookieBanner({ open, onOpenChange }: CookieBannerProps) 
               <button 
                 onClick={() => {
                   onOpenChange(false);
-                  window.location.href = '/contact';
+                  if (onContact) {
+                    onContact();
+                  }
                 }}
                 className="text-white hover:text-white/70 transition-colors underline"
               >

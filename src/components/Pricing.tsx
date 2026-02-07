@@ -4,6 +4,7 @@ import { motion, useMotionValue, useSpring, useTransform, animate } from 'framer
 import { cn } from '@/lib/utils';
 import { Check } from "lucide-react";
 import vibeCodeVR from "@/assets/vibe-coding-vr.png";
+import StackedClothingShowcase from "@/components/StackedClothingShowcase";
 
 interface PricingPlan {
     name: string;
@@ -17,14 +18,14 @@ interface PricingPlan {
 
 const plans: PricingPlan[] = [
     {
-        name: "ICE - Starter Mode",
-        price: 29,
-        description: "Build your foundation.",
+        name: "ICE — CREATIVE MODE",
+        price: 149,
+        description: "Turn ideas into product",
         features: [
-            "Beginner Systems",
-            "Website Starter Tools",
-            "Store Setup Basics",
-            "Prompt Fundamentals"
+            "Creative system foundations",
+            "Learn to use Beymflow (vibe coding app)",
+            "Prompting for builders & creators",
+            "Landing Page Method"
         ],
         cta: "START ICE",
         accent: "bg-cyan-500", // Bright blue/cyan for ICE
@@ -32,12 +33,12 @@ const plans: PricingPlan[] = [
     {
         name: "ELITE - Money Mode",
         price: 199,
-        description: "Monetize your skills.",
+        description: "Multiply your sales skill",
         features: [
-            "Full Training System",
-            "Sales & Client Methods",
-            "Solo Seller App",
-            "Automation Tools"
+            "Design a sellable system",
+            "Execute sales with structure",
+            "Learn to use GoldenClose (sales/pipeline app)",
+            "Automation frameworks for scale"
         ],
         cta: "ACTIVATE ELITE",
         accent: "bg-purple-500", // Purple for ELITE
@@ -356,7 +357,7 @@ export default function Pricing() {
                             filter: "brightness(1.05)",
                         }}
                     >
-                        GET THE APP
+                        PICK UP THE PHONE
                     </button>
                 </div>
 
@@ -374,6 +375,56 @@ export default function Pricing() {
                     </div>
                 </div>
             </div>
+
+            {/* Beymflow Section */}
+            <div className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center relative z-10 px-4 mb-24">
+                {/* Image Placeholder */}
+                <div className="relative order-1">
+                    <div className="relative rounded-3xl overflow-hidden border-4 border-zinc-800 shadow-[12px_12px_0px_0px_#27272a] transform rotate-1 hover:rotate-0 transition-all duration-500 bg-zinc-900 h-[520px] flex items-center justify-center">
+                        <div className="text-center p-8">
+                            <span className="text-zinc-600 font-black text-2xl uppercase block mb-2">Beymflow</span>
+                            <span className="text-zinc-700 font-bold block">ADD IMAGE HERE</span>
+                        </div>
+                        <div className="absolute top-0 w-full h-1 bg-gradient-to-r from-transparent via-zinc-700 to-transparent opacity-50" />
+                        <div className="absolute bottom-0 w-full h-24 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+                    </div>
+                </div>
+
+                {/* Text Side */}
+                <div className="space-y-6 order-2">
+                    <h3 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight">
+                        Beymflow — Vibe Coding Toolkit
+                    </h3>
+                    <p className="text-zinc-400 text-xl font-medium leading-relaxed">
+                        Beymflow is a creative coding app built to keep you in flow while you build.
+                    </p>
+                    <p className="text-zinc-400 text-lg leading-relaxed">
+                        It combines a prompt generator, a Color Codex, and a living landing page library into one focused workspace — so you can move from idea to implementation without context switching.
+                    </p>
+                    <div>
+                        <button
+                            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                            className="px-8 py-4 rounded-lg text-white font-black text-lg tracking-widest uppercase
+                                border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
+                                hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
+                                active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2
+                                transition-all duration-150 bg-black hover:bg-zinc-900"
+                            style={{
+                                background: "linear-gradient(135deg, #000000 0%, #00000090 10%, #000000 25%, #00000080 40%, #63636345 55%, #63636325 70%, #f3f3f330 85%, #000000 100%)",
+                                filter: "brightness(1.05)",
+                            }}
+                        >
+                            START VIBE CODING
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Current Hero (moved below content sections) */}
+            <div className="flex h-screen items-center justify-center px-4 relative z-10 mb-24">
+                <StackedClothingShowcase />
+            </div>
+
         </div>
     );
 }

@@ -11,13 +11,11 @@ import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 import { ShopifyProduct } from "@/lib/shopify";
 import { useCartStore } from "@/stores/cartStore";
 
-const categories = ["ALL", "MERCH", "APPS"];
-
 export default function Shop() {
-  const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
   const [selectedProduct, setSelectedProduct] = useState<ShopifyProduct | null>(null);
   const { products } = useShopifyProducts(50);
   const syncCart = useCartStore((state) => state.syncCart);
+  const selectedCategory = "ALL";
 
   useEffect(() => {
     syncCart();
@@ -65,25 +63,11 @@ export default function Shop() {
         }}
       />
       {/* Header with back button */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-transparent">
         <div className="flex items-center justify-between px-6 py-4">
           <Link to="/" className="text-white hover:text-white/70 transition-colors">
             <ChevronLeft className="w-6 h-6" />
           </Link>
-
-          {/* Category Nav */}
-          <nav className="flex flex-wrap justify-center gap-4 md:gap-8">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`text-sm md:text-base font-display font-bold tracking-widest transition-colors duration-300 ${selectedCategory === category ? "text-white" : "text-white/40 hover:text-white/70"
-                  }`}
-              >
-                {category}
-              </button>
-            ))}
-          </nav>
 
           <div className="w-6" /> {/* Spacer for symmetry */}
         </div>

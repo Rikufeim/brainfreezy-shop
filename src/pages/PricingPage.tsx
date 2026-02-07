@@ -3,14 +3,14 @@ import Header from "@/components/Header";
 // Footer is implemented inline
 import CartDrawer from "@/components/CartDrawer";
 import CookieBanner from "@/components/CookieBanner";
-import { Link, useNavigate } from "react-router-dom";
+import ContactModal from "@/components/ContactModal";
+import { useNavigate } from "react-router-dom";
 import icyMascot from "@/assets/icy-mascot.png";
 import { useState } from "react";
-import { useCartStore } from "@/stores/cartStore";
 
 export default function PricingPage() {
     const [cookieBannerOpen, setCookieBannerOpen] = useState(false);
-    const syncCart = useCartStore((state) => state.syncCart);
+    const [contactOpen, setContactOpen] = useState(false);
     const navigate = useNavigate();
 
     const seamlessBackground = {
@@ -49,10 +49,15 @@ export default function PricingPage() {
 
             {/* Cart & Cookie Banner */}
             <CartDrawer />
-            <CookieBanner open={cookieBannerOpen} onOpenChange={setCookieBannerOpen} />
+            <CookieBanner
+                open={cookieBannerOpen}
+                onOpenChange={setCookieBannerOpen}
+                onContact={() => setContactOpen(true)}
+            />
+            <ContactModal isOpen={contactOpen} onClose={() => setContactOpen(false)} />
 
             {/* Footer */}
-            <footer className="py-8 px-6 md:px-12 bg-black w-full relative z-10 border-t border-white/10">
+            <footer className="py-8 px-6 md:px-12 bg-transparent w-full relative z-10">
                 <div className="max-w-7xl mx-auto">
                     <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-0">
                         {/* Mascot - shown first on mobile */}
@@ -66,7 +71,12 @@ export default function PricingPage() {
 
                         {/* Links */}
                         <div className="flex flex-wrap justify-center items-center gap-6 md:gap-12 flex-1">
-                            <Link to="/contact" className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">CONTACT</Link>
+                            <button
+                                onClick={() => setContactOpen(true)}
+                                className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300"
+                            >
+                                CONTACT
+                            </button>
                             <button
                                 onClick={() => setCookieBannerOpen(true)}
                                 className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300"
