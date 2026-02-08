@@ -87,7 +87,7 @@ export default function Crypto() {
       <main className="pt-24">
         <section className="py-16 px-6 md:px-12 bg-transparent w-full relative z-10">
           <div className="max-w-7xl mx-auto mb-10">
-            <h1 className="text-3xl md:text-5xl font-black text-white text-left mb-4"> templates & guides</h1>
+            <h1 className="text-3xl md:text-5xl font-black text-white text-left mb-4">templates & guides</h1>
             <p className="text-white/70 text-base md:text-lg max-w-4xl text-left">Templates and guides for thinking, building, and decision-making.</p>
           </div>
           <div className="max-w-7xl mx-auto mb-12">
