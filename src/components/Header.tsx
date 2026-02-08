@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useCartStore } from "@/stores/cartStore";
 import { Button } from "@/components/ui/button";
 import icyCartIcon from "@/assets/icy-cart-icon.png";
@@ -44,18 +45,36 @@ export default function Header({
       </div>
 
       {/* Center text */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-        <div className="flex items-baseline gap-3 md:gap-4">
-          <div className="relative inline-block">
-
-
-          </div>
-
-        </div>
-      </div>
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
 
       {/* Right side buttons */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-6">
+        <div className="flex items-center gap-6">
+          <Link
+            to="/crypto"
+            className="text-xs md:text-sm font-display font-bold tracking-widest text-white/60 hover:text-white transition-colors duration-300 uppercase"
+          >
+            TEMPLATES & GUIDES
+          </Link>
+          <Link
+            to="/pricing"
+            className="text-xs md:text-sm font-display font-bold tracking-widest text-white/60 hover:text-white transition-colors duration-300 uppercase"
+          >
+            COURSES
+          </Link>
+          <Link
+            to="/shop"
+            className="text-xs md:text-sm font-display font-bold tracking-widest text-white/60 hover:text-white transition-colors duration-300 uppercase"
+          >
+            SHOP MERCH
+          </Link>
+          <Link
+            to="/community"
+            className="text-xs md:text-sm font-display font-bold tracking-widest text-white/60 hover:text-white transition-colors duration-300 uppercase"
+          >
+            COMMUNITY
+          </Link>
+        </div>
         {/* Cart Button */}
         <motion.div initial={{
           opacity: 0,
