@@ -4,6 +4,7 @@ import { motion, useMotionValue, useSpring, useTransform, animate } from 'framer
 import { cn } from '@/lib/utils';
 import { Check } from "lucide-react";
 import vibeCodeVR from "@/assets/vibe-coding-vr.png";
+import beymflowLogo from "@/assets/beymflow-logo.png";
 import StackedClothingShowcase from "@/components/StackedClothingShowcase";
 
 interface PricingPlan {
@@ -378,16 +379,13 @@ export default function Pricing() {
 
             {/* Beymflow Section */}
             <div className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center relative z-10 px-4 mb-24">
-                {/* Image Placeholder */}
-                <div className="relative order-1">
-                    <div className="relative rounded-3xl overflow-hidden border-4 border-zinc-800 shadow-[12px_12px_0px_0px_#27272a] transform rotate-1 hover:rotate-0 transition-all duration-500 bg-zinc-900 h-[520px] flex items-center justify-center">
-                        <div className="text-center p-8">
-                            <span className="text-zinc-600 font-black text-2xl uppercase block mb-2">Beymflow</span>
-                            <span className="text-zinc-700 font-bold block">ADD IMAGE HERE</span>
-                        </div>
-                        <div className="absolute top-0 w-full h-1 bg-gradient-to-r from-transparent via-zinc-700 to-transparent opacity-50" />
-                        <div className="absolute bottom-0 w-full h-24 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
-                    </div>
+            {/* Beymflow Image */}
+                <div className="relative order-1 flex items-center justify-center">
+                    <img 
+                        src={beymflowLogo} 
+                        alt="Beymflow Logo" 
+                        className="w-full max-w-md h-auto object-contain"
+                    />
                 </div>
 
                 {/* Text Side */}
