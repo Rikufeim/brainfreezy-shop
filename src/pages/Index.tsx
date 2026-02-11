@@ -15,6 +15,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Cover } from "@/components/ui/cover";
+import { FrostedTextReveal } from "@/components/ui/frosted-text-reveal";
 
 function IndexContent() {
   const [cookieBannerOpen, setCookieBannerOpen] = useState(false);
@@ -77,7 +79,7 @@ function IndexContent() {
               transition={{ duration: 0.8 }}
               className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight"
             >
-              Mental cold shock
+              <FrostedTextReveal text="MENTAL COLD" textClassName="text-white font-black uppercase tracking-tight" /> <Cover className="text-white">SHOCK</Cover>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -85,7 +87,7 @@ function IndexContent() {
               transition={{ duration: 0.8, delay: 0.1 }}
               className="text-lg md:text-xl text-white/70 max-w-xl"
             >
-              Reset your focus, sharpen your edge, and build with clarity.
+              Everything you need to cool your brain.
             </motion.p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-2">
@@ -118,6 +120,43 @@ function IndexContent() {
               alt="ICY"
               className="w-48 h-48 object-contain"
             />
+          </div>
+        </div>
+      </section>
+
+      {/* Templates OS Section */}
+      <section className="relative z-10 w-full py-16 px-6 md:px-12">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid gap-10 md:grid-cols-[minmax(0,0.9fr)_minmax(0,2fr)] items-start">
+            <div className="space-y-5">
+              <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight">
+                XRP – Crypto Brain
+              </h2>
+              <p className="text-white/80 text-sm md:text-base leading-relaxed">
+                Organize your research, track real-time prices, and build long-term conviction with this all-in-one XRP workspace.
+              </p>
+              <ul className="text-white/90 text-sm md:text-base space-y-2 list-disc list-inside">
+                <li>Live price tracking</li>
+                <li>Learning resources</li>
+                <li>Investment journal</li>
+                <li>Lifetime updates</li>
+              </ul>
+              <Link
+                to="/pricing"
+                className="inline-flex items-center justify-center px-6 py-3 rounded-lg text-white font-black text-sm tracking-widest uppercase border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a] hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1 active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2 transition-all duration-150 bg-black"
+              >
+                JOIN XRP ARMY
+              </Link>
+            </div>
+            <div className="rounded-3xl border border-white/10 bg-black/40 overflow-hidden">
+              <div className="relative w-full h-[360px] md:h-[420px] overflow-hidden">
+                <iframe
+                  src="https://remarkable-elk-cb3.notion.site/ebd//3033c81b0c1280039033c0357a8fc1cd"
+                  className="absolute inset-0 w-full h-full"
+                  frameBorder={0}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>

@@ -87,8 +87,15 @@ export default function Crypto() {
       <main className="pt-24">
         <section className="py-16 px-6 md:px-12 bg-transparent w-full relative z-10">
           <div className="max-w-7xl mx-auto mb-10">
-            <h1 className="text-3xl md:text-5xl font-black text-white text-left mb-4">templates & guides</h1>
-            <p className="text-white/70 text-base md:text-lg max-w-4xl text-left"> for thinking, building, and decision-making.</p>
+            <h1 className="text-3xl md:text-5xl font-black text-white text-left mb-2">
+              Templates & guides
+            </h1>
+            <p className="text-white/70 text-base md:text-lg max-w-4xl text-left mb-4">
+              Systems for thinking, building, and decision-making.
+            </p>
+            <p className="text-3xl md:text-5xl font-black text-white text-left uppercase tracking-[0.2em]">
+              Coming soon
+            </p>
           </div>
           <div className="max-w-7xl mx-auto mb-12">
             <div className="flex flex-wrap gap-4">
@@ -109,11 +116,16 @@ export default function Crypto() {
             }} transition={{
               delay: index * 0.1
             }} className="flex flex-col items-center">
-                  <Product3DCard className="w-full">
+                  <Product3DCard className="w-full rounded-3xl border border-white/10 bg-black/80 p-4">
                     <div className="relative w-full aspect-square mb-6">
-                      <img src="/placeholder.svg" alt={product.name} className="w-full h-full object-contain drop-shadow-2xl" style={{
-                    filter: "drop-shadow(0 15px 30px rgba(0, 0, 0, 0.4))"
-                  }} />
+                      <img
+                        src="/placeholder.svg"
+                        alt={product.name}
+                        className="w-full h-full object-contain drop-shadow-2xl"
+                        style={{
+                          filter: "drop-shadow(0 15px 30px rgba(0, 0, 0, 0.4))",
+                        }}
+                      />
                     </div>
                   </Product3DCard>
                   <h3 className="font-display font-medium text-lg tracking-widest text-white/90 uppercase text-center mt-2">
@@ -128,9 +140,63 @@ export default function Crypto() {
                 </motion.div>)}
             </div>
           </div>
+
+          <div className="max-w-7xl mx-auto mt-16">
+            <div className="grid gap-10 md:grid-cols-[minmax(0,0.9fr)_minmax(0,2fr)] items-start">
+              <div className="space-y-5">
+                <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight">
+                  XRP – Crypto Brain
+                </h2>
+                <p className="text-white/80 text-sm md:text-base leading-relaxed">
+                  Organize your research, track real-time prices, and build long-term conviction with this all-in-one XRP workspace.
+                </p>
+                <ul className="text-white/90 text-sm md:text-base space-y-2 list-disc list-inside">
+                  <li>Live price tracking</li>
+                  <li>Learning resources</li>
+                  <li>Investment journal</li>
+                  <li>Lifetime updates</li>
+                </ul>
+                <Link
+                  to="/pricing"
+                  className="inline-flex items-center justify-center px-6 py-3 rounded-lg text-white font-black text-sm tracking-widest uppercase border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a] hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1 active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2 transition-all duration-150 bg-black"
+                >
+                  JOIN XRP ARMY
+                </Link>
+              </div>
+              <div className="rounded-3xl border border-white/10 bg-black/40 overflow-hidden">
+                <div className="relative w-full h-[360px] md:h-[420px] overflow-hidden">
+                  <iframe
+                    src="https://remarkable-elk-cb3.notion.site/ebd//3033c81b0c1280039033c0357a8fc1cd"
+                    className="absolute inset-0 w-full h-full"
+                    frameBorder={0}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
       </main>
 
       <CartDrawer />
+
+      {/* Full-page coming soon overlay */}
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md">
+        <div className="flex flex-col items-center gap-6 px-6 text-center">
+          <h1 className="text-4xl md:text-6xl font-black text-white uppercase tracking-[0.3em]">
+            Coming soon
+          </h1>
+          <p className="text-white/70 text-sm md:text-base max-w-md">
+            Templates OS and guides will be available here soon.
+          </p>
+          <Link
+            to="/"
+            className="inline-flex items-center justify-center px-6 py-3 rounded-lg text-white font-black text-xs md:text-sm tracking-widest uppercase
+                       border-2 border-white/40 hover:border-white bg-transparent hover:bg-white/10
+                       transition-colors duration-150"
+          >
+            Back to main page
+          </Link>
+        </div>
+      </div>
     </div>;
 }

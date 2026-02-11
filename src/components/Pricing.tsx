@@ -65,7 +65,7 @@ const Counter = ({ from, to }: { from: number; to: number }) => {
 };
 
 // Header Component
-const PricingHeader = ({ title }: { title: string }) => (
+const PricingHeader = ({ title, subtitle }: { title: string; subtitle?: string }) => (
     <div className="text-center mb-10 relative z-10 p-4">
         <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -79,7 +79,7 @@ const PricingHeader = ({ title }: { title: string }) => (
                 {title}
             </h1>
         </motion.div>
-        <p className="text-zinc-500 font-bold text-lg mt-3">Lifetime Access. One-time payment.</p>
+        <p className="text-zinc-500 font-bold text-lg mt-3">{subtitle ?? "Lifetime Access. One-time payment."}</p>
     </div>
 );
 
@@ -217,7 +217,7 @@ export default function Pricing() {
     return (
         <div className="w-full py-12 px-4 md:px-8 relative min-h-screen flex flex-col items-center overflow-x-hidden scrollbar-hide">
             {/* Background Effects Removed */}
-            <PricingHeader title="CHOOSE YOUR LEVEL" />
+            <PricingHeader title="CHOOSE YOUR SYSTEM" subtitle="Your process. Lifetime updates." />
 
             {/* Pricing Cards */}
             <div className="w-full max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 relative z-10 px-2 md:px-0 mb-24">
