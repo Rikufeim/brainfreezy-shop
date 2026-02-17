@@ -106,7 +106,7 @@ export default function StackedClothingShowcase() {
                         transition={{ delay: 0.5, duration: 0.6 }}
                     >
                         <motion.button
-                            onClick={() => navigate("/pricing")}
+                            onClick={() => navigate("/templates")}
                             className="px-8 py-4 rounded-lg text-white font-black text-xl tracking-widest uppercase
                                 border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
                                 hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
@@ -119,7 +119,7 @@ export default function StackedClothingShowcase() {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.95 }}
                         >
-                            Unlock Access
+                            USE TEMPLATES
                         </motion.button>
                     </motion.div>
                 </div>

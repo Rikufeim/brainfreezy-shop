@@ -17,12 +17,57 @@ import {
 } from "@/components/ui/select";
 import { Cover } from "@/components/ui/cover";
 import { FrostedTextReveal } from "@/components/ui/frosted-text-reveal";
+import { useShopifyProducts } from "@/hooks/useShopifyProducts";
+import { toast } from "sonner";
 
 function IndexContent() {
   const [cookieBannerOpen, setCookieBannerOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [service, setService] = useState("");
-  const syncCart = useCartStore((state) => state.syncCart);
+  const { syncCart, addItem, openCart } = useCartStore();
+  const { products, isLoading: productsLoading } = useShopifyProducts(250);
+
+  const handleAddToCart = async () => {
+    if (productsLoading) {
+      toast.info("Loading products, please wait...");
+      return;
+    }
+
+    // specific search for XRP product
+    // We strictly look for "crypto brain" to avoid matching other XRP merch (like stickers/tees)
+    const xrpProduct = products.find(p => {
+      const title = p.node.title.toLowerCase();
+      return title.includes("crypto brain");
+    });
+
+    if (!xrpProduct) {
+      console.error("XRP Product NOT FOUND. Available products:", products.map(p => p.node.title));
+      toast.error("Product 'Crypto Brain' not found.");
+      return;
+    }
+
+    const variant = xrpProduct.node.variants.edges[0]?.node;
+    if (!variant) {
+      toast.error("Product has no variants.");
+      return;
+    }
+
+    try {
+      await addItem({
+        product: xrpProduct,
+        variantId: variant.id,
+        variantTitle: variant.title,
+        price: variant.price,
+        quantity: 1,
+        selectedOptions: []
+      });
+      toast.success(`Added ${xrpProduct.node.title} to cart`);
+      openCart();
+    } catch (e) {
+      console.error("Add to cart error", e);
+      toast.error("Failed to add to cart");
+    }
+  };
 
   // Sync cart on visibility change
   useEffect(() => {
@@ -92,24 +137,24 @@ function IndexContent() {
 
             <div className="flex flex-col sm:flex-row gap-4 pt-2">
               <Link
-                to="/crypto"
+                to="/templates"
                 className="inline-flex items-center justify-center px-8 py-4 rounded-lg text-white font-black text-sm tracking-widest uppercase
                            border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
                            hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
                            active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2
                            transition-all duration-150 bg-black"
               >
-                Use templates
+                USE TEMPLATES
               </Link>
               <Link
-                to="/pricing"
+                to="/shop"
                 className="inline-flex items-center justify-center px-8 py-4 rounded-lg text-white font-black text-sm tracking-widest uppercase
                            border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
                            hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
                            active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2
                            transition-all duration-150 bg-black"
               >
-                START WINNING
+                SHOP MERCH
               </Link>
             </div>
           </div>
@@ -125,7 +170,7 @@ function IndexContent() {
       </section>
 
       {/* Templates OS Section */}
-      <section className="relative z-10 w-full py-16 px-6 md:px-12">
+      <section className="relative z-10 w-full py-48 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
           <div className="grid gap-10 md:grid-cols-[minmax(0,0.9fr)_minmax(0,2fr)] items-start">
             <div className="space-y-5">
@@ -141,12 +186,13 @@ function IndexContent() {
                 <li>Investment journal</li>
                 <li>Lifetime updates</li>
               </ul>
-              <Link
-                to="/pricing"
-                className="inline-flex items-center justify-center px-6 py-3 rounded-lg text-white font-black text-sm tracking-widest uppercase border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a] hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1 active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2 transition-all duration-150 bg-black"
+              <button
+                onClick={handleAddToCart}
+                disabled={productsLoading}
+                className="inline-flex items-center justify-center px-6 py-3 rounded-lg text-white font-black text-sm tracking-widest uppercase border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a] hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1 active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2 transition-all duration-150 bg-black disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                JOIN XRP ARMY
-              </Link>
+                {productsLoading ? "LOADING..." : "BUY NOW"}
+              </button>
             </div>
             <div className="rounded-3xl border border-white/10 bg-black/40 overflow-hidden">
               <div className="relative w-full h-[360px] md:h-[420px] overflow-hidden">
@@ -162,7 +208,7 @@ function IndexContent() {
       </section>
 
       {/* Pricing Section */}
-      <div className="relative z-10 w-full overflow-hidden">
+      <div className="relative z-10 w-full overflow-hidden py-48">
         <Pricing />
       </div>
 
@@ -180,7 +226,7 @@ function IndexContent() {
       <ContactModal isOpen={contactOpen} onClose={() => setContactOpen(false)} />
 
       {/* Contact Section */}
-      <section className="relative z-10 w-full py-16 px-6 md:px-12">
+      <section className="relative z-10 w-full pt-24 pb-12 px-6 md:px-12">
         <div className="w-full">
           <div className="mb-8">
             <h2 className="text-2xl md:text-3xl font-bold text-white">

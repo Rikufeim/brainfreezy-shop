@@ -216,44 +216,10 @@ const PricingCard = ({
 export default function Pricing() {
     return (
         <div className="w-full py-12 px-4 md:px-8 relative min-h-screen flex flex-col items-center overflow-x-hidden scrollbar-hide">
-            {/* Background Effects Removed */}
-            <PricingHeader title="CHOOSE YOUR SYSTEM" subtitle="Your process. Lifetime updates." />
 
-            {/* Pricing Cards */}
-            <div className="w-full max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 relative z-10 px-2 md:px-0 mb-24">
-                {plans.map((plan, index) => (
-                    <PricingCard
-                        key={plan.name}
-                        plan={plan}
-                        index={index}
-                    />
-                ))}
-            </div>
-
-            {/* Course Content Section */}
-            <div className="w-full max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10 px-4 mb-24">
-                {/* Text Side (Left) */}
-                <div className="text-left space-y-6">
-                    <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight">
-                        What's Inside?
-                    </h2>
-                    <div className="space-y-4 text-zinc-400 text-lg leading-relaxed font-medium">
-                        <p>
-                            Comprehensive training, tools, and strategies to dominate the market.
-                        </p>
-                    </div>
-                </div>
-
-                {/* Image Side (Right) */}
-                <div className="relative">
-                    <div className="relative rounded-2xl overflow-hidden border-4 border-zinc-800 shadow-[8px_8px_0px_0px_#27272a] transform rotate-2 hover:rotate-0 transition-all duration-500 bg-zinc-900 h-64 flex items-center justify-center">
-                        <span className="text-zinc-500 font-bold">ADD IMAGE HERE</span>
-                    </div>
-                </div>
-            </div>
 
             {/* Vibe Code Quote Section */}
-            <div className="w-full max-w-6xl mx-auto text-center relative z-10 px-4 mb-32">
+            <div className="w-full max-w-6xl mx-auto text-center relative z-10 px-4 mb-24">
                 <h3 className="text-2xl md:text-3xl font-black text-white leading-snug uppercase tracking-tight mb-16">
                     When you learn the Vibe Code, you don’t follow trends — <br className="hidden md:block" />
                     <span className="text-zinc-500">you build, launch, and sell faster than everyone else.</span>
@@ -262,9 +228,9 @@ export default function Pricing() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center text-left mb-16 max-w-5xl mx-auto">
                     {/* Vibe Coding Image */}
                     <div className="relative transform hover:scale-105 transition-all duration-500 w-full flex items-center justify-center">
-                        <img 
-                            src={vibeCodeVR} 
-                            alt="Vibe Coding VR" 
+                        <img
+                            src={vibeCodeVR}
+                            alt="Vibe Coding VR"
                             className="w-full max-w-md h-auto object-contain"
                         />
                     </div>
@@ -287,142 +253,68 @@ export default function Pricing() {
                     </div>
                 </div>
 
-                <div>
-                    <button
-                        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                        className="px-8 py-4 rounded-lg text-white font-black text-xl tracking-widest uppercase
-                            border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
-                            hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
-                            active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2
-                            transition-all duration-150 bg-black hover:bg-zinc-900"
-                        style={{
-                            background: "linear-gradient(135deg, #000000 0%, #00000090 10%, #000000 25%, #00000080 40%, #63636345 55%, #63636325 70%, #f3f3f330 85%, #000000 100%)",
-                            filter: "brightness(1.05)",
-                        }}
+                <div className="mb-48">
+                    <a
+                        href="#"
+                        className="inline-flex items-center justify-center px-8 py-4 rounded-lg text-white font-black text-xl tracking-widest uppercase
+                        border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
+                        hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
+                        active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2
+                        transition-all duration-150 bg-black cursor-not-allowed opacity-80"
+                        onClick={(e) => e.preventDefault()}
                     >
-                        START VIBE CODING
-                    </button>
+                        VIBE CODE - BRAIN COMING SOON
+                    </a>
                 </div>
-            </div>
 
-            {/* Sales App Section */}
-            <div className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center relative z-10 px-4 mb-24">
-                {/* Text Side */}
-                <div className="space-y-10 order-2 md:order-1">
-                    <div>
-                        <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-6 leading-[0.9]">
-                            Control your sales. <br />
-                            <span className="text-zinc-600">Close with clarity.</span>
-                        </h2>
-                        <p className="text-zinc-400 text-xl font-medium leading-relaxed max-w-md">
-                            This sales app is built for people who want full control over their sales process — without bloated, confusing CRMs.
+
+
+                {/* Beymflow Section */}
+                <div className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center relative z-10 px-4 mb-48">
+                    {/* Beymflow Image */}
+                    <div className="relative order-2 flex items-center justify-center">
+                        <img
+                            src={beymflowLogo}
+                            alt="Beymflow Logo"
+                            className="w-full max-w-md h-auto object-contain"
+                        />
+                    </div>
+
+                    {/* Text Side */}
+                    <div className="space-y-6 order-1 text-left">
+                        <h3 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight">
+                            Beymflow — Vibe Coding
+                        </h3>
+                        <p className="text-zinc-400 text-xl font-medium leading-relaxed">
+                            Beymflow is a creative app built to keep you in flow while you build.
                         </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-8">
+                        <p className="text-zinc-400 text-lg leading-relaxed">
+                            It combines a prompt generator, a Color Codes, and a living landing page library into one focused workspace — so you can move from idea to implementation without context switching.
+                        </p>
                         <div>
-                            <h4 className="text-white font-black uppercase tracking-widest text-sm mb-4 border-b border-zinc-800 pb-2 inline-block">From one system, you can:</h4>
-                            <ul className="space-y-3">
-                                {["manage and add leads", "create clear action plans", "call efficiently with a Power Dialer", "track every deal inside a visual pipeline"].map(item => (
-                                    <li key={item} className="flex items-start gap-3 text-zinc-300 font-medium">
-                                        <div className="mt-1.5 w-2 h-2 bg-purple-500 rounded-full shadow-[0_0_10px_rgba(168,85,247,0.5)]" />
-                                        {item}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-
-                        <div>
-                            <h4 className="text-white font-black uppercase tracking-widest text-sm mb-4 border-b border-zinc-800 pb-2 inline-block">You always know:</h4>
-                            <ul className="space-y-3">
-                                {["where each deal stands", "what to do next", "what’s actually driving revenue"].map(item => (
-                                    <li key={item} className="flex items-start gap-3 text-zinc-300 font-medium">
-                                        <div className="mt-1.5 w-2 h-2 bg-purple-500 rounded-full shadow-[0_0_10px_rgba(168,85,247,0.5)]" />
-                                        {item}
-                                    </li>
-                                ))}
-                            </ul>
+                            <a
+                                href="https://beymflow.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center px-8 py-4 rounded-lg text-white font-black text-lg tracking-widest uppercase
+                        border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
+                        hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
+                        active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2
+                        transition-all duration-150 bg-black"
+                            >
+                                START VIBE CODING
+                            </a>
                         </div>
                     </div>
 
-                    <div className="text-white font-black uppercase text-2xl tracking-tight space-y-1">
-                        <p>No guesswork.</p>
-                        <p>No scattered tools.</p>
-                    </div>
-
-                    <button
-                        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                        className="w-full md:w-auto px-10 py-5 rounded-lg bg-black text-white font-black text-xl tracking-widest uppercase border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a] hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1 transition-all"
-                        style={{
-                            background: "linear-gradient(135deg, #000000 0%, #00000090 10%, #000000 25%, #00000080 40%, #63636345 55%, #63636325 70%, #f3f3f330 85%, #000000 100%)",
-                            filter: "brightness(1.05)",
-                        }}
-                    >
-                        PICK UP THE PHONE
-                    </button>
                 </div>
 
-                {/* App Image Placeholder Side */}
-                <div className="relative order-1 md:order-2">
-                    <div className="relative rounded-3xl overflow-hidden border-4 border-zinc-800 shadow-[12px_12px_0px_0px_#27272a] transform -rotate-1 hover:rotate-0 transition-all duration-500 bg-zinc-900 h-[700px] flex items-center justify-center">
-                        <div className="text-center p-8">
-                            <span className="text-zinc-600 font-black text-2xl uppercase block mb-2">App UI Preview</span>
-                            <span className="text-zinc-700 font-bold block">ADD IMAGE HERE</span>
-                        </div>
-
-                        {/* Decorative elements */}
-                        <div className="absolute top-0 w-full h-1 bg-gradient-to-r from-transparent via-zinc-700 to-transparent opacity-50" />
-                        <div className="absolute bottom-0 w-full h-32 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
-                    </div>
+                {/* Current Hero (moved below content sections) */}
+                <div className="flex h-screen items-center justify-center px-4 relative z-10 mb-24">
+                    <StackedClothingShowcase />
                 </div>
+
             </div>
-
-            {/* Beymflow Section */}
-            <div className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center relative z-10 px-4 mb-24">
-            {/* Beymflow Image */}
-                <div className="relative order-1 flex items-center justify-center">
-                    <img 
-                        src={beymflowLogo} 
-                        alt="Beymflow Logo" 
-                        className="w-full max-w-md h-auto object-contain"
-                    />
-                </div>
-
-                {/* Text Side */}
-                <div className="space-y-6 order-2">
-                    <h3 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight">
-                        Beymflow — Vibe Coding Toolkit
-                    </h3>
-                    <p className="text-zinc-400 text-xl font-medium leading-relaxed">
-                        Beymflow is a creative coding app built to keep you in flow while you build.
-                    </p>
-                    <p className="text-zinc-400 text-lg leading-relaxed">
-                        It combines a prompt generator, a Color Codex, and a living landing page library into one focused workspace — so you can move from idea to implementation without context switching.
-                    </p>
-                    <div>
-                        <button
-                            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                            className="px-8 py-4 rounded-lg text-white font-black text-lg tracking-widest uppercase
-                                border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
-                                hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
-                                active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2
-                                transition-all duration-150 bg-black hover:bg-zinc-900"
-                            style={{
-                                background: "linear-gradient(135deg, #000000 0%, #00000090 10%, #000000 25%, #00000080 40%, #63636345 55%, #63636325 70%, #f3f3f330 85%, #000000 100%)",
-                                filter: "brightness(1.05)",
-                            }}
-                        >
-                            START VIBE CODING
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            {/* Current Hero (moved below content sections) */}
-            <div className="flex h-screen items-center justify-center px-4 relative z-10 mb-24">
-                <StackedClothingShowcase />
-            </div>
-
         </div>
     );
 }

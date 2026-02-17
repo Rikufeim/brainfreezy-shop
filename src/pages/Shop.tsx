@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, X } from "lucide-react";
 import CartDrawer from "@/components/CartDrawer";
+import Header from "@/components/Header";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import { filterByCategory } from "@/components/FeaturedProducts";
 import ProductDetail from "@/components/ProductDetail";
@@ -24,7 +25,7 @@ export default function Shop() {
   // Same dedupe + filter order as FeaturedProducts (for modal next/prev)
   const uniqueProducts = products.filter(
     (product, index, self) => index === self.findIndex((p) => p.node.id === product.node.id)
-  );
+  ).filter(p => !p.node.title.toLowerCase().includes("xrp") && !p.node.title.toLowerCase().includes("crypto brain"));
   const filteredProducts = filterByCategory(uniqueProducts, selectedCategory);
 
   const handleNext = () => {
@@ -63,15 +64,12 @@ export default function Shop() {
         }}
       />
       {/* Header with back button */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-transparent">
-        <div className="flex items-center justify-between px-6 py-4">
-          <Link to="/" className="text-white hover:text-white/70 transition-colors">
-            <ChevronLeft className="w-6 h-6" />
-          </Link>
-
-          <div className="w-6" /> {/* Spacer for symmetry */}
-        </div>
-      </header>
+      {/* Header with back button */}
+      <Header
+        onToggleCategories={() => { }}
+        showBackButton={true}
+        onBack={() => window.history.back()}
+      />
 
       {/* Product Grid – same as front page (FeaturedProducts: Product3DCard, grid, styles) */}
       <main className="pt-24">

@@ -51,28 +51,10 @@ export default function Header({
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-6">
           <Link
-            to="/crypto"
-            className="text-xs md:text-sm font-display font-bold tracking-widest text-white/60 hover:text-white transition-colors duration-300 uppercase"
-          >
-            TEMPLATES & GUIDES
-          </Link>
-          <Link
-            to="/pricing"
-            className="text-xs md:text-sm font-display font-bold tracking-widest text-white/60 hover:text-white transition-colors duration-300 uppercase"
-          >
-            COURSES
-          </Link>
-          <Link
             to="/shop"
             className="text-xs md:text-sm font-display font-bold tracking-widest text-white/60 hover:text-white transition-colors duration-300 uppercase"
           >
             SHOP MERCH
-          </Link>
-          <Link
-            to="/community"
-            className="text-xs md:text-sm font-display font-bold tracking-widest text-white/60 hover:text-white transition-colors duration-300 uppercase"
-          >
-            COMMUNITY
           </Link>
         </div>
         {/* Cart Button */}

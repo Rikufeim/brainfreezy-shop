@@ -15,6 +15,9 @@ export default function FeaturedProducts({ selectedCategory, onSelectProduct }: 
     // Deduplicate products by id and filter by category
     const uniqueProducts = products.filter((product, index, self) =>
         index === self.findIndex(p => p.node.id === product.node.id)
+    ).filter(p =>
+        !p.node.title.toLowerCase().includes("xrp") &&
+        !p.node.title.toLowerCase().includes("crypto brain")
     );
     const filteredProducts = filterByCategory(uniqueProducts, selectedCategory);
 

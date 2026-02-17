@@ -10,6 +10,7 @@ import CheckoutSuccess from "./pages/CheckoutSuccess";
 import Book from "./pages/Book";
 import NotFound from "./pages/NotFound";
 import PricingPage from "./pages/PricingPage";
+import Templates from "./pages/Templates";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/crypto" element={<Crypto />} />
+          <Route path="/templates" element={<Templates />} />
           <Route path="/checkout/success" element={<CheckoutSuccess />} />
           <Route path="/book" element={<Book />} />
           <Route path="/pricing" element={<PricingPage />} />
