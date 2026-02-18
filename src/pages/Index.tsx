@@ -139,20 +139,22 @@ function IndexContent() {
               <Link
                 to="/templates"
                 className="inline-flex items-center justify-center px-8 py-4 rounded-lg text-white font-black text-sm tracking-widest uppercase
-                           border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
-                           hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
-                           active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2
-                           transition-all duration-150 bg-black"
+                           border-2 border-cyan-500 shadow-[5px_5px_0px_0px_#0891b2]
+                           hover:shadow-[7px_7px_0px_0px_#0891b2] hover:-translate-y-1 hover:-translate-x-1
+                           active:shadow-[0px_0px_0px_0px_#0891b2] active:translate-y-2 active:translate-x-2
+                           transition-all duration-150"
+                style={{ background: "linear-gradient(196deg, #051018 0%, #0c1824 25%, #0891b245 55%, #22d3ee30 85%, #051018 100%)" }}
               >
                 USE TEMPLATES
               </Link>
               <Link
                 to="/shop"
                 className="inline-flex items-center justify-center px-8 py-4 rounded-lg text-white font-black text-sm tracking-widest uppercase
-                           border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
-                           hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
-                           active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2
-                           transition-all duration-150 bg-black"
+                           border-2 border-cyan-500 shadow-[5px_5px_0px_0px_#0891b2]
+                           hover:shadow-[7px_7px_0px_0px_#0891b2] hover:-translate-y-1 hover:-translate-x-1
+                           active:shadow-[0px_0px_0px_0px_#0891b2] active:translate-y-2 active:translate-x-2
+                           transition-all duration-150"
+                style={{ background: "linear-gradient(196deg, #051018 0%, #0c1824 25%, #0891b245 55%, #22d3ee30 85%, #051018 100%)" }}
               >
                 SHOP MERCH
               </Link>
@@ -184,7 +186,8 @@ function IndexContent() {
               <button
                 onClick={handleAddToCart}
                 disabled={productsLoading}
-                className="inline-flex items-center justify-center px-6 py-3 rounded-lg text-white font-black text-sm tracking-widest uppercase border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a] hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1 active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2 transition-all duration-150 bg-black disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center justify-center px-6 py-3 rounded-lg text-white font-black text-sm tracking-widest uppercase border-2 border-cyan-500 shadow-[5px_5px_0px_0px_#0891b2] hover:shadow-[7px_7px_0px_0px_#0891b2] hover:-translate-y-1 hover:-translate-x-1 active:shadow-[0px_0px_0px_0px_#0891b2] active:translate-y-2 active:translate-x-2 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ background: "linear-gradient(196deg, #051018 0%, #0c1824 25%, #0891b245 55%, #22d3ee30 85%, #051018 100%)" }}
               >
                 {productsLoading ? "LOADING..." : "BUY NOW"}
               </button>
@@ -340,7 +343,8 @@ function IndexContent() {
             <div className="md:col-span-2 flex justify-end">
               <button
                 type="submit"
-                className="px-6 py-3 rounded-md border border-white/40 text-white text-sm font-bold tracking-widest uppercase hover:bg-white/10 transition-colors"
+                className="px-6 py-3 rounded-md border-2 border-cyan-500 text-white text-sm font-bold tracking-widest uppercase transition-all duration-150 shadow-[5px_5px_0px_0px_#0891b2] hover:shadow-[7px_7px_0px_0px_#0891b2] hover:-translate-y-1 hover:-translate-x-1 active:shadow-none active:translate-y-2 active:translate-x-2"
+                style={{ background: "linear-gradient(196deg, #051018 0%, #0c1824 25%, #0891b245 55%, #22d3ee30 85%, #051018 100%)" }}
               >
                 Send
               </button>
