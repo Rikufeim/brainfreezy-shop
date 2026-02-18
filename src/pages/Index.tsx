@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
-import MountainBackground from "@/components/MountainBackground";
 import CartDrawer from "@/components/CartDrawer";
 import CookieBanner from "@/components/CookieBanner";
 import ContactModal from "@/components/ContactModal";
@@ -95,8 +94,25 @@ function IndexContent() {
         onBack={() => { }}
       />
 
-      {/* Mountain Background - sky to mountain panorama */}
-      <MountainBackground />
+      {/* Seamless Integrated Background - covers entire page */}
+      <div
+        className="fixed inset-0 pointer-events-none z-0"
+        style={{
+          background: `
+            radial-gradient(ellipse at 20% 180vh, #00323440 0%, #00323418 20%, transparent 50%),
+            radial-gradient(ellipse at 80% 150vh, #00000040 0%, #00000018 20%, transparent 50%),
+            radial-gradient(ellipse at 50% 200vh, #0b0d5730 0%, #0b0d5712 25%, transparent 55%),
+            radial-gradient(ellipse at 30% 170vh, #00151730 0%, #00151712 20%, transparent 45%),
+            radial-gradient(ellipse at 20% 40%, #0b0d5740 0%, #0b0d5718 20%, transparent 50%),
+            radial-gradient(ellipse at 80% 20%, #00151740 0%, #00151718 20%, transparent 50%),
+            radial-gradient(ellipse at 50% 50%, #00000025 0%, #00000010 30%, transparent 65%),
+            radial-gradient(circle at 30% 30%, #0b0d5725 0%, #0b0d5710 15%, transparent 35%),
+            radial-gradient(circle at 70% 70%, #00151725 0%, #00151710 15%, transparent 35%),
+            #000000
+          `,
+          filter: "brightness(1.6)",
+        }}
+      />
 
       {/* New Hero */}
       <section className="relative z-10 min-h-screen flex items-center px-6 md:px-12">
@@ -123,22 +139,20 @@ function IndexContent() {
               <Link
                 to="/templates"
                 className="inline-flex items-center justify-center px-8 py-4 rounded-lg text-white font-black text-sm tracking-widest uppercase
-                           border-2 border-cyan-500 shadow-[5px_5px_0px_0px_#0891b2]
-                           hover:shadow-[7px_7px_0px_0px_#0891b2] hover:-translate-y-1 hover:-translate-x-1
-                           active:shadow-[0px_0px_0px_0px_#0891b2] active:translate-y-2 active:translate-x-2
-                           transition-all duration-150"
-                style={{ background: "linear-gradient(196deg, #051018 0%, #0c1824 25%, #0891b245 55%, #22d3ee30 85%, #051018 100%)" }}
+                           border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
+                           hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
+                           active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2
+                           transition-all duration-150 bg-black"
               >
                 USE TEMPLATES
               </Link>
               <Link
                 to="/shop"
                 className="inline-flex items-center justify-center px-8 py-4 rounded-lg text-white font-black text-sm tracking-widest uppercase
-                           border-2 border-cyan-500 shadow-[5px_5px_0px_0px_#0891b2]
-                           hover:shadow-[7px_7px_0px_0px_#0891b2] hover:-translate-y-1 hover:-translate-x-1
-                           active:shadow-[0px_0px_0px_0px_#0891b2] active:translate-y-2 active:translate-x-2
-                           transition-all duration-150"
-                style={{ background: "linear-gradient(196deg, #051018 0%, #0c1824 25%, #0891b245 55%, #22d3ee30 85%, #051018 100%)" }}
+                           border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
+                           hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
+                           active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2
+                           transition-all duration-150 bg-black"
               >
                 SHOP MERCH
               </Link>
@@ -170,8 +184,7 @@ function IndexContent() {
               <button
                 onClick={handleAddToCart}
                 disabled={productsLoading}
-                className="inline-flex items-center justify-center px-6 py-3 rounded-lg text-white font-black text-sm tracking-widest uppercase border-2 border-cyan-500 shadow-[5px_5px_0px_0px_#0891b2] hover:shadow-[7px_7px_0px_0px_#0891b2] hover:-translate-y-1 hover:-translate-x-1 active:shadow-[0px_0px_0px_0px_#0891b2] active:translate-y-2 active:translate-x-2 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ background: "linear-gradient(196deg, #051018 0%, #0c1824 25%, #0891b245 55%, #22d3ee30 85%, #051018 100%)" }}
+                className="inline-flex items-center justify-center px-6 py-3 rounded-lg text-white font-black text-sm tracking-widest uppercase border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a] hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1 active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2 transition-all duration-150 bg-black disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {productsLoading ? "LOADING..." : "BUY NOW"}
               </button>
@@ -327,8 +340,7 @@ function IndexContent() {
             <div className="md:col-span-2 flex justify-end">
               <button
                 type="submit"
-                className="px-6 py-3 rounded-md border-2 border-cyan-500 text-white text-sm font-bold tracking-widest uppercase transition-all duration-150 shadow-[5px_5px_0px_0px_#0891b2] hover:shadow-[7px_7px_0px_0px_#0891b2] hover:-translate-y-1 hover:-translate-x-1 active:shadow-none active:translate-y-2 active:translate-x-2"
-                style={{ background: "linear-gradient(196deg, #051018 0%, #0c1824 25%, #0891b245 55%, #22d3ee30 85%, #051018 100%)" }}
+                className="px-6 py-3 rounded-md border border-white/40 text-white text-sm font-bold tracking-widest uppercase hover:bg-white/10 transition-colors"
               >
                 Send
               </button>
