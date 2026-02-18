@@ -160,11 +160,6 @@ function IndexContent() {
           </div>
 
           <div className="hidden md:flex items-center justify-center">
-            <img
-              src={icyMascot}
-              alt="ICY"
-              className="w-48 h-48 object-contain"
-            />
           </div>
         </div>
       </section>
