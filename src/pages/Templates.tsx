@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useCartStore } from "@/stores/cartStore";
 import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 import { toast } from "sonner";
+import { ctaButtonSmallClassName, ctaButtonStyle } from "@/lib/cta-button";
 
 const categories = ["All", "Crypto", "Mindset", "Vibe coding", "Sales"] as const;
 type Category = (typeof categories)[number];
@@ -164,7 +165,8 @@ export default function Templates() {
                             <button
                                 onClick={handleAddToCart}
                                 disabled={productsLoading}
-                                className="inline-flex items-center justify-center px-6 py-3 rounded-lg text-white font-black text-sm tracking-widest uppercase border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a] hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1 active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2 transition-all duration-150 bg-black disabled:opacity-50 disabled:cursor-not-allowed"
+                                className={ctaButtonSmallClassName}
+                                style={ctaButtonStyle}
                             >
                                 {productsLoading ? "LOADING..." : "BUY NOW"}
                             </button>

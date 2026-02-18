@@ -8,9 +8,11 @@ import { SparklesCore } from "@/components/ui/sparkles";
 export const Cover = ({
   children,
   className,
+  variant = "default",
 }: {
   children?: React.ReactNode;
   className?: string;
+  variant?: "default" | "cta";
 }) => {
   const [hovered, setHovered] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -32,6 +34,8 @@ export const Cover = ({
     setBeamPositions(positions);
   }, [hovered]);
 
+  const isCta = variant === "cta";
+
   return (
     <motion.div
       onMouseEnter={() => setHovered(true)}
@@ -39,13 +43,16 @@ export const Cover = ({
       ref={ref}
       animate={{ opacity: hovered ? 1 : 0.85 }}
       transition={{ duration: 0.4, ease: "easeInOut" }}
+      style={isCta ? {
+        background: "linear-gradient(135deg, #000000 0%, #00000090 10%, #000000 25%, #00000080 40%, #63636345 55%, #63636325 70%, #f3f3f330 85%, #000000 100%)",
+        filter: "brightness(1.05)",
+      } : undefined}
       className={cn(
-        // Icy "glass" chip: cold gradient + subtle border + glow on hover
         "relative inline-block px-2 py-2 rounded-sm transition duration-200",
-        "bg-gradient-to-b from-sky-200/20 via-cyan-200/10 to-transparent",
-        "ring-1 ring-white/10",
-        "hover:ring-white/20",
-        "backdrop-blur-sm",
+        !isCta && "bg-gradient-to-b from-sky-200/20 via-cyan-200/10 to-transparent",
+        !isCta && "ring-1 ring-white/10",
+        !isCta && "hover:ring-white/20",
+        !isCta && "backdrop-blur-sm",
         className
       )}
     >

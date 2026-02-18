@@ -19,6 +19,8 @@ import { Cover } from "@/components/ui/cover";
 import { FrostedTextReveal } from "@/components/ui/frosted-text-reveal";
 import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 import { toast } from "sonner";
+import { Youtube } from "lucide-react";
+import { ctaButtonClassName, ctaButtonStyle, ctaButtonSmallClassName } from "@/lib/cta-button";
 
 function IndexContent() {
   const [cookieBannerOpen, setCookieBannerOpen] = useState(false);
@@ -124,7 +126,7 @@ function IndexContent() {
               transition={{ duration: 0.8 }}
               className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight"
             >
-              <FrostedTextReveal text="MENTAL COLD" textClassName="text-white font-black uppercase tracking-tight" /> <Cover className="text-white">SHOCK</Cover>
+              <FrostedTextReveal text="MENTAL COLD" textClassName="text-white font-black uppercase tracking-tight" /> <Cover variant="cta" className="text-white">SHOCK</Cover>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -138,21 +140,15 @@ function IndexContent() {
             <div className="flex flex-col sm:flex-row gap-4 pt-2">
               <Link
                 to="/templates"
-                className="inline-flex items-center justify-center px-8 py-4 rounded-lg text-white font-black text-sm tracking-widest uppercase
-                           border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
-                           hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
-                           active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2
-                           transition-all duration-150 bg-black"
+                className={ctaButtonClassName}
+                style={ctaButtonStyle}
               >
                 USE TEMPLATES
               </Link>
               <Link
                 to="/shop"
-                className="inline-flex items-center justify-center px-8 py-4 rounded-lg text-white font-black text-sm tracking-widest uppercase
-                           border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
-                           hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
-                           active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2
-                           transition-all duration-150 bg-black"
+                className={ctaButtonClassName}
+                style={ctaButtonStyle}
               >
                 SHOP MERCH
               </Link>
@@ -184,7 +180,8 @@ function IndexContent() {
               <button
                 onClick={handleAddToCart}
                 disabled={productsLoading}
-                className="inline-flex items-center justify-center px-6 py-3 rounded-lg text-white font-black text-sm tracking-widest uppercase border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a] hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1 active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2 transition-all duration-150 bg-black disabled:opacity-50 disabled:cursor-not-allowed"
+                className={ctaButtonSmallClassName}
+                style={ctaButtonStyle}
               >
                 {productsLoading ? "LOADING..." : "BUY NOW"}
               </button>
@@ -340,7 +337,8 @@ function IndexContent() {
             <div className="md:col-span-2 flex justify-end">
               <button
                 type="submit"
-                className="px-6 py-3 rounded-md border border-white/40 text-white text-sm font-bold tracking-widest uppercase hover:bg-white/10 transition-colors"
+                className={ctaButtonSmallClassName}
+                style={ctaButtonStyle}
               >
                 Send
               </button>
@@ -354,12 +352,34 @@ function IndexContent() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-0">
             {/* Mascot - shown first on mobile */}
-            <div className="md:hidden flex justify-center mb-4">
+            <div className="md:hidden flex flex-col items-center gap-4 mb-4">
               <img
                 src={icyMascot}
                 alt="ICY"
                 className="w-24 h-24 object-contain"
               />
+              <div className="flex items-center gap-4">
+                <a
+                  href="https://www.tiktok.com/@brainfreezynow"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="TikTok"
+                  className="text-white/50 hover:text-white transition-colors duration-300"
+                >
+                  <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
+                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+                  </svg>
+                </a>
+                <a
+                  href="https://www.youtube.com/@Brainfreezynow"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="YouTube"
+                  className="text-white/50 hover:text-white transition-colors duration-300"
+                >
+                  <Youtube className="w-6 h-6" />
+                </a>
+              </div>
             </div>
 
             {/* Links */}
@@ -378,8 +398,28 @@ function IndexContent() {
               </button>
             </div>
 
-            {/* Mascot - shown on right for desktop */}
-            <div className="hidden md:flex justify-end">
+            {/* Social icons + logo - right side on desktop */}
+            <div className="hidden md:flex items-center justify-end gap-4">
+              <a
+                href="https://www.tiktok.com/@brainfreezynow"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TikTok"
+                className="text-white/50 hover:text-white transition-colors duration-300"
+              >
+                <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+                </svg>
+              </a>
+              <a
+                href="https://www.youtube.com/@Brainfreezynow"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="YouTube"
+                className="text-white/50 hover:text-white transition-colors duration-300"
+              >
+                <Youtube className="w-6 h-6" />
+              </a>
               <img
                 src={icyMascot}
                 alt="ICY"

@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, animate } from 'framer-motion'
 import { cn } from '@/lib/utils';
 import { Check } from "lucide-react";
+import { ctaButtonClassName, ctaButtonFullClassName, ctaButtonStyle } from "@/lib/cta-button";
 import vibeCodeVR from "@/assets/vibe-coding-vr.png";
 import beymflowLogo from "@/assets/beymflow-logo.png";
 import StackedClothingShowcase from "@/components/StackedClothingShowcase";
@@ -194,15 +195,8 @@ const PricingCard = ({
 
             {/* CTA Button */}
             <motion.button
-                className="w-full py-3 rounded-lg text-white font-black text-lg tracking-widest uppercase
-                    border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
-                    hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
-                    active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2
-                    transition-all duration-150 bg-black hover:bg-zinc-900"
-                style={{
-                    background: "linear-gradient(135deg, #000000 0%, #00000090 10%, #000000 25%, #00000080 40%, #63636345 55%, #63636325 70%, #f3f3f330 85%, #000000 100%)",
-                    filter: "brightness(1.05)",
-                }}
+                className={ctaButtonFullClassName}
+                style={ctaButtonStyle}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.95 }}
             >
@@ -256,11 +250,8 @@ export default function Pricing() {
                 <div className="mb-48">
                     <a
                         href="#"
-                        className="inline-flex items-center justify-center px-8 py-4 rounded-lg text-white font-black text-xl tracking-widest uppercase
-                        border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
-                        hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
-                        active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2
-                        transition-all duration-150 bg-black cursor-not-allowed opacity-80"
+                        className={`${ctaButtonClassName} cursor-not-allowed opacity-80`}
+                        style={ctaButtonStyle}
                         onClick={(e) => e.preventDefault()}
                     >
                         VIBE CODE - BRAIN COMING SOON
@@ -296,11 +287,8 @@ export default function Pricing() {
                                 href="https://beymflow.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center px-8 py-4 rounded-lg text-white font-black text-lg tracking-widest uppercase
-                        border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
-                        hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
-                        active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2
-                        transition-all duration-150 bg-black"
+                                className={ctaButtonFullClassName}
+                                style={ctaButtonStyle}
                             >
                                 START VIBE CODING
                             </a>

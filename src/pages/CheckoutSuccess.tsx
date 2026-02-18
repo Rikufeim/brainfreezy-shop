@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { CheckCircle, Calendar } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ctaButtonClassName, ctaButtonStyle } from "@/lib/cta-button";
 import { getLead } from "@/lib/api";
 import type { Lead } from "@/lib/leadsStore";
 
@@ -122,12 +122,14 @@ export default function CheckoutSuccess() {
             <p className="text-muted-foreground mb-6">
               Schedule a discovery call to discuss your project in detail
             </p>
-            <Button asChild size="lg" className="uppercase tracking-[0.15em] font-display">
-              <Link to="/book">
-                <Calendar className="w-4 h-4 mr-2" />
-                Book a Call
-              </Link>
-            </Button>
+            <Link
+              to="/book"
+              className={ctaButtonClassName}
+              style={ctaButtonStyle}
+            >
+              <Calendar className="w-4 h-4 mr-2 inline-block" />
+              BOOK A CALL
+            </Link>
           </motion.div>
 
           {/* Back to Home */}
