@@ -195,13 +195,13 @@ const PricingCard = ({
             {/* CTA Button */}
             <motion.button
                 className="w-full py-3 rounded-lg text-white font-black text-lg tracking-widest uppercase
-                    border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
-                    hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
-                    active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2
-                    transition-all duration-150 bg-black hover:bg-zinc-900"
+                    border-2 border-cyan-500 shadow-[5px_5px_0px_0px_#0891b2]
+                    hover:shadow-[7px_7px_0px_0px_#0891b2] hover:-translate-y-1 hover:-translate-x-1
+                    active:shadow-[0px_0px_0px_0px_#0891b2] active:translate-y-2 active:translate-x-2
+                    transition-all duration-150"
                 style={{
-                    background: "linear-gradient(135deg, #000000 0%, #00000090 10%, #000000 25%, #00000080 40%, #63636345 55%, #63636325 70%, #f3f3f330 85%, #000000 100%)",
-                    filter: "brightness(1.05)",
+                    background: "linear-gradient(196deg, #051018 0%, #0c1824 25%, #0891b245 55%, #22d3ee30 85%, #051018 100%)",
+                    filter: "brightness(1.2)",
                 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.95 }}
@@ -257,10 +257,11 @@ export default function Pricing() {
                     <a
                         href="#"
                         className="inline-flex items-center justify-center px-8 py-4 rounded-lg text-white font-black text-xl tracking-widest uppercase
-                        border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
-                        hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
-                        active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2
-                        transition-all duration-150 bg-black cursor-not-allowed opacity-80"
+                        border-2 border-cyan-500 shadow-[5px_5px_0px_0px_#0891b2]
+                        hover:shadow-[7px_7px_0px_0px_#0891b2] hover:-translate-y-1 hover:-translate-x-1
+                        active:shadow-[0px_0px_0px_0px_#0891b2] active:translate-y-2 active:translate-x-2
+                        transition-all duration-150 cursor-not-allowed opacity-80"
+                        style={{ background: "linear-gradient(196deg, #051018 0%, #0c1824 25%, #0891b245 55%, #22d3ee30 85%, #051018 100%)" }}
                         onClick={(e) => e.preventDefault()}
                     >
                         VIBE CODE - BRAIN COMING SOON
@@ -296,11 +297,12 @@ export default function Pricing() {
                                 href="https://beymflow.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center px-8 py-4 rounded-lg text-white font-black text-lg tracking-widest uppercase
-                        border-2 border-zinc-800 shadow-[5px_5px_0px_0px_#27272a]
-                        hover:shadow-[7px_7px_0px_0px_#27272a] hover:-translate-y-1 hover:-translate-x-1
-                        active:shadow-[0px_0px_0px_0px_#27272a] active:translate-y-2 active:translate-x-2
-                        transition-all duration-150 bg-black"
+                            className="inline-flex items-center justify-center px-8 py-4 rounded-lg text-white font-black text-lg tracking-widest uppercase
+                        border-2 border-cyan-500 shadow-[5px_5px_0px_0px_#0891b2]
+                        hover:shadow-[7px_7px_0px_0px_#0891b2] hover:-translate-y-1 hover:-translate-x-1
+                        active:shadow-[0px_0px_0px_0px_#0891b2] active:translate-y-2 active:translate-x-2
+                        transition-all duration-150"
+                            style={{ background: "linear-gradient(196deg, #051018 0%, #0c1824 25%, #0891b245 55%, #22d3ee30 85%, #051018 100%)" }}
                             >
                                 START VIBE CODING
                             </a>
