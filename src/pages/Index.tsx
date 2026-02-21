@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { Youtube } from "lucide-react";
 import { ctaButtonSmallClassName, ctaButtonStyle } from "@/lib/cta-button";
 import ArcticBackground from "@/components/ArcticBackground";
+import brainfreezyChart from "@/assets/brainfreezy-chart.png";
 
 
 /* ── tiny CTA (even smaller than ctaButtonSmallClassName) ── */
@@ -154,7 +155,15 @@ function IndexContent() {
           SECTION 2 — TEMPLATES
          ═══════════════════════════════════════════ */}
       <HeroSection id="templates">
-        <div className="max-w-xl">
+        {/* Background image for XRP section */}
+        <img
+          src={brainfreezyChart}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover z-0 opacity-40"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#020C18] via-[#020C18]/60 to-transparent z-[1]" />
+        <div className="max-w-xl relative z-[2]">
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
