@@ -7,7 +7,6 @@ import CookieBanner from "@/components/CookieBanner";
 import ContactModal from "@/components/ContactModal";
 import icyMascot from "@/assets/icy-mascot.png";
 import { useCartStore } from "@/stores/cartStore";
-import Pricing from "@/components/Pricing";
 import {
   Select,
   SelectContent,
@@ -15,13 +14,39 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Cover } from "@/components/ui/cover";
-import { FrostedTextReveal } from "@/components/ui/frosted-text-reveal";
 import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 import { toast } from "sonner";
 import { Youtube } from "lucide-react";
-import { ctaButtonClassName, ctaButtonStyle, ctaButtonSmallClassName } from "@/lib/cta-button";
+import { ctaButtonSmallClassName, ctaButtonStyle } from "@/lib/cta-button";
 import ArcticBackground from "@/components/ArcticBackground";
+import FrostedOverlay from "@/components/FrostedOverlay";
+
+/* ── tiny CTA (even smaller than ctaButtonSmallClassName) ── */
+const miniCtaClass =
+  "inline-flex items-center justify-center px-5 py-2.5 rounded-lg text-white font-bold text-xs tracking-widest uppercase " +
+  "border border-white/20 backdrop-blur-sm bg-white/5 " +
+  "hover:bg-white/10 hover:border-white/30 " +
+  "transition-all duration-200";
+
+/* ── Hero Section wrapper ── */
+function HeroSection({
+  children,
+  id,
+  className = "",
+}: {
+  children: React.ReactNode;
+  id?: string;
+  className?: string;
+}) {
+  return (
+    <section
+      id={id}
+      className={`relative z-10 min-h-screen flex flex-col justify-end px-6 md:px-12 pb-16 md:pb-24 ${className}`}
+    >
+      {children}
+    </section>
+  );
+}
 
 function IndexContent() {
   const [cookieBannerOpen, setCookieBannerOpen] = useState(false);
@@ -35,26 +60,13 @@ function IndexContent() {
       toast.info("Loading products, please wait...");
       return;
     }
-
-    // specific search for XRP product
-    // We strictly look for "crypto brain" to avoid matching other XRP merch (like stickers/tees)
-    const xrpProduct = products.find(p => {
-      const title = p.node.title.toLowerCase();
-      return title.includes("crypto brain");
-    });
-
+    const xrpProduct = products.find(p => p.node.title.toLowerCase().includes("crypto brain"));
     if (!xrpProduct) {
-      console.error("XRP Product NOT FOUND. Available products:", products.map(p => p.node.title));
       toast.error("Product 'Crypto Brain' not found.");
       return;
     }
-
     const variant = xrpProduct.node.variants.edges[0]?.node;
-    if (!variant) {
-      toast.error("Product has no variants.");
-      return;
-    }
-
+    if (!variant) { toast.error("Product has no variants."); return; }
     try {
       await addItem({
         product: xrpProduct,
@@ -72,7 +84,6 @@ function IndexContent() {
     }
   };
 
-  // Sync cart on visibility change
   useEffect(() => {
     syncCart();
     const handleVisibilityChange = () => {
@@ -89,335 +100,251 @@ function IndexContent() {
       transition={{ duration: 0.8 }}
       className="relative h-screen bg-[#020C18] overflow-y-auto overflow-x-hidden scrollbar-hide"
     >
-
-      {/* Header */}
-      <Header
-        onToggleCategories={() => { }}
-        showBackButton={false}
-        onBack={() => { }}
-      />
-
+      <Header onToggleCategories={() => {}} showBackButton={false} onBack={() => {}} />
       <ArcticBackground />
 
-      {/* New Hero */}
-      <section className="relative z-10 min-h-screen flex items-center px-6 md:px-12">
-        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div className="text-left space-y-6">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight"
+      {/* ═══════════════════════════════════════════
+          SECTION 1 — MAIN HERO (video + frosted overlay)
+         ═══════════════════════════════════════════ */}
+      <section className="relative z-10 min-h-screen flex flex-col justify-end overflow-hidden">
+        {/* Video background */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover z-0"
+          style={{ filter: "brightness(0.45) saturate(1.2)" }}
+        >
+          <source src="/hero-video.mov" type="video/mp4" />
+        </video>
+
+        {/* Frosted interactive overlay */}
+        <FrostedOverlay />
+
+        {/* Dark gradient at bottom for text readability */}
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#020C18] via-[#020C18]/60 to-transparent z-[3]" />
+
+        {/* Content — bottom left */}
+        <div className="relative z-[4] px-6 md:px-12 pb-16 md:pb-24 max-w-2xl">
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-2xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight leading-tight mb-4"
+          >
+            Everything you need to cool your brain.
+          </motion.h1>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="flex flex-wrap gap-3"
+          >
+            <Link to="/templates" className={miniCtaClass}>
+              USE TEMPLATES
+            </Link>
+            <Link to="/shop" className={miniCtaClass}>
+              SHOP MERCH
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          SECTION 2 — TEMPLATES
+         ═══════════════════════════════════════════ */}
+      <HeroSection id="templates">
+        <div className="max-w-xl">
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mb-3"
+          >
+            XRP — Crypto Brain
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="text-white/60 text-sm md:text-base mb-6 max-w-md"
+          >
+            Organize your research, track real-time prices, and build long-term conviction with this all-in-one XRP workspace.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="flex flex-wrap gap-3"
+          >
+            <button
+              onClick={handleAddToCart}
+              disabled={productsLoading}
+              className={miniCtaClass}
             >
-              <FrostedTextReveal text="MENTAL COLD" textClassName="text-white font-black uppercase tracking-tight" /> <Cover variant="cta" className="text-white">SHOCK</Cover>
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="text-lg md:text-xl text-white/70 max-w-xl"
-            >
-              Everything you need to cool your brain.
-            </motion.p>
-
-            <div className="flex flex-col sm:flex-row gap-4 pt-2">
-              <Link
-                to="/templates"
-                className={ctaButtonClassName}
-                style={ctaButtonStyle}
-              >
-                USE TEMPLATES
-              </Link>
-              <Link
-                to="/shop"
-                className={ctaButtonClassName}
-                style={ctaButtonStyle}
-              >
-                SHOP MERCH
-              </Link>
-            </div>
-          </div>
-
-          <div className="hidden md:flex items-center justify-center">
-          </div>
+              {productsLoading ? "LOADING..." : "BUY NOW"}
+            </button>
+            <Link to="/templates" className={miniCtaClass}>
+              VIEW ALL TEMPLATES
+            </Link>
+          </motion.div>
         </div>
-      </section>
+      </HeroSection>
 
-      {/* Templates OS Section */}
-      <section className="relative z-10 w-full py-48 px-6 md:px-12">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid gap-10 md:grid-cols-[minmax(0,0.9fr)_minmax(0,2fr)] items-start">
-            <div className="space-y-5">
-              <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight">
-                XRP – Crypto Brain
-              </h2>
-              <p className="text-white/80 text-sm md:text-base leading-relaxed">
-                Organize your research, track real-time prices, and build long-term conviction with this all-in-one XRP workspace.
-              </p>
-              <ul className="text-white/90 text-sm md:text-base space-y-2 list-disc list-inside">
-                <li>Live price tracking</li>
-                <li>Learning resources</li>
-                <li>Investment journal</li>
-                <li>Lifetime updates</li>
-              </ul>
-              <button
-                onClick={handleAddToCart}
-                disabled={productsLoading}
-                className={ctaButtonSmallClassName}
-                style={ctaButtonStyle}
-              >
-                {productsLoading ? "LOADING..." : "BUY NOW"}
-              </button>
-            </div>
-            <div className="rounded-3xl border border-white/10 bg-black/40 overflow-hidden">
-              <div className="relative w-full h-[360px] md:h-[420px] overflow-hidden">
-                <iframe
-                  src="https://remarkable-elk-cb3.notion.site/ebd//3033c81b0c1280039033c0357a8fc1cd"
-                  className="absolute inset-0 w-full h-full"
-                  frameBorder={0}
-                />
-              </div>
-            </div>
-          </div>
+      {/* ═══════════════════════════════════════════
+          SECTION 3 — COURSES / PRICING
+         ═══════════════════════════════════════════ */}
+      <HeroSection id="courses">
+        <div className="max-w-xl">
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mb-3"
+          >
+            Learn the Vibe Code
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="text-white/60 text-sm md:text-base mb-6 max-w-md"
+          >
+            Build, launch, and sell faster than everyone else. Lifetime access courses for creators and builders.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="flex flex-wrap gap-3"
+          >
+            <Link to="/pricing" className={miniCtaClass}>
+              VIEW COURSES
+            </Link>
+          </motion.div>
         </div>
-      </section>
+      </HeroSection>
 
-      {/* Pricing Section */}
-      <div className="relative z-10 w-full overflow-hidden py-48">
-        <Pricing />
-      </div>
-
-      {/* Cart Drawer */}
-      <CartDrawer />
-
-      {/* Cookie Banner */}
-      <CookieBanner
-        open={cookieBannerOpen}
-        onOpenChange={setCookieBannerOpen}
-        onContact={() => setContactOpen(true)}
-      />
-
-      {/* Contact Modal */}
-      <ContactModal isOpen={contactOpen} onClose={() => setContactOpen(false)} />
-
-      {/* Contact Section */}
-      <section className="relative z-10 w-full pt-24 pb-12 px-6 md:px-12">
-        <div className="w-full">
-          <div className="mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold text-white">
-              Have a project in mind?
-            </h2>
-            <p className="text-xl md:text-2xl font-bold text-cyan-300">
-              Let’s talk.
-            </p>
-          </div>
-
-          <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-xs font-bold tracking-widest text-white/70 mb-2 uppercase">
-                Name *
-              </label>
-              <input
-                type="text"
-                required
-                placeholder="Name *"
-                className="w-full rounded-md border border-white/20 bg-black/40 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold tracking-widest text-white/70 mb-2 uppercase">
-                Email *
-              </label>
-              <input
-                type="email"
-                required
-                placeholder="Email *"
-                className="w-full rounded-md border border-white/20 bg-black/40 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold tracking-widest text-white/70 mb-2 uppercase">
-                Company
-              </label>
-              <input
-                type="text"
-                placeholder="Company"
-                className="w-full rounded-md border border-white/20 bg-black/40 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20"
-              />
-            </div>
-
-            <div className="md:col-span-2">
-              <label className="block text-xs font-bold tracking-widest text-white/70 mb-2 uppercase">
-                Service *
-              </label>
-              <Select
-                value={service}
-                onValueChange={(value) => setService(value === "__none" ? "" : value)}
-              >
-                <SelectTrigger className="w-full h-12 rounded-md border border-white/20 bg-black/40 text-white focus:ring-white/20">
-                  <SelectValue placeholder="Select one..." />
-                </SelectTrigger>
-                <SelectContent className="border-white/20 bg-black text-white">
-                  <SelectItem
-                    value="__none"
-                    className="focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white"
-                  >
-                    Select one...
-                  </SelectItem>
-                  <SelectItem
-                    value="custom-landing-page"
-                    className="focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white"
-                  >
-                    Custom Landing Page
-                  </SelectItem>
-                  <SelectItem
-                    value="web-app"
-                    className="focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white"
-                  >
-                    Web App
-                  </SelectItem>
-                  <SelectItem
-                    value="personal-tracker"
-                    className="focus:bg-white/10 focus:text-white data-[highlighted]:bg-white/10 data-[highlighted]:text-white"
-                  >
-                    Personal Tracker
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              <input type="hidden" name="service" value={service} required />
-            </div>
-
-            <div className="md:col-span-2">
-              <label className="block text-xs font-bold tracking-widest text-white/70 mb-2 uppercase">
-                Tell us more about your project *
-              </label>
-              <textarea
-                required
-                rows={5}
-                placeholder="Tell us more about your project"
-                className="w-full rounded-md border border-white/20 bg-black/40 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20"
-              />
-            </div>
-
-            <div className="md:col-span-1">
-              <label className="block text-xs font-bold tracking-widest text-white/70 mb-2 uppercase">
-                Attachments
-              </label>
-              <div className="h-full min-h-[96px] rounded-md border border-dashed border-white/20 bg-black/40 px-4 py-4 text-white/70 flex items-center justify-center text-sm">
-                Additional info (PDF, DOC)
-              </div>
-            </div>
-
-            <div className="md:col-span-1 flex items-end">
-              <div className="w-full rounded-md border-l-4 border-cyan-300/70 bg-black/40 px-4 py-4 text-xs text-white/60">
-                This form collects your contact information so that we can correspond with you.
-                Check out our privacy policy for more information about how we protect and manage your data.
-              </div>
-            </div>
-
-            <div className="md:col-span-2 flex justify-end">
-              <button
-                type="submit"
-                className={ctaButtonSmallClassName}
-                style={ctaButtonStyle}
-              >
-                Send
-              </button>
-            </div>
-          </form>
+      {/* ═══════════════════════════════════════════
+          SECTION 4 — SHOP
+         ═══════════════════════════════════════════ */}
+      <HeroSection id="shop">
+        <div className="max-w-xl">
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mb-3"
+          >
+            Shop Merch
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="text-white/60 text-sm md:text-base mb-6 max-w-md"
+          >
+            Premium streetwear designed for builders. Hoodies, crewnecks, and accessories.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="flex flex-wrap gap-3"
+          >
+            <Link to="/shop" className={miniCtaClass}>
+              BROWSE COLLECTION
+            </Link>
+          </motion.div>
         </div>
-      </section>
+      </HeroSection>
+
+      {/* ═══════════════════════════════════════════
+          SECTION 5 — CONTACT
+         ═══════════════════════════════════════════ */}
+      <HeroSection id="contact">
+        <div className="max-w-xl">
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mb-1"
+          >
+            Have a project in mind?
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="text-cyan-300 text-lg md:text-2xl font-bold mb-6"
+          >
+            Let's talk.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.25 }}
+            className="flex flex-wrap gap-3"
+          >
+            <button onClick={() => setContactOpen(true)} className={miniCtaClass}>
+              GET IN TOUCH
+            </button>
+          </motion.div>
+        </div>
+      </HeroSection>
 
       {/* Footer */}
       <footer className="py-8 px-6 md:px-12 bg-transparent w-full relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-0">
-            {/* Mascot - shown first on mobile */}
             <div className="md:hidden flex flex-col items-center gap-4 mb-4">
-              <img
-                src={icyMascot}
-                alt="ICY"
-                className="w-24 h-24 object-contain"
-              />
+              <img src={icyMascot} alt="ICY" className="w-24 h-24 object-contain" />
               <div className="flex items-center gap-4">
-                <a
-                  href="https://www.tiktok.com/@brainfreezynow"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="TikTok"
-                  className="text-white/50 hover:text-white transition-colors duration-300"
-                >
-                  <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
-                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
-                  </svg>
+                <a href="https://www.tiktok.com/@brainfreezynow" target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="text-white/50 hover:text-white transition-colors duration-300">
+                  <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" /></svg>
                 </a>
-                <a
-                  href="https://www.youtube.com/@Brainfreezynow"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="YouTube"
-                  className="text-white/50 hover:text-white transition-colors duration-300"
-                >
+                <a href="https://www.youtube.com/@Brainfreezynow" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="text-white/50 hover:text-white transition-colors duration-300">
                   <Youtube className="w-6 h-6" />
                 </a>
               </div>
             </div>
-
-            {/* Links */}
             <div className="flex flex-wrap justify-center items-center gap-6 md:gap-12 flex-1">
-              <button
-                onClick={() => setContactOpen(true)}
-                className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300"
-              >
-                CONTACT
-              </button>
-              <button
-                onClick={() => setCookieBannerOpen(true)}
-                className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300"
-              >
-                COOKIES
-              </button>
+              <button onClick={() => setContactOpen(true)} className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">CONTACT</button>
+              <button onClick={() => setCookieBannerOpen(true)} className="text-base md:text-xl font-display font-bold tracking-widest text-white/50 hover:text-white transition-colors duration-300">COOKIES</button>
             </div>
-
-            {/* Social icons + logo - right side on desktop */}
             <div className="hidden md:flex items-center justify-end gap-4">
-              <a
-                href="https://www.tiktok.com/@brainfreezynow"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="TikTok"
-                className="text-white/50 hover:text-white transition-colors duration-300"
-              >
-                <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor">
-                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
-                </svg>
+              <a href="https://www.tiktok.com/@brainfreezynow" target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="text-white/50 hover:text-white transition-colors duration-300">
+                <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" /></svg>
               </a>
-              <a
-                href="https://www.youtube.com/@Brainfreezynow"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="YouTube"
-                className="text-white/50 hover:text-white transition-colors duration-300"
-              >
+              <a href="https://www.youtube.com/@Brainfreezynow" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="text-white/50 hover:text-white transition-colors duration-300">
                 <Youtube className="w-6 h-6" />
               </a>
-              <img
-                src={icyMascot}
-                alt="ICY"
-                className="w-20 h-20 object-contain"
-              />
+              <img src={icyMascot} alt="ICY" className="w-20 h-20 object-contain" />
             </div>
           </div>
         </div>
       </footer>
+
+      <CartDrawer />
+      <CookieBanner open={cookieBannerOpen} onOpenChange={setCookieBannerOpen} onContact={() => setContactOpen(true)} />
+      <ContactModal isOpen={contactOpen} onClose={() => setContactOpen(false)} />
     </motion.div>
   );
 }
 
-const Index = () => {
-  return <IndexContent />;
-};
-
+const Index = () => <IndexContent />;
 export default Index;
