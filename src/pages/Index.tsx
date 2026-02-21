@@ -19,7 +19,7 @@ import { toast } from "sonner";
 import { Youtube } from "lucide-react";
 import { ctaButtonSmallClassName, ctaButtonStyle } from "@/lib/cta-button";
 import ArcticBackground from "@/components/ArcticBackground";
-import FrostedOverlay from "@/components/FrostedOverlay";
+
 
 /* ── tiny CTA (even smaller than ctaButtonSmallClassName) ── */
 const miniCtaClass =
@@ -119,8 +119,6 @@ function IndexContent() {
           <source src="/hero-video.mov" type="video/mp4" />
         </video>
 
-        {/* Frosted interactive overlay */}
-        <FrostedOverlay />
 
         {/* Dark gradient at bottom for text readability */}
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#020C18] via-[#020C18]/60 to-transparent z-[3]" />
