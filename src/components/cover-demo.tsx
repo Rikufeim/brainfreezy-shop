@@ -10,7 +10,7 @@ export default function CoverDemo() {
           <Cover className="text-white">SHOCK</Cover>
         </h1>
         <p className="mt-6 text-base md:text-lg text-white/70">
-          Everything you need to cool your brain.
+          Everything you need to <span className="text-cyan-400">cool your brain</span>
         </p>
       </div>
     </section>

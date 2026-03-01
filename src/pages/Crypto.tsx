@@ -182,7 +182,7 @@ export default function Crypto() {
           <div className="grid gap-10 md:grid-cols-[minmax(0,0.9fr)_minmax(0,2fr)] items-start">
             <div className="space-y-5">
               <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight">
-                XRP – Crypto Brain
+                XRP – <span className="text-cyan-400">Crypto Brain</span>
               </h2>
               <p className="text-white/80 text-sm md:text-base leading-relaxed">
                 Organize your research, track real-time prices, and build long-term conviction with this all-in-one XRP workspace.

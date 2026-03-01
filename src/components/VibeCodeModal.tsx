@@ -50,7 +50,7 @@ export default function VibeCodeModal({ isOpen, onClose }: VibeCodeModalProps) {
                   transition={{ delay: 0.1 }}
                   className="font-display text-4xl md:text-5xl font-bold uppercase tracking-[0.2em] mb-4"
                 >
-                  Vibe Code
+                  <span className="text-cyan-400">Vibe Code</span>
                 </motion.h2>
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}

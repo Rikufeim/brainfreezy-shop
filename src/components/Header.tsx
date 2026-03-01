@@ -17,7 +17,7 @@ export default function Header({
   const items = useCartStore(state => state.items);
   const openCart = useCartStore(state => state.openCart);
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  return <header className="fixed top-0 left-0 right-0 z-50 bg-black/10 backdrop-blur-md transition-all duration-500">
+  return <header className="fixed top-0 left-0 right-0 z-[100] bg-black/40 backdrop-blur-md transition-all duration-500">
 
     <nav className="relative flex items-center justify-between px-6 md:px-8 pt-2" style={{
       height: '60px'

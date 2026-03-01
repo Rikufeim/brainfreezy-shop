@@ -20,6 +20,10 @@ import { Youtube } from "lucide-react";
 import { ctaButtonSmallClassName, ctaButtonStyle } from "@/lib/cta-button";
 import ArcticBackground from "@/components/ArcticBackground";
 import brainfreezyChart from "@/assets/brainfreezy-chart.png";
+import { cn } from "@/lib/utils";
+import HalideLanding from "@/components/HalideLanding";
+import StarfieldBackground from "@/components/StarfieldBackground";
+import { VibeCodeDitheringCard } from "@/components/ui/hero-dithering-card";
 
 
 /* ── tiny CTA (even smaller than ctaButtonSmallClassName) ── */
@@ -99,7 +103,7 @@ function IndexContent() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
-      className="relative h-screen bg-[#020C18] overflow-y-auto overflow-x-hidden scrollbar-hide"
+      className="relative h-screen bg-black overflow-y-auto overflow-x-hidden scrollbar-hide"
     >
       <Header onToggleCategories={() => {}} showBackButton={false} onBack={() => {}} />
       <ArcticBackground />
@@ -108,6 +112,10 @@ function IndexContent() {
           SECTION 1 — MAIN HERO (video + frosted overlay)
          ═══════════════════════════════════════════ */}
       <section className="relative z-10 min-h-screen flex flex-col justify-end overflow-hidden">
+        {/* Tähtitaivas koko hero-alueella tasaisesti */}
+        <div className="absolute inset-0 z-[2] overflow-hidden pointer-events-none">
+          <StarfieldBackground transparentBg sparse />
+        </div>
         {/* Video background */}
         <video
           autoPlay
@@ -121,8 +129,8 @@ function IndexContent() {
         </video>
 
 
-        {/* Dark gradient at bottom for text readability */}
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#020C18] via-[#020C18]/60 to-transparent z-[3]" />
+        {/* Musta fade alaosaan - tekstin luettavuus */}
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black via-black/60 to-transparent z-[3]" />
 
         {/* Content — bottom left */}
         <div className="relative z-[4] px-6 md:px-12 pb-16 md:pb-24 max-w-2xl">
@@ -132,7 +140,7 @@ function IndexContent() {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="text-2xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight leading-tight mb-4"
           >
-            Everything you need to cool your brain.
+            Everything you need to <span className="text-cyan-400">cool your brain</span>
           </motion.h1>
 
           <motion.div
@@ -160,25 +168,44 @@ function IndexContent() {
           src={brainfreezyChart}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover z-0 opacity-40"
+          className="absolute inset-0 w-full h-full object-cover z-0"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#020C18] via-[#020C18]/60 to-transparent z-[1]" />
+        {/* Musta fade ylä- ja alaosaan - teksti erottuu */}
+        <div
+          className="absolute inset-0 z-[1]"
+          style={{
+            background: `
+              linear-gradient(to bottom, black 0%, rgba(0,0,0,0.6) 12%, transparent 30%),
+              linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 15%, rgba(0,0,0,0.7) 35%, black 55%)
+            `,
+          }}
+        />
+        {/* Tähtitaivas oikealle, tekstin kohdalle - sama määrä kuin muissa osioissa */}
+        <div
+          className="absolute right-0 top-[35%] bottom-0 left-[45%] z-[1] overflow-hidden"
+          style={{
+            maskImage: "linear-gradient(to right, transparent 0%, black 25%)",
+            WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 25%)",
+          }}
+        >
+          <StarfieldBackground transparentBg sparse />
+        </div>
         <div className="max-w-xl relative z-[2]">
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mb-3"
+            className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mb-4 leading-[1.05]"
           >
-            XRP — Crypto Brain
+            XRP — <span className="text-cyan-400">Crypto Brain</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.15 }}
-            className="text-white/60 text-sm md:text-base mb-6 max-w-md"
+            className="text-white/70 text-sm md:text-base mb-7 max-w-md leading-relaxed"
           >
             Organize your research, track real-time prices, and build long-term conviction with this all-in-one XRP workspace.
           </motion.p>
@@ -187,7 +214,7 @@ function IndexContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="flex flex-wrap gap-3"
+            className="flex flex-wrap gap-3 mt-1"
           >
             <button
               onClick={handleAddToCart}
@@ -196,35 +223,38 @@ function IndexContent() {
             >
               {productsLoading ? "LOADING..." : "BUY NOW"}
             </button>
-            <Link to="/templates" className={miniCtaClass}>
-              VIEW ALL TEMPLATES
+            <Link to="/crypto" className={miniCtaClass}>
+              LEARN CRYPTO
             </Link>
           </motion.div>
         </div>
       </HeroSection>
 
       {/* ═══════════════════════════════════════════
-          SECTION 3 — COURSES / PRICING
+          SECTION 3 — CRYPTO PORTFOLIO APP
          ═══════════════════════════════════════════ */}
-      <HeroSection id="courses">
-        <div className="max-w-xl">
+      <HeroSection id="crypto-portfolio" className="overflow-hidden -mt-[12vh] pt-[12vh]">
+        {/* Background: harvennettu tähtitaivas */}
+        <StarfieldBackground sparse />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/20 z-[1]" />
+        <div className="max-w-xl relative z-[2]">
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mb-3"
+            className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mb-4 leading-[1.05]"
           >
-            Learn the Vibe Code
+            Crypto Portfolio <span className="text-cyan-400">App</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.15 }}
-            className="text-white/60 text-sm md:text-base mb-6 max-w-md"
+            className="text-white/70 text-sm md:text-base mb-7 max-w-md leading-relaxed"
           >
-            Build, launch, and sell faster than everyone else. Lifetime access courses for creators and builders.
+            Everything you need from portfolio tracker.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -233,18 +263,49 @@ function IndexContent() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="flex flex-wrap gap-3"
           >
-            <Link to="/pricing" className={miniCtaClass}>
-              VIEW COURSES
-            </Link>
+            <a
+              href="https://multiply-vision.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={miniCtaClass}
+            >
+              EXPLORE MULTIPLY
+            </a>
           </motion.div>
         </div>
       </HeroSection>
 
       {/* ═══════════════════════════════════════════
-          SECTION 4 — SHOP
+          SECTION 4 — COURSES / PRICING
+         ═══════════════════════════════════════════ */}
+      <HeroSection id="courses" className="!px-0 overflow-hidden">
+        <div className="absolute inset-0 z-0 bg-black" aria-hidden="true" />
+        <div className="absolute inset-0 z-[0.5]">
+          <StarfieldBackground transparentBg sparse />
+        </div>
+        <div className="flex justify-center items-center w-full relative z-[1]">
+          <VibeCodeDitheringCard />
+        </div>
+      </HeroSection>
+
+      {/* ═══════════════════════════════════════════
+          SECTION 5 — VIBE CODE APP (Halide 3D Hero)
+         ═══════════════════════════════════════════ */}
+      <section id="vibe-code-app" className="relative z-10 min-h-screen w-full overflow-hidden -mt-[12vh] pt-[12vh] bg-black">
+        <div className="absolute inset-0 min-h-screen w-full">
+          <HalideLanding />
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          SECTION 6 — SHOP
          ═══════════════════════════════════════════ */}
       <HeroSection id="shop">
-        <div className="max-w-xl">
+        <div className="absolute inset-0 z-0 bg-black" aria-hidden="true" />
+        <div className="absolute inset-0 z-[0.5]">
+          <StarfieldBackground transparentBg sparse />
+        </div>
+        <div className="max-w-xl relative z-[1]">
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -252,7 +313,7 @@ function IndexContent() {
             transition={{ duration: 0.7 }}
             className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mb-3"
           >
-            Shop Merch
+            Shop <span className="text-cyan-400">Merch</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -278,10 +339,14 @@ function IndexContent() {
       </HeroSection>
 
       {/* ═══════════════════════════════════════════
-          SECTION 5 — CONTACT
+          SECTION 7 — CONTACT
          ═══════════════════════════════════════════ */}
       <HeroSection id="contact">
-        <div className="max-w-xl">
+        <div className="absolute inset-0 z-0 bg-black" aria-hidden="true" />
+        <div className="absolute inset-0 z-[0.5]">
+          <StarfieldBackground transparentBg sparse />
+        </div>
+        <div className="max-w-xl relative z-[1]">
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -315,8 +380,11 @@ function IndexContent() {
       </HeroSection>
 
       {/* Footer */}
-      <footer className="py-8 px-6 md:px-12 bg-transparent w-full relative z-10">
-        <div className="max-w-7xl mx-auto">
+      <footer className="relative py-8 px-6 md:px-12 bg-black w-full z-10 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <StarfieldBackground transparentBg sparse />
+        </div>
+        <div className="max-w-7xl mx-auto relative z-[1]">
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-0">
             <div className="md:hidden flex flex-col items-center gap-4 mb-4">
               <img src={icyMascot} alt="ICY" className="w-24 h-24 object-contain" />

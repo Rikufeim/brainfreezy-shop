@@ -215,7 +215,7 @@ export default function Pricing() {
             {/* Vibe Code Quote Section */}
             <div className="w-full max-w-6xl mx-auto text-center relative z-10 px-4 mb-24">
                 <h3 className="text-2xl md:text-3xl font-black text-white leading-snug uppercase tracking-tight mb-16">
-                    When you learn the Vibe Code, you don’t follow trends — <br className="hidden md:block" />
+                    When you learn the <span className="text-cyan-400">Vibe Code</span>, you don’t follow trends — <br className="hidden md:block" />
                     <span className="text-zinc-500">you build, launch, and sell faster than everyone else.</span>
                 </h3>
 
@@ -231,7 +231,7 @@ export default function Pricing() {
 
                     {/* Vibe Code Points */}
                     <div className="space-y-8">
-                        <h4 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight">Vibe Code teaches you:</h4>
+                        <h4 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight"><span className="text-cyan-400">Vibe Code</span> teaches you:</h4>
                         <div className="space-y-6">
                             {[
                                 { title: "How to build fast", desc: "Create websites, stores, and systems with AI & prompts" },
@@ -254,7 +254,7 @@ export default function Pricing() {
                         style={ctaButtonStyle}
                         onClick={(e) => e.preventDefault()}
                     >
-                        VIBE CODE - BRAIN COMING SOON
+                        <span className="text-cyan-400">VIBE CODE</span> - BRAIN COMING SOON
                     </a>
                 </div>
 
