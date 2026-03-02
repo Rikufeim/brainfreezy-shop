@@ -163,13 +163,26 @@ function IndexContent() {
           SECTION 2 — TEMPLATES
          ═══════════════════════════════════════════ */}
       <HeroSection id="templates">
-        {/* Background image for XRP section */}
-        <img
-          src={brainfreezyChart}
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover z-0"
-        />
+        {/* Background: XRP Crypto Brain Notion template product image */}
+        {(() => {
+          const cryptoBrainProduct = products.find(p => p.node.title.toLowerCase().includes("crypto brain"));
+          const cryptoBrainImage = cryptoBrainProduct?.node.images.edges[0]?.node.url;
+          return cryptoBrainImage ? (
+            <img
+              src={cryptoBrainImage}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover z-0"
+            />
+          ) : (
+            <img
+              src={brainfreezyChart}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover z-0"
+            />
+          );
+        })()}
         {/* Musta fade ylä- ja alaosaan - teksti erottuu */}
         <div
           className="absolute inset-0 z-[1]"
@@ -180,7 +193,7 @@ function IndexContent() {
             `,
           }}
         />
-        {/* Tähtitaivas oikealle, tekstin kohdalle - sama määrä kuin muissa osioissa */}
+        {/* Tähtitaivas oikealle, tekstin kohdalle */}
         <div
           className="absolute right-0 top-[35%] bottom-0 left-[45%] z-[1] overflow-hidden"
           style={{
@@ -374,46 +387,7 @@ function IndexContent() {
         </motion.div>
       </section>
 
-      {/* ═══════════════════════════════════════════
-          SECTION 7 — CONTACT
-         ═══════════════════════════════════════════ */}
-      <HeroSection id="contact">
-        <div className="absolute inset-0 z-0 bg-black" aria-hidden="true" />
-        <div className="absolute inset-0 z-[0.5]">
-          <StarfieldBackground transparentBg sparse />
-        </div>
-        <div className="max-w-xl relative z-[1]">
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mb-1"
-          >
-            Have a project in mind?
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-cyan-300 text-lg md:text-2xl font-bold mb-6"
-          >
-            Let's talk.
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.25 }}
-            className="flex flex-wrap gap-3"
-          >
-            <button onClick={() => setContactOpen(true)} className={miniCtaClass}>
-              GET IN TOUCH
-            </button>
-          </motion.div>
-        </div>
-      </HeroSection>
+      {/* Contact section removed */}
 
       {/* Footer */}
       <footer className="relative py-8 px-6 md:px-12 bg-black w-full z-10 overflow-hidden">
