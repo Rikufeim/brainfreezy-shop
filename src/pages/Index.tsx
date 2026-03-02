@@ -163,26 +163,12 @@ function IndexContent() {
           SECTION 2 — TEMPLATES
          ═══════════════════════════════════════════ */}
       <HeroSection id="templates">
-        {/* Background: XRP Crypto Brain Notion template product image */}
-        {(() => {
-          const cryptoBrainProduct = products.find(p => p.node.title.toLowerCase().includes("crypto brain"));
-          const cryptoBrainImage = cryptoBrainProduct?.node.images.edges[0]?.node.url;
-          return cryptoBrainImage ? (
-            <img
-              src={cryptoBrainImage}
-              alt=""
-              aria-hidden="true"
-              className="absolute inset-0 w-full h-full object-cover z-0"
-            />
-          ) : (
-            <img
-              src={brainfreezyChart}
-              alt=""
-              aria-hidden="true"
-              className="absolute inset-0 w-full h-full object-cover z-0"
-            />
-          );
-        })()}
+        {/* Background: Notion embed for XRP Crypto Brain */}
+        <iframe
+          src="https://remarkable-elk-cb3.notion.site/ebd/3033c81b0c1280039033c0357a8fc1cd"
+          className="absolute inset-0 w-full h-full z-0 border-0"
+          allowFullScreen
+        />
         {/* Musta fade ylä- ja alaosaan - teksti erottuu */}
         <div
           className="absolute inset-0 z-[1]"
