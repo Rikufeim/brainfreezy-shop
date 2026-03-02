@@ -170,7 +170,7 @@ const HalideLanding: React.FC = () => {
         <div
           className="absolute inset-0 z-[3] pointer-events-none"
           style={{
-            background: "linear-gradient(to bottom, rgba(34, 211, 238, 0.18) 0%, rgba(34, 211, 238, 0.06) 25%, transparent 55%, rgba(0,0,0,0.3) 100%)",
+            background: "linear-gradient(to bottom, rgba(34, 211, 238, 0.18) 0%, rgba(34, 211, 238, 0.06) 25%, transparent 45%, rgba(0,0,0,0.5) 75%, rgba(0,0,0,0.95) 100%)",
           }}
         />
 
