@@ -16,6 +16,8 @@ export function VibeCodeDitheringCard() {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="relative overflow-hidden min-h-[480px] md:min-h-[520px] flex flex-col items-center justify-center duration-500 w-full">
+        {/* Black fade at top */}
+        <div className="absolute top-0 left-0 right-0 h-32 md:h-48 z-[5] pointer-events-none" style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 40%, transparent 100%)" }} />
         <Suspense fallback={<div className="absolute inset-0 bg-black/20" />}>
           <div className="absolute inset-0 z-0 pointer-events-none opacity-35 mix-blend-screen">
             <Dithering
