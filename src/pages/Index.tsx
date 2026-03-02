@@ -300,43 +300,79 @@ function IndexContent() {
       {/* ═══════════════════════════════════════════
           SECTION 6 — SHOP
          ═══════════════════════════════════════════ */}
-      <HeroSection id="shop">
+      <section id="shop" className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 md:px-12 py-16 md:py-24">
         <div className="absolute inset-0 z-0 bg-black" aria-hidden="true" />
         <div className="absolute inset-0 z-[0.5]">
           <StarfieldBackground transparentBg sparse />
         </div>
-        <div className="max-w-xl relative z-[1]">
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mb-3"
-          >
-            Shop <span className="text-cyan-400">Merch</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.15 }}
-            className="text-white/60 text-sm md:text-base mb-6 max-w-md"
-          >
-            Premium streetwear designed for builders. Hoodies, crewnecks, and accessories.
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="flex flex-wrap gap-3"
-          >
-            <Link to="/shop" className={miniCtaClass}>
-              BROWSE COLLECTION
-            </Link>
-          </motion.div>
-        </div>
-      </HeroSection>
+
+        {/* Centered title */}
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="text-4xl md:text-6xl lg:text-7xl font-black text-white uppercase tracking-tight mb-12 md:mb-16 relative z-[1] text-center"
+        >
+          Shop <span className="text-cyan-400">Merch</span>
+        </motion.h2>
+
+        {/* 3 Featured products */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.15 }}
+          className="grid grid-cols-3 gap-4 md:gap-8 lg:gap-12 mb-12 md:mb-16 relative z-[1] max-w-4xl w-full"
+        >
+          {products.slice(0, 3).map((product, i) => {
+            const imageUrl = product.node.images.edges[0]?.node.url;
+            const price = parseFloat(product.node.priceRange.minVariantPrice.amount);
+            return (
+              <motion.div
+                key={product.node.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }}
+                className="flex flex-col items-center gap-3"
+              >
+                <Link to="/shop" className="group">
+                  <div className="relative overflow-hidden rounded-lg bg-white/5 border border-white/10 p-4 md:p-6 transition-all duration-300 group-hover:border-cyan-400/30 group-hover:bg-white/10">
+                    {imageUrl && (
+                      <img
+                        src={imageUrl}
+                        alt={product.node.title}
+                        className="w-full aspect-square object-contain transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                    )}
+                  </div>
+                  <p className="text-white/70 text-xs md:text-sm text-center mt-2 font-medium truncate max-w-full">
+                    {product.node.title}
+                  </p>
+                  <p className="text-cyan-400 text-xs md:text-sm text-center font-bold">
+                    €{price.toFixed(0)}
+                  </p>
+                </Link>
+              </motion.div>
+            );
+          })}
+        </motion.div>
+
+        {/* Browse Collection CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.5 }}
+          className="relative z-[1]"
+        >
+          <Link to="/shop" className={miniCtaClass}>
+            BROWSE COLLECTION
+          </Link>
+        </motion.div>
+      </section>
 
       {/* ═══════════════════════════════════════════
           SECTION 7 — CONTACT
