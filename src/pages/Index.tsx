@@ -167,61 +167,43 @@ function IndexContent() {
         <div className="absolute inset-0 z-[0.5]">
           <StarfieldBackground transparentBg sparse />
         </div>
-        <div className="max-w-7xl w-full relative z-[1]">
-          <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] items-end">
-            <div className="space-y-4">
-              <motion.h2
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7 }}
-                className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight leading-[1.05]"
-              >
-                XRP — <span className="text-cyan-400">Crypto Brain</span>
-              </motion.h2>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.15 }}
-                className="text-white/70 text-sm md:text-base leading-relaxed max-w-md"
-              >
-                Organize your research, track real-time prices, and build long-term conviction with this all-in-one XRP workspace.
-              </motion.p>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.3 }}
-                className="flex flex-wrap gap-3"
-              >
-                <button
-                  onClick={handleAddToCart}
-                  disabled={productsLoading}
-                  className={miniCtaClass}
-                >
-                  {productsLoading ? "LOADING..." : "BUY NOW"}
-                </button>
-                <Link to="/crypto" className={miniCtaClass}>
-                  LEARN CRYPTO
-                </Link>
-              </motion.div>
-            </div>
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-              className="rounded-2xl border border-white/10 bg-black/40 overflow-hidden"
+        <div className="max-w-xl relative z-[1]">
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mb-4 leading-[1.05]"
+          >
+            XRP — <span className="text-cyan-400">Crypto Brain</span>
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="text-white/70 text-sm md:text-base mb-7 max-w-md leading-relaxed"
+          >
+            Organize your research, track real-time prices, and build long-term conviction with this all-in-one XRP workspace.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="flex flex-wrap gap-3 mt-1"
+          >
+            <button
+              onClick={handleAddToCart}
+              disabled={productsLoading}
+              className={miniCtaClass}
             >
-              <div className="relative w-full h-[280px] md:h-[360px] overflow-hidden">
-                <iframe
-                  src="https://remarkable-elk-cb3.notion.site/ebd/3033c81b0c1280039033c0357a8fc1cd"
-                  className="absolute inset-0 w-full h-full border-0"
-                />
-              </div>
-            </motion.div>
-          </div>
+              {productsLoading ? "LOADING..." : "BUY NOW"}
+            </button>
+            <Link to="/crypto" className={miniCtaClass}>
+              LEARN CRYPTO
+            </Link>
+          </motion.div>
         </div>
       </HeroSection>
 
