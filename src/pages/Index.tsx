@@ -162,72 +162,69 @@ function IndexContent() {
       {/* ═══════════════════════════════════════════
           SECTION 2 — TEMPLATES
          ═══════════════════════════════════════════ */}
-      <HeroSection id="templates">
-        {/* Background: Notion embed for XRP Crypto Brain */}
-        <iframe
-          src="https://remarkable-elk-cb3.notion.site/ebd/3033c81b0c1280039033c0357a8fc1cd"
-          className="absolute inset-0 w-full h-full z-0 border-0"
-          allowFullScreen
-        />
-        {/* Musta fade ylä- ja alaosaan - teksti erottuu */}
-        <div
-          className="absolute inset-0 z-[1]"
-          style={{
-            background: `
-              linear-gradient(to bottom, black 0%, rgba(0,0,0,0.6) 12%, transparent 30%),
-              linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 15%, rgba(0,0,0,0.7) 35%, black 55%)
-            `,
-          }}
-        />
-        {/* Tähtitaivas oikealle, tekstin kohdalle */}
-        <div
-          className="absolute right-0 top-[35%] bottom-0 left-[45%] z-[1] overflow-hidden"
-          style={{
-            maskImage: "linear-gradient(to right, transparent 0%, black 25%)",
-            WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 25%)",
-          }}
-        >
+      <section id="templates" className="relative z-10 min-h-screen flex flex-col justify-center px-6 md:px-12 py-16 md:py-24">
+        <div className="absolute inset-0 z-0 bg-black" aria-hidden="true" />
+        <div className="absolute inset-0 z-[0.5]">
           <StarfieldBackground transparentBg sparse />
         </div>
-        <div className="max-w-xl relative z-[2]">
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mb-4 leading-[1.05]"
-          >
-            XRP — <span className="text-cyan-400">Crypto Brain</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.15 }}
-            className="text-white/70 text-sm md:text-base mb-7 max-w-md leading-relaxed"
-          >
-            Organize your research, track real-time prices, and build long-term conviction with this all-in-one XRP workspace.
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="flex flex-wrap gap-3 mt-1"
-          >
-            <button
-              onClick={handleAddToCart}
-              disabled={productsLoading}
-              className={miniCtaClass}
+        <div className="max-w-7xl mx-auto w-full relative z-[1]">
+          <div className="grid gap-10 md:grid-cols-[minmax(0,0.9fr)_minmax(0,2fr)] items-start">
+            <div className="space-y-5">
+              <motion.h2
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7 }}
+                className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight leading-[1.05]"
+              >
+                XRP — <span className="text-cyan-400">Crypto Brain</span>
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.15 }}
+                className="text-white/70 text-sm md:text-base leading-relaxed"
+              >
+                Organize your research, track real-time prices, and build long-term conviction with this all-in-one XRP workspace.
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.3 }}
+                className="flex flex-wrap gap-3"
+              >
+                <button
+                  onClick={handleAddToCart}
+                  disabled={productsLoading}
+                  className={miniCtaClass}
+                >
+                  {productsLoading ? "LOADING..." : "BUY NOW"}
+                </button>
+                <Link to="/crypto" className={miniCtaClass}>
+                  LEARN CRYPTO
+                </Link>
+              </motion.div>
+            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="rounded-3xl border border-white/10 bg-black/40 overflow-hidden"
             >
-              {productsLoading ? "LOADING..." : "BUY NOW"}
-            </button>
-            <Link to="/crypto" className={miniCtaClass}>
-              LEARN CRYPTO
-            </Link>
-          </motion.div>
+              <div className="relative w-full h-[360px] md:h-[420px] overflow-hidden">
+                <iframe
+                  src="https://remarkable-elk-cb3.notion.site/ebd/3033c81b0c1280039033c0357a8fc1cd"
+                  className="absolute inset-0 w-full h-full"
+                  frameBorder={0}
+                />
+              </div>
+            </motion.div>
+          </div>
         </div>
-      </HeroSection>
+      </section>
 
       {/* ═══════════════════════════════════════════
           SECTION 3 — CRYPTO PORTFOLIO APP
