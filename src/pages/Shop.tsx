@@ -45,7 +45,7 @@ export default function Shop() {
 
   return (
     <div className="h-screen overflow-y-auto overflow-x-hidden scrollbar-hide bg-[#020C18] relative">
-      <ArcticBackground />
+      <ArcticBackground animateZoom />
       {/* Header with back button */}
       {/* Header with back button */}
       <Header
@@ -59,6 +59,7 @@ export default function Shop() {
         <FeaturedProducts
           selectedCategory={selectedCategory}
           onSelectProduct={setSelectedProduct}
+          entranceDelay={0.35}
         />
       </main>
 

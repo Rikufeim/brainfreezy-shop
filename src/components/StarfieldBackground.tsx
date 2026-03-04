@@ -11,11 +11,14 @@ const ANIMATIONS = ["animate-twinkle-subtle", "animate-twinkle-medium", "animate
 export default function StarfieldBackground({
   transparentBg = false,
   sparse = false,
+  minimal = false,
 }: {
   transparentBg?: boolean;
   sparse?: boolean;
+  /** Even fewer stars (e.g. for footer) */
+  minimal?: boolean;
 }) {
-  const starCount = sparse ? 55 : 220;
+  const starCount = minimal ? 18 : sparse ? 55 : 220;
   const stars = useMemo(() => {
     const result: Array<{
       id: number;

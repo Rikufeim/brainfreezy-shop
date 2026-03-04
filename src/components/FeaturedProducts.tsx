@@ -1,15 +1,16 @@
 import { motion } from "framer-motion";
 import { useShopifyProducts } from "@/hooks/useShopifyProducts";
 import { ShopifyProduct } from "@/lib/shopify";
-import { Loader2 } from "lucide-react";
 import Product3DCard from "./Product3DCard";
 
 interface FeaturedProductsProps {
     selectedCategory: string;
     onSelectProduct: (product: ShopifyProduct) => void;
+    /** Delay before products start fading in (for entrance sync with background zoom etc) */
+    entranceDelay?: number;
 }
 
-export default function FeaturedProducts({ selectedCategory, onSelectProduct }: FeaturedProductsProps) {
+export default function FeaturedProducts({ selectedCategory, onSelectProduct, entranceDelay = 0 }: FeaturedProductsProps) {
     const { products, isLoading, error } = useShopifyProducts(50);
 
     // Deduplicate products by id and filter by category
@@ -24,9 +25,7 @@ export default function FeaturedProducts({ selectedCategory, onSelectProduct }: 
     if (isLoading) {
         return (
             <section className="py-24 px-6 md:px-12 bg-transparent w-full relative z-10">
-                <div className="max-w-7xl mx-auto flex items-center justify-center min-h-[400px]">
-                    <Loader2 className="w-8 h-8 animate-spin text-white/50" />
-                </div>
+                <div className="max-w-7xl mx-auto min-h-[400px]" />
             </section>
         );
     }
@@ -65,7 +64,7 @@ export default function FeaturedProducts({ selectedCategory, onSelectProduct }: 
                                 key={product.node.id}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: index * 0.1 }}
+                                transition={{ delay: entranceDelay + index * 0.08, duration: 0.6 }}
                                 className="flex flex-col items-center"
                             >
                                 <Product3DCard
