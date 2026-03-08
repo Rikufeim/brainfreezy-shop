@@ -253,6 +253,52 @@ function IndexContent() {
       </HeroSection>
 
       {/* ═══════════════════════════════════════════
+          SECTION 3.5 — EXPLODE ON TIKTOK
+         ═══════════════════════════════════════════ */}
+      <HeroSection id="tiktok">
+        <div className="absolute inset-0 z-0 bg-black" aria-hidden="true" />
+        <div className="absolute inset-0 z-[0.5]">
+          <StarfieldBackground transparentBg sparse />
+        </div>
+        <div className="max-w-xl relative z-[1]">
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight mb-4 leading-[1.05]"
+          >
+            Explode on <span className="text-cyan-400">TikTok</span>
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="text-white/70 text-sm md:text-base mb-7 max-w-md leading-relaxed"
+          >
+            Go viral with proven strategies, content frameworks, and growth hacks that turn views into followers.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="flex flex-wrap gap-3"
+          >
+            <a
+              href="https://www.tiktok.com/@brainfreezynow"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={miniCtaClass}
+            >
+              FOLLOW US
+            </a>
+          </motion.div>
+        </div>
+      </HeroSection>
+
+      {/* ═══════════════════════════════════════════
           SECTION 4 — COURSES / PRICING
          ═══════════════════════════════════════════ */}
       <HeroSection id="courses" className="!px-0 overflow-hidden">
