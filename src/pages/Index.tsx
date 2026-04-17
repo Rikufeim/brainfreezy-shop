@@ -19,11 +19,8 @@ import { toast } from "sonner";
 import { Youtube } from "lucide-react";
 import { ctaButtonSmallClassName, ctaButtonStyle } from "@/lib/cta-button";
 import ArcticBackground from "@/components/ArcticBackground";
-import brainfreezyChart from "@/assets/brainfreezy-chart.png";
-import { cn } from "@/lib/utils";
-import HalideLanding from "@/components/HalideLanding";
 import StarfieldBackground from "@/components/StarfieldBackground";
-import { VibeCodeDitheringCard } from "@/components/ui/hero-dithering-card";
+import multiplyLogo from "@/assets/multiply-logo.png";
 
 
 /* ── tiny CTA (even smaller than ctaButtonSmallClassName) ── */
@@ -109,54 +106,20 @@ function IndexContent() {
       <ArcticBackground />
 
       {/* ═══════════════════════════════════════════
-          SECTION 1 — MAIN HERO (video + frosted overlay)
+          SECTION 1 — MAIN HERO (logo only)
          ═══════════════════════════════════════════ */}
-      <section className="relative z-10 min-h-screen flex flex-col justify-end overflow-hidden">
-        {/* Tähtitaivas koko hero-alueella tasaisesti */}
+      <section className="relative z-10 min-h-screen flex items-center justify-center overflow-hidden px-6">
         <div className="absolute inset-0 z-[2] overflow-hidden pointer-events-none">
           <StarfieldBackground transparentBg sparse />
         </div>
-        {/* Video background */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover z-0"
-          style={{ filter: "brightness(0.45) saturate(1.2)" }}
-        >
-          <source src="/hero-video.mov" type="video/mp4" />
-        </video>
-
-
-        {/* Musta fade alaosaan - tekstin luettavuus */}
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black via-black/60 to-transparent z-[3]" />
-
-        {/* Content — bottom left */}
-        <div className="relative z-[4] px-6 md:px-12 pb-16 md:pb-24 max-w-2xl">
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-2xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight leading-tight mb-4"
-          >
-            Everything you need to <span className="text-cyan-400">cool your brain</span>
-          </motion.h1>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-wrap gap-3"
-          >
-            <Link to="/templates" className={miniCtaClass}>
-              USE TEMPLATES
-            </Link>
-            <Link to="/shop" className={miniCtaClass}>
-              SHOP MERCH
-            </Link>
-          </motion.div>
-        </div>
+        <motion.img
+          src={multiplyLogo}
+          alt="Multiply"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.9, ease: "easeOut" }}
+          className="relative z-[4] w-full max-w-md md:max-w-2xl lg:max-w-3xl object-contain"
+        />
       </section>
 
       {/* ═══════════════════════════════════════════
@@ -297,40 +260,6 @@ function IndexContent() {
           </motion.div>
         </div>
       </HeroSection>
-
-      {/* ═══════════════════════════════════════════
-          SECTION 6 — SHOP
-         ═══════════════════════════════════════════ */}
-      <section id="shop" className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 md:px-12 py-16 md:py-24">
-        <div className="absolute inset-0 z-0 bg-black" aria-hidden="true" />
-        <div className="absolute inset-0 z-[0.5]">
-          <StarfieldBackground transparentBg sparse />
-        </div>
-
-        {/* Centered title */}
-        <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="text-4xl md:text-6xl lg:text-7xl font-black text-white uppercase tracking-tight mb-8 relative z-[1] text-center"
-        >
-          Shop <span className="text-cyan-400">Merch</span>
-        </motion.h2>
-
-        {/* Browse Collection CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.3 }}
-          className="relative z-[1]"
-        >
-          <Link to="/shop" className={miniCtaClass}>
-            BROWSE COLLECTION
-          </Link>
-        </motion.div>
-      </section>
 
       {/* Contact section removed */}
 
