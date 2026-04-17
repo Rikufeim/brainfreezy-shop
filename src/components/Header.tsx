@@ -49,14 +49,6 @@ export default function Header({
 
       {/* Right side buttons */}
       <div className="flex items-center gap-6">
-        <div className="flex items-center gap-6">
-          <Link
-            to="/shop"
-            className="text-xs md:text-sm font-display font-bold tracking-widest text-white/60 hover:text-white transition-colors duration-300 uppercase"
-          >
-            SHOP MERCH
-          </Link>
-        </div>
         {/* Cart Button */}
         <motion.div initial={{
           opacity: 0,
