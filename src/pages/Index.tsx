@@ -299,28 +299,6 @@ function IndexContent() {
       </HeroSection>
 
       {/* ═══════════════════════════════════════════
-          SECTION 4 — COURSES / PRICING
-         ═══════════════════════════════════════════ */}
-      <HeroSection id="courses" className="!px-0 overflow-hidden">
-        <div className="absolute inset-0 z-0 bg-black" aria-hidden="true" />
-        <div className="absolute inset-0 z-[0.5]">
-          <StarfieldBackground transparentBg sparse />
-        </div>
-        <div className="flex justify-center items-center w-full relative z-[1]">
-          <VibeCodeDitheringCard />
-        </div>
-      </HeroSection>
-
-      {/* ═══════════════════════════════════════════
-          SECTION 5 — VIBE CODE APP (Halide 3D Hero)
-         ═══════════════════════════════════════════ */}
-      <section id="vibe-code-app" className="relative z-10 min-h-screen w-full overflow-hidden -mt-[12vh] pt-[12vh] bg-black">
-        <div className="absolute inset-0 min-h-screen w-full">
-          <HalideLanding />
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════
           SECTION 6 — SHOP
          ═══════════════════════════════════════════ */}
       <section id="shop" className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 md:px-12 py-16 md:py-24">
